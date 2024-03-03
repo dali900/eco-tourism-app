@@ -1,0 +1,29 @@
+
+/*fix*/
+.p-dropdown-panel {
+    z-index: 3;
+}
+
+.p-datepicker {
+    z-index: 1;
+}
+.jodit-add-new-line {
+    display: none !important;
+}
+.jodit-toolbar__box {
+    z-index: 0 !important;
+}
+.app-box-shadow {
+    -webkit-box-shadow: 10px 10px 23px -12px rgba(0,0,0,0.75);
+    -moz-box-shadow: 10px 10px 23px -12px rgba(0,0,0,0.75);
+    box-shadow: 10px 10px 23px -12px rgba(0,0,0,0.75);
+}
+/* TODO: ovo treba definisati kao var */
+.p-button:hover {
+    background: #5d5d5d !important;
+}
+/* .p-button {
+    background: var(--color-bzr-navbar-background-primary);
+    border: var(--color-bzr-navbar-background-primary);
+} */
+  

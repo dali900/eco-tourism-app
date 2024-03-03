@@ -1,85 +1,76 @@
-<script setup lang="ts">
+<script setup>
+import { computed, onBeforeMount, onMounted, watch } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { useAuthStore } from './stores/auth'
+import { useGlobalStore } from './stores/global'
+import { storeToRefs } from 'pinia'
+import { useRouter, useRoute } from 'vue-router'
+//import { useAppUpdateManager } from '@/util/appUpdateManager'
+const env = import.meta.env.VITE_APP_ENV;
+
+const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore();
+const globalStore = useGlobalStore();
+const { user, loading } = storeToRefs(authStore);
+//const { appIsOpen } = storeToRefs(indexStore);
+
+//useAppUpdateManager();
+//Fetch auth user
+if(!user.value){
+    authStore.getAuthUser();
+}
+/* watch( user, (newVal, oldVal) => {
+    //click on update form 
+    if(user.value)
+    {
+        indexStore.openApp();
+    }
+}); */
+
+/* onMounted( () => {
+    let uri = window.location.search.substring(1); 
+    let params = new URLSearchParams(uri);
+
+    if(params.get("open-app")){
+        indexStore.openApp();
+        router.push({to: 'Login' });
+    }
+}); */
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+    <div class="layout">
+        <Toast position="top-right"/>
+        <RouterView />
+        <ConfirmDialog class="confirm-dialog"></ConfirmDialog>
     </div>
-  </header>
-
-  <RouterView />
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style>
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #bdbdbd;
+    font-family: var(--font-family);
+    font-weight: 400;
+    color: var(--text-color);
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+#app {
+    height: 100%;
 }
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.layout {
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
 }
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.p-dialog-mask.p-component-overlay {
+    z-index: 3 !important;
 }
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+:deep(.p-toast) {
+    z-index: 9999;
 }
 </style>
