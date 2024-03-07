@@ -16,7 +16,7 @@
                 <div class="field flex flex-column">
                     <label for="name-help">Sadržaj</label>
                     <span class="p-float-label">
-                        <jodit-editor v-model="form.content" :buttons="joditButtons"></jodit-editor>
+                        Editor
                     </span>
                     <small id="name-help" class="p-error">{{formErrors.content}}</small>
                 </div>

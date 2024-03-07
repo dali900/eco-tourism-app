@@ -2,7 +2,7 @@
     <div class="login">
         <Card class="login-card">
             <template #title>
-                Actamedia admin panel
+                Ekoturizam admin panel
             </template>
             <template #content>
                 <div class="login-form flex flex-column">

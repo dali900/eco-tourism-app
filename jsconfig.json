@@ -1,8 +1,13 @@
 {
-  "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "exclude": ["node_modules", "dist"]
+    "compilerOptions": {
+        "paths": {
+            "@/*": ["./src/*"],
+            "@admin/*": ["./src/modules/admin/*"],
+            "@eco/*": ["./src/modules/eco/*"],
+            "@bzr/*": ["./src/modules/bzr/*"],
+            "@ei/*": ["./src/modules/ei/*"],
+            "@zzs/*": ["./src/modules/zzs/*"]
+        }
+    },
+    "exclude": ["node_modules", "dist"]
 }

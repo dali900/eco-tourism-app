@@ -16,14 +16,14 @@
                 <div class="field flex flex-column">
                     <label for="name-help">Pitanje</label>
                     <span class="p-float-label">
-                        <jodit-editor v-model="form.question" :buttons="joditButtons"></jodit-editor>
+                        Editor
                     </span>
                     <small id="name-help" class="p-error">{{formErrors.question}}</small>
                 </div>
                 <div class="field flex flex-column">
                     <label for="name-help">Odgovor</label>
                     <span class="p-float-label">
-                        <jodit-editor v-model="form.answer" :buttons="joditButtons"></jodit-editor>
+                        Editor
                     </span>
                     <small id="name-help" class="p-error">{{formErrors.answer}}</small>
                 </div>

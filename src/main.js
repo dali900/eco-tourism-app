@@ -6,7 +6,10 @@ import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
 import Toast from 'primevue/toast';
 import ConfirmationService from 'primevue/confirmationservice';
-import JoditEditor from 'jodit-vue'
+import { createI18n } from 'vue-i18n'
+import en from './locales/en.json'
+import srCyrl from './locales/sr-cyrl.json'
+import srLatn from './locales/sr-latn.json'
 import VueMixpanel from 'vue-mixpanel'
 
 import 'primevue/resources/themes/saga-blue/theme.css';
@@ -50,8 +53,14 @@ import App from './App.vue'
 import router from './router/index'
 
 //import './assets/main.css'
-import 'jodit/build/jodit.min.css'
 import './bootstrap'
+
+const i18n = createI18n({
+    locale: "srLatn",
+    fallback: "srLatn",
+    messages: { en, srLatn, srCyrl },
+    legacy: false
+})
 
 const app = createApp(App)
 // Global error handler
@@ -74,7 +83,7 @@ app.use(router)
 app.use(PrimeVue, {ripple: true});
 app.use(ToastService);
 app.use(ConfirmationService);
-app.use(JoditEditor);
+app.use(i18n)
 /* app.use(VueMixpanel, {
     token: import.meta.env.VITE_MIXPANEL_TOKEN,
     config: {

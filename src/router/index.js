@@ -1,29 +1,81 @@
-import routerEi from '@/modules/ei/routes/index'
-import routerBzr from '@/modules/bzr/routes/index'
-import routerZzs from '@/modules/zzs/routes/index'
-import routerAdmin from '@/modules/admin/routes/index'
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import PageNotFound from "../pages/PageNotFound.vue";
+import adminRoutes from "../modules/admin/routes/index"
+import ecoRoutes from "../modules/eco/routes/index"
 
-const host = window.location.host;
-const parts = host.split('.');
-const domainLength = 3; // route1.example.com => domain length = 3
-const router = () => {
-  let index = routerEi;
-  let routes;
-  if (host.includes('localhost')) {
-    routes = index;
-  } else if (host.includes('exportinfo') || host.includes('ei')) {
-    routes = routerEi;
-  } else if (host.includes('bzrportal') || host.includes('bzr')) {
-    routes = routerBzr;
-  } else if (host.includes('zzs')) {
-    routes = routerZzs;
-  } else if (host.includes('actamedia') || host.includes('admin')) {
-    routes = routerAdmin;
-  } 
-  else {
-    console.error("Missing new app. App '"+host+"' not defined.");
-  }
-  return routes;
-};
-export default router()
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+        {
+            name: "AdminAuth",
+            path: "/admin-login",
+            component: () => import("@admin/layouts/LoginLayout.vue"),
+            children: [
+                {
+                    name: "AdminLogin",
+                    path: "/admin-login",
+                    alias: "admin-login",
+                    component: () => import("@admin/pages/auth/Login.vue"),
+                }
+            ]
+        },
+        {
+            name: "Admin",
+            path: "/admin",
+            component: () => import("@admin/layouts/DefaultLayout.vue"),
+            children: adminRoutes,
+            meta: {requiresAuth: true, adminPanel: true},
+        },
+        {
+            name: "Eco",
+            path: "/",
+            component: () => import("@eco/layouts/DefaultLayout.vue"),
+            children: ecoRoutes,
+        },
+        {
+            path: "/:pathMatch(.*)*",
+            name: "PageNotFound",
+            component: PageNotFound
+        },
+    ],
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return { top: 0 }
+        }
+    },
+})
+
+router.beforeEach((to, from, next) => {
+    if(to.meta.requiresAuth && to.meta.adminPanel){
+        const authStore = useAuthStore();
+        //Auth user exists
+        if(authStore.isAuthenticated && authStore.hasAccessLevel(1)){
+            next();
+        }
+        //Fetching user from api
+        else if (authStore.fetchingUser){
+            authStore.$subscribe((mutation, state) => {
+                if(state.user && authStore.hasAccessLevel(1)){
+                    next();
+                } else {
+                    authStore.redirectUrl = to.fullPath;
+                    next({ name: 'AdminLogin', params: {error: 'no-access'} }); 
+                }
+            });
+        }
+        //Guest user
+        else {
+            authStore.redirectUrl = to.fullPath;
+            //next({ name: 'Login', query: { from: loginpath } });
+            next({ name: 'AdminLogin' });
+        }
+    } else {
+        next();
+    }
+})
+
+export default router
 
