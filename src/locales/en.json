@@ -1,3 +1,9 @@
 {
-    "Home": "Home"
+    "Home": "Home",
+    "footer": {
+        "link1": "",
+        "bottomPart1": "Selo na 3 klika",
+        "bottomPart2": "All rights reserved",
+        "bottomPart3": "updating the portal on a daily basis"
+    }
 }

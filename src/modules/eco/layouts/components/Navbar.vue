@@ -6,7 +6,7 @@
     import { useBuildMenuRecursively } from '@/composables/useBuildMenuRecursively'
     import { useI18n } from "vue-i18n";
 
-    const { t, locale } = useI18n({ useScope: 'global' });
+    const { t, locale } = useI18n();
     const authStore = useAuthStore();
     const globalStore = useGlobalStore();
     const { user, hasUserAdminAccess} = storeToRefs(authStore);
@@ -25,21 +25,21 @@
             }]
         }, */
         {
-            label: t('Home'),
-            to: '/articles',
+            label: t('nav.home'),
+            route: '/',
         },
         {
-            label: 'O nama',
-            to: '/questions'
+            label: t('nav.about'),
+            route: '/about',
         },
         {
-            label: 'Opštine',
-            to: '/videos'
+            label: t('nav.municipality'),
+            route: '/videos'
         },
         {
-            label: 'Sela',
-            to: '/videos'
-        }
+            label: t('nav.places'),
+            route: '/places',
+        },
     ]);
     
     //Fetch and insert menu items
@@ -101,22 +101,33 @@
     <Menubar :model="menuItems">
         <template #start>
             <a href="/" class="logo">
-                <!-- <img alt="Logo" src="/images/bzr_white_logo.png" to="/"> -->
-                <span><span>  BZR</span> PORTAL</span>
+                <img alt="Logo" src="/images/app-logo.svg" to="/">
             </a>
         </template>
-        <template #end>
-            <a href="/BZR-Narudzbenica-2024.pdf" target= “_blank” class="portal-2023">
-                PRETPLATA ZA 2024.
+        <template #item="{ item, props, hasSubmenu }">
+            <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+                <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+                    <span :class="item.icon" />
+                    <span class="ml-2">{{ item.label }}</span>
+                </a>
+            </router-link>
+            <a v-else v-ripple :href="item.url" :target="item.target" v-bind="props.action">
+                <span :class="item.icon" />
+                <span class="ml-2">{{ item.label }}</span>
+                <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down ml-2" />
             </a>
+        </template>
+        <!-- <template #end>
             <Button
                 type="button"
                 @click="toggleUserMenu"
                 aria-haspopup="true"
                 aria-controls="user-menu"
-                :icon="user ? 'pi pi-user' : ''"
-                :label="user ? user.name : 'PRIJAVA'"
-                class="p-button-rounded p-link user-btn"
+                icon="pi pi-user"
+                :label="user ? user.name : ''"
+                rounded
+                outlined
+                class="user-btn"
                 :title="user ? user.name : ''"
             >
             </Button>
@@ -127,18 +138,18 @@
                 :popup="true"
                 to="/login"
             />
-        </template>
+        </template> -->
     </Menubar>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
     .logo {
         width: auto;
         color: white;
         padding-right: 30px;
         text-decoration: none;
         img {
-            max-height: 36px;
+            max-height: 50px;
         }
         span {
             bottom: 8px;
@@ -159,44 +170,50 @@
         width: 100%;
         position: fixed;
         z-index: 2;
+        :deep(.p-menubar-start, .p-menubar-button) {
+            flex: 0 0 auto;
+        }
+        :deep(.p-menubar-root-list) {
+            flex: 1 0 auto;
+            justify-content: flex-end;
+        }
+        :deep(.p-menubar-end) {
+            flex: 0;
+        }
         @media screen and (min-width: 960px){
-            .p-menuitem-text {
+            :deep(.p-menuitem-text) {
                 color: var(--color-white) !important;
             }
         }
-        .p-submenu-list {
-            background-color: var(--color-black);
+
+        :deep(.p-menuitem-content:hover) {
+            background-color: inherit;
+            .p-menuitem-link {
+                color: var(--link-hover-color);
+            }
         }
-        .p-menuitem-link:hover {
-            background-color: var(--color-grey) !important;
+        :deep(.p-menuitem-link) {
+            color: var(--color-white);
         }
-        .p-menuitem-active > .p-menuitem-link {
+        :deep(.p-menuitem-active > .p-menuitem-content) {
             background: var(--color-blue) !important;
         }
-        .p-menuitem-active > .p-menuitem-content {
-            background: var(--color-blue) !important;
+        :deep(.p-focus > .p-menuitem-content) {
+            background: transparent;
         }
-        .p-focus > .p-menuitem-content {
-            background: var(--color-blue) !important;
+        :deep(.p-submenu-list) {
+            background-color: var(--vt-c-black-soft);
         }
     }
     .user-btn {
-        background: #ffffff;
-        color: var(--color-bzr-navbar-text-primary) !important;
-        border-radius: 5px !important;
+        color: var(--color-white) !important;
         padding: 5px;
     }
-    .user-btn:enabled:hover {
-        background: var(--color-bzr-navbar-hover-background-primary);
-        border-color: var(--color-bzr-navbar-hover-background-primary);
+    .user-btn:hover {
+        border-color: var(--link-hover-color);
+        background: var(--link-hover-color);
     }
     #user-menu {
         z-index: 1;
-    }
-    .portal-2023 {
-        color: red;
-        font-size: 20px;
-        text-decoration: none;
-        padding-right: 10px;
     }
 </style>

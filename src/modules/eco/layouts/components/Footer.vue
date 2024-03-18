@@ -1,5 +1,8 @@
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from "vue-i18n";
+
+const { t, locale } = useI18n();
 
 const currentYear = computed(() => new Date().getFullYear());
 </script>
@@ -7,91 +10,116 @@ const currentYear = computed(() => new Date().getFullYear());
 <template>
     <footer class="footer">
         <div class="footer-container">
-            
-        </div>
-        <div class="copyright">
-            <div>Copyright &#169; {{ currentYear }} - Sva prava zadržava 
-                <span class="yellow">SELO NA 3 KLIKA&nbsp;</span>
+            <div class="footer-top">
+                <div class="links">
+                    <div>
+                        <router-link to="/">{{ t('footer.link1') }}</router-link>
+                    </div>
+                    <div>
+                        <router-link to="/">{{ t('footer.link2') }}</router-link>
+                    </div>
+                    <div>
+                        <router-link to="/">{{ t('footer.link3') }}</router-link>
+                    </div>
+                    <div>
+                        <router-link to="/">{{ t('footer.link4') }}</router-link>
+                    </div>
+                </div>
+                <div class="logo-wrapper">
+                    <a href="/" class="logo">
+                        <img alt="Logo" src="/images/app-logo.svg" to="/">
+                    </a>
+                </div>
+                <div class="socials">
+                    <div>{{ t('footer.contact') }} 123123123</div>
+                    <div>E-mail email@example.com</div>
+                    <div class="social-links">
+                        <a href="//twitter.com" target="_blank">
+                            <img alt="Logo" src="/images/twitter.svg" to="/">
+                        </a>
+                        <a href="//facebook.com" target="_blank">
+                            <img alt="Logo" src="/images/facebook.svg" to="/">
+                        </a>
+                        <a href="//instagram.com" target="_blank">
+                            <img alt="Logo" src="/images/instagram.svg" to="/">
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div>
-                | Kraljice Natalije 45/7 |&nbsp;
-            </div>
-            <div>
-                ažuriranje portala na dnevnom nivou, ISSN 3009-4550 (Online)
+            <div class="footer-bottom">
+                <div>Copyright © {{ currentYear }} - <span>{{ t('footer.bottomPart1') }}</span></div>
+                <div>{{ t('footer.bottomPart2') }}</div>
+                <div>{{ t('footer.bottomPart3') }}</div>
             </div>
         </div>
     </footer>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
     .footer {
-        .logo-footer {
-            width: auto;
-            height: 50px;
-        }
-        background-color: var(--color-bzr-navbar-background-primary);
-        .copyright {
-            background-color: #333331;
-            min-height: 50px;
-            width: 100%;
-            color: white;
-            span {
-                top: 15px;
-            }
-            .yellow {
-                color: var(--color-bzr-navbar-background-primary);
-                top: 0px;
-            }
-        }
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .copyright {
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        bottom: 0;
+        /* position: absolute;
+        bottom: -164px; */
+        padding: 8px 0;
+        display: flex;
+        justify-content: center;
+        color: var(--color-white-soft);
         width: 100%;
-        min-height: 280px;
-        .col-full {
+        background-color: var(--color-black);
+        .footer-container {
+            max-width: var(--container-width);
+        }
+        .footer-top {
             display: flex;
-            padding-top: 20px;
-            background-color: var(--color-bzr-navbar-background-primary) !important;
-            color: var(--color-bzr-navbar-text-primary) !important;
-            .widget {
-                position: relative;
-                margin: 0;
-                padding: 0 20px;
-                flex: 1;
-                .textwidget {
-                    font-size: 14px;
-                    margin-top: 1rem;
-                    ul {
-                        padding-left: 50px;
-                        li {
-                            display: block;
-                            padding-bottom: 50px;
-                            a {
-                                text-decoration: none;
-                                color: var(--color-bzr-navbar-text-primary) !important;
-                                font-weight: 600 !important;
-                            }
-                        }
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            .links {
+                div {
+                    margin-bottom: 8px;
+                }
+                a {
+                    text-decoration: none;
+                    color: var(--color-white-soft);
+                    &:hover {
+                        color: var(--link-hover-color) !important;
                     }
-                    p {
-                        padding-top: 5px;
-                        font-weight: 600 !important;
-                        span {
-                            bottom: 5px;
-                            font-weight: 600 !important;
-                        }
+                };
+            }
+            .logo-wrapper {
+                img {
+                    width: auto;
+                    height: 100px;
+                }
+            }
+            .socials {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                gap: 8px;
+                .social-links {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 8px;
+                    img {
+                        height: 50px;
                     }
                 }
             }
         }
+        .footer-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 4px;
+            :nth-child(2) {
+                margin: 0 8px;
+                padding: 0 8px;
+                border-left: 1px solid var(--color-white-soft);
+                border-right: 1px solid var(--color-white-soft);
+            }
+            span {
+                font-weight: 600;
+            }
+        }
+        
     }
 </style>

@@ -1,3 +1,28 @@
 {
-    "Home": "Početna"
+    "Home": "Početna",
+    "nav": {
+        "home": "Početna",
+        "about": "O nama",
+        "municipality": "O opštinama",
+        "places": "O selima"
+    },
+    "home": {
+        "headerMsg": "Pružite sebi odmor kakav zaslužujete",
+        "tourism": "Ekoturizam",
+        "market": "E pijaca",
+        "news": "E novine",
+        "latestContentTitle": "Najnoviji sadržaj",
+        "statisticsTitle": "Posećenost",
+        "suggestionTitle": "Zaronite u prirodne bajke i otkrijte tajne naših krajve"
+    },
+    "footer": {
+        "link1": "Radio stanice nasih opština",
+        "link2": "Zvanični sajtovi opština",
+        "link3": "Važni telefoni ustanva",
+        "link4": "Uslovi korišćenja",
+        "contact": "Kontakt telefon",
+        "bottomPart1": "Selo na 3 klika",
+        "bottomPart2": "Sva prava zadržana",
+        "bottomPart3": "ažuriranje portala na dnevnom nivou"
+    }
 }

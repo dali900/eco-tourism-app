@@ -5,6 +5,8 @@ import { useAuthStore } from './stores/auth'
 import { useGlobalStore } from './stores/global'
 import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
+import {useI18n} from 'vue-i18n'
+
 //import { useAppUpdateManager } from '@/util/appUpdateManager'
 const env = import.meta.env.VITE_APP_ENV;
 
@@ -13,6 +15,8 @@ const router = useRouter();
 const authStore = useAuthStore();
 const globalStore = useGlobalStore();
 const { user, loading } = storeToRefs(authStore);
+const {locale} = useI18n();
+//locale.value = "srCyrl";
 //const { appIsOpen } = storeToRefs(indexStore);
 
 //useAppUpdateManager();
@@ -41,7 +45,7 @@ if(!user.value){
 </script>
 
 <template>
-    <div class="layout">
+    <div class="wrapper">
         <Toast position="top-right"/>
         <RouterView />
         <ConfirmDialog class="confirm-dialog"></ConfirmDialog>
@@ -49,7 +53,7 @@ if(!user.value){
 </template>
 
 <style>
-body {
+/* body {
     padding: 0;
     margin: 0;
     height: 100%;
@@ -69,6 +73,21 @@ body {
 }
 .p-dialog-mask.p-component-overlay {
     z-index: 3 !important;
+} */
+html,
+body {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 :deep(.p-toast) {
     z-index: 9999;

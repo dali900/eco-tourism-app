@@ -61,7 +61,7 @@ const currentYear = computed(() => new Date().getFullYear());
         </div>
         <div class="copyright">
             <div>Copyright &#169; {{ currentYear }} - Sva prava zadržava 
-                <span class="yellow">ACTA MEDIA&nbsp;</span>
+                <span class="yellow">Selo na 3 klika&nbsp;</span>
             </div>
             <div>
                 | Kraljice Natalije 45/7 |&nbsp;

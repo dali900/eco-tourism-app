@@ -2,13 +2,19 @@ export default [
     {
         path: "/",
         alias: "",
-        name: "Home",
+        name: "home",
         component: () => import("@eco/pages/home/index.vue"),
     },
     {
-        path: "/places",
-        alias: "",
-        name: "Places",
+        path: "about/",
+        alias: ["onama/"],
+        name: "about",
+        component: () => import("@eco/pages/AboutUs.vue"),
+    },
+    {
+        path: "places/",
+        alias: "mesta/",
+        name: "places",
         component: () => import("@eco/pages/places/Places.vue"),
     },
     /* {

@@ -1,5 +1,5 @@
 <script setup>
-
+const currentYear = computed(() => new Date().getFullYear());
 </script>
 
 <template>
@@ -57,7 +57,7 @@
         </div>
         <div class="copyright">
             <div>
-                <span>Copyright &#169; 2024 - <span class="red">ACTA MEDIA</span> | Sva prava zadržana | </span>
+                <span>Copyright &#169; {{ currentYear }} - <span class="red">Selo na 3 klika</span> | Sva prava zadržana | </span>
                 <span>
                     ažuriranje portala na dnevnom nivou, ISSN 3009-4771 (Online)
                 </span>

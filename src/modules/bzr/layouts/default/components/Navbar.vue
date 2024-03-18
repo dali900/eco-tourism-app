@@ -102,14 +102,11 @@
     <Menubar :model="menuItems">
         <template #start>
             <a href="/" class="logo">
-                <img alt="Logo" src="/images/bzr_white_logo.png" to="/">
-                <span><span>  BZR</span> PORTAL</span>
+                <!-- <img alt="Logo" src="/images/bzr_white_logo.png" to="/"> -->
+                <span>Selo na 3 klika</span>
             </a>
         </template>
-        <template #end>
-            <a href="/BZR-Narudzbenica-2024.pdf" target= “_blank” class="portal-2023">
-                PRETPLATA ZA 2024.
-            </a>
+        <template #end>            
             <Button
                 type="button"
                 @click="toggleUserMenu"

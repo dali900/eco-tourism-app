@@ -1,31 +1,37 @@
 <script setup>
-    import  Navbar  from './components/Navbar.vue'
-    import  Footer  from './components/Footer.vue'
+import { RouterLink, RouterView } from "vue-router";
+import Navbar from "./components/Navbar.vue";
+import Footer from "./components/Footer.vue";
 </script>
 
 <template>
     <Navbar />
     <div class="container">
         <div class="content">
-            <router-view></router-view>
+            <RouterView />
         </div>
-        <Footer></Footer>
     </div>
+    <Footer />
 </template>
 
 <style lang="scss">
-    @import "../../../assets/base.css";
-    @import "../assets/base.css";
-    .container {
-        height: auto;
-        min-height: 100%;
+@import "../../../assets/base.css";
+@import "../assets/base.css";
+
+.container {
+    min-height: 100vh;
         position: relative;
         background-color: var(--color-bzr-body-background);
         padding-top: 60px;
-        /* color: rgb(209, 213, 219); */
-    }
-    .content {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
+        overflow: auto;
+    /* color: rgb(209, 213, 219); */
+}
+.content {
+    flex-grow: 1;
+    width: 100%;
+    position: relative;
+    max-width: var(--container-width);
+    margin: 0 auto;
+}
+
 </style>
