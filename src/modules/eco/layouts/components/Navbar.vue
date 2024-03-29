@@ -159,6 +159,7 @@
             }
         }
     }
+    
     .p-menubar {
         font-size: 18px;
         border: none;
@@ -170,6 +171,7 @@
         width: 100%;
         position: fixed;
         z-index: 2;
+
         :deep(.p-menubar-start, .p-menubar-button) {
             flex: 0 0 auto;
         }
@@ -204,6 +206,9 @@
         :deep(.p-submenu-list) {
             background-color: var(--vt-c-black-soft);
         }
+    }
+    :deep(.p-menubar-root-list) {
+        background: var(--color-black);
     }
     .user-btn {
         color: var(--color-white) !important;

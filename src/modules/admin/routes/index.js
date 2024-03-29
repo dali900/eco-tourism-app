@@ -2,7 +2,7 @@ export default [
     {
         path: "dashboard/",
         name: "AdminDashboard",
-        component: import("../pages/dashboard/Dashboard.vue"),
+        component: () => import("../pages/dashboard/Dashboard.vue"),
     },
     {
         path: "users/",
@@ -63,7 +63,7 @@ export default [
         component: () => import("../pages/regulations/regulationTypes/RegulationTypes.vue"),
     },
     {
-        path: "/news",
+        path: "news/",
         name: "AdminNews",
         component: () => import("../pages/news/News.vue"),
     },
@@ -83,37 +83,37 @@ export default [
         component: () => import("../pages/documents/documentTypes/DocumentTypes.vue"),
     },
     {
-        path: "/articles",
+        path: "articles/",
         name: "AdminArticles",
         component: () => import("../pages/articles/Articles.vue"),
     },
     {
-        path: "/article/:articleId?",
+        path: "article/:articleId?/",
         name: "AdminArticle",
         component: () => import("../pages/articles/Article.vue"),
     },
     {
-        path: "/article-types",
+        path: "article-types/",
         name: "AdminArticleTypes",
         component: () => import("../pages/articles/articleTypes/ArticleTypes.vue"),
     },
     {
-        path: "/questions",
+        path: "questions/",
         name: "AdminQuestions",
         component: () => import("../pages/questions/Questions.vue"),
     },
     {
-        path: "/question-types",
+        path: "question-types/",
         name: "AdminQuestionTypes",
         component: () => import("../pages/questions/questionTypes/QuestionTypes.vue"),
     },
     {
-        path: "/videos",
+        path: "videos/",
         name: "AdminVideos",
         component: () => import("../pages/videos/Videos.vue"),
     },
     {
-        path: "/banners",
+        path: "banners/",
         name: "AdminBanners",
         component: () => import("../pages/banners/Banners.vue"),
     }

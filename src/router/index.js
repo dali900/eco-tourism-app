@@ -3,7 +3,6 @@ import { useAuthStore } from '@/stores/auth'
 import PageNotFound from "../pages/PageNotFound.vue";
 import adminRoutes from "../modules/admin/routes/index"
 import ecoRoutes from "../modules/eco/routes/index"
-console.log(import.meta.env.BASE_URL);
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_BASE_URL),
   routes: [

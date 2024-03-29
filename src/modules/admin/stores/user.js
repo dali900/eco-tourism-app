@@ -32,7 +32,7 @@ export const useUserStore = defineStore('user', {
             this.users = null;
             try {
                 const urlParams = parseFilterParams(params);             
-                const response = await http.get('/api/'+this.selectedApp+'/users', urlParams);
+                const response = await http.get('/api/users', urlParams);
                 this.users = response.data.data.users.results;
                 this.usersTotal = response.data.data.users.pagination.total;
                 this.roles = response.data.data.roles;
@@ -51,7 +51,7 @@ export const useUserStore = defineStore('user', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {
-                const response = await http.get('/api/'+this.selectedApp+'/users/'+id);
+                const response = await http.get('/api/users/'+id);
                 this.user = response.data.data.user;
                 this.roles = response.data.data.roles;
                 indexStore.setLoading(false);
@@ -69,7 +69,7 @@ export const useUserStore = defineStore('user', {
             indexStore.setLoading();
             try {
                 const urlParams = parseFilterParams(params);             
-                const response = await http.get('/api/'+this.selectedApp+'/users/profiles', urlParams);
+                const response = await http.get('/api/users/profiles', urlParams);
                 this.profiles = response.data.data.user_profiles.results;
                 this.profilesTotal = response.data.data.user_profiles.pagination.total;
                 this.roles = response.data.data.roles;
@@ -87,7 +87,7 @@ export const useUserStore = defineStore('user', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {
-                const response = await http.get('/api/'+this.selectedApp+'/users/'+id+'/profile');
+                const response = await http.get('/api/users/'+id+'/profile');
                 this.user = response.data.data.user;
                 this.roles = response.data.data.roles;
                 indexStore.setLoading(false);
@@ -105,7 +105,7 @@ export const useUserStore = defineStore('user', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.post('/api/'+this.selectedApp+'/users/admin-create', data);
+                const response = await http.post('/api/users/admin-create', data);
                 const user = response.data.data.user;
                 //users are not loaded when user form is opened directly
                 if(this.users && this.users.length){
@@ -133,7 +133,7 @@ export const useUserStore = defineStore('user', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.put('/api/'+this.selectedApp+'/users/'+id, data);
+                const response = await http.put('/api/users/'+id, data);
                 const user = response.data.data.user;
                 if(this.users && this.users.length){
                     //replace the existing resource
@@ -160,7 +160,7 @@ export const useUserStore = defineStore('user', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.put('/api/'+this.selectedApp+'/users/'+id+'/password', data);
+                const response = await http.put('/api/users/'+id+'/password', data);
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -177,7 +177,7 @@ export const useUserStore = defineStore('user', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.delete('/api/'+this.selectedApp+'/users/'+id);
+                const response = await http.delete('/api/users/'+id);
                 if(this.users) {
                     this.users = this.users.filter(el => el.id != id); 
                 }
@@ -198,7 +198,7 @@ export const useUserStore = defineStore('user', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.delete('/api/'+this.selectedApp+'/users/'+id);
+                const response = await http.delete('/api/users/'+id);
                 this.profiles = this.profiles.filter(el => el.id != id); 
                 if(this.profiles && this.profiles.id == id){
                     this.profiles = null;
@@ -239,7 +239,7 @@ export const useUserStore = defineStore('user', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {
-                downloadFile('/api/'+this.selectedApp+'/users/export-excel', null, 'users.xls');
+                downloadFile('/api/users/export-excel', null, 'users.xls');
                 indexStore.setLoading(false);
                 return this.user;
             } catch (error) {

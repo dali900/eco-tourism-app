@@ -3,7 +3,6 @@ import axios from 'axios';
 import { http, storeAuthToken, removeAuthToken, getAuthToken } from '@/util/apiClient';
 import { defineStore } from 'pinia'
 import { useGlobalStore } from './global'
-import { getAppNameFromUrl } from '../util/general'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -40,7 +39,7 @@ export const useAuthStore = defineStore('auth', {
             globalStore.setLoading();
             try {
                 await http.get('/sanctum/csrf-cookie');
-                const response = await http.post('/api/'+getAppNameFromUrl()+'/login', data);
+                const response = await http.post('/api/login', data);
                 this.user = response.data.data.user;
                 this.token = response.data.data.csrf_token;
                 this.apiAuthToken = response.data.data.auth_token;
@@ -87,7 +86,7 @@ export const useAuthStore = defineStore('auth', {
             const globalStore = useGlobalStore();
             globalStore.setLoading();
             try {
-                const response = await http.get('/api/'+getAppNameFromUrl()+'/me');
+                const response = await http.get('/api/me');
                 if(response.data.data.user !== null){
                     this.user = response.data.data.user;
                     this.token = response.data.data.csrf_token;

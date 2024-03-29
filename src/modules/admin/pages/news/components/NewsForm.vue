@@ -23,14 +23,15 @@
                 <div class="field flex flex-column">
                     <label for="name-help">Sažetak</label>
                     <span class="p-float-label">
-                        Editor
+                        <jodit-editor v-model="form.summary" :buttons="joditButtons"></jodit-editor>
                     </span>
                     <small id="name-help" class="p-error">{{formErrors.summary}}</small>
                 </div>
                 <div class="field flex flex-column">
                     <label for="name-help">Sadržaj</label>
                     <span class="p-float-label">
-                        Editor
+                        <jodit-editor v-model="form.text" :buttons="joditButtons"></jodit-editor>
+                    </span>
                     <small id="name-help" class="p-error">{{formErrors.text}}</small>
                 </div>
                 <div class="field flex flex-column">

@@ -2,7 +2,12 @@
     <div class="login">
         <Card class="login-card">
             <template #title>
-                Ekoturizam admin panel
+                <div>
+                    <small style="font-size: 16px">Admin panel</small>
+                </div>
+                <div>
+                    Selo na 3 klika
+                </div>
             </template>
             <template #content>
                 <div class="login-form flex flex-column">
@@ -128,13 +133,13 @@ const login = async () => {
 
 <style scoped>
 .login{
-    max-width: 290px;
+    max-width: 370px;
 }
 .login-form #email{
     width: 100%;
 }
 .login-card {
-    background-color: var(--gray-200) !important;
+    background-color: #eeeeeed4;
 }
 .login-form{
     max-width: 370px;

@@ -17,84 +17,37 @@ const items = ref([
         items: [
             {
                 label: 'Svi korisnici',
-                to: '/users',
+                route: '/admin/users/',
                 visible: authStore.hasAdminAccess()
             },
             {
                 label: 'Korisnički profili',
-                to: '/user-profiles',
+                route: '/user-profiles',
                 visible: authStore.hasAdminAccess()
             },
             {
                 label: 'Vrste planova',
-                to: '/plans'
+                route: '/plans'
             },
-        ]
-    },
-    {
-        label: 'Propisi',
-        items: [
-            {
-                label: 'Prikaz propisa',
-                to: '/regulations',
-            },
-            {
-                label: 'Tipovi',
-                to: '/regulation-types',
-            }
-        ]
-    },
-    {
-        label: 'Dokumentacija',
-        items: [
-            {
-                label: 'Prikaz modela akata',
-                to: '/documents',
-            },
-            {
-                label: 'Tipovi',
-                to: '/document-types',
-            }
         ]
     },
     {
         label: 'Vesti',
-        to: '/news'
+        route: '/admin/news/'
     },
     {
         label: 'Članci',
         items: [
             {
                 label: 'Prikaz članaka',
-                to: '/articles',
+                route: '/articles',
             },
             {
                 label: 'Kategorije',
-                to: '/article-types',
+                route: '/article-types',
             }
         ]
     },
-    {
-        label: 'Pitanja i odgovori',
-        items: [
-            {
-                label: 'Prikaz pitanja',
-                to: '/questions',
-            },
-            {
-                label: 'Kategorije',
-                to: '/question-types',
-            }
-        ]
-    },
-    {
-        label: 'Video',
-        to: '/videos'
-    },
-    {
-        label: 'Baneri',
-        to: '/banners'
-    }
 ]);
 
 const menu = ref(null); //Gets <Menu> component via ref="meni"
@@ -103,36 +56,18 @@ const toggleUserMenu = (event) => {
 }
 
 const userMenuItems = ref([
-    {
+    /* {
         label: "Korisnički panel BZR",
         command: () => {
             window.open(import.meta.env.VITE_BZR_URL, '_blank');
         }
-    },
-    {
-        label: "Korisnički panel EXPORTINFO",
-        command: () => {
-            window.open(import.meta.env.VITE_EXPORTINFO_URL, '_blank');
-        }
-    },
-    {
-        label: "Korisnički panel ZŽS",
-        command: () => {
-            window.open(import.meta.env.VITE_ZZS_URL, '_blank');
-        }
-    },
+    }, */
     {
         label: "Izlogujte se",
         command: () => {
             logout();
         }
     }
-]);
-
-const appItems = ref([
-    { name: "EXPORTINFO", id: 'exportinfo' },
-    { name: "BZR", id: 'bzr' },
-    { name: "ZZS", id: 'zzs' }
 ]);
 
 const logout = async () => {
@@ -152,29 +87,26 @@ const onAppChange = (event) => {
     <div class="admin-navbar" :class="indexStore.selectedApp">
         <Menubar :model="items">
             <template #start>
-                <template v-if="indexStore.selectedApp === 'bzr'">
-                    <a class="logo">
-                        <img alt="Logo" src="/images/bzr_white_logo.png" to="/">
-                        <span><span>  BZR</span> PORTAL</span>
+                <a class="logo">
+                    <img alt="Logo" src="/images/app-logo.svg" to="/">
+                    <span>Selo na 3 klika</span>
+                </a>
+            </template>
+            <template #item="{ item, props, hasSubmenu }">
+                <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+                    <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+                        <span :class="item.icon" />
+                        <span class="ml-2 p-menuitem-text">{{ item.label }}</span>
                     </a>
-                </template>
-                <template v-if="indexStore.selectedApp === 'exportinfo'">
-                    <a class="logo">
-                        <img alt="Logo" src="/images/exportinfo_white_logo.png" to="/">
-                        <span><span>  EXPORT</span> INFO</span>
-                    </a>
-                </template>
+                </router-link>
+                <a v-else v-ripple :href="item.url" :target="item.target" v-bind="props.action">
+                    <span :class="item.icon" />
+                    <span class="ml-2 p-menuitem-text">{{ item.label }}</span>
+                    <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down ml-2" />
+                </a>
             </template>
             <template #end>
                 <!-- <InputText placeholder="Pretražite" type="text" /> -->
-                <Dropdown 
-                    v-model="indexStore.selectedApp" 
-                    placeholder="" 
-                    :options="appItems" 
-                    optionLabel="name" 
-                    optionValue="id" 
-                    @change="onAppChange"
-                />
                 <Button
                     type="button"
                     v-if="user"
@@ -218,8 +150,11 @@ const onAppChange = (event) => {
     color: white;
     padding-right: 30px;
     text-decoration: none;
+    display: flex;
+    align-items: center;
     img {
         max-height: 36px;
+        margin-right: 4px;
     }
     span {
         bottom: 8px;
@@ -239,85 +174,31 @@ const onAppChange = (event) => {
     width: 100%;
     position: fixed;
     z-index: 2;
-}
-.exportinfo {
-    .p-menubar {
-        background-color: var(--color-exportinfo-navbar-background-primary);
-        @media screen and (min-width: 960px){
-            .p-menuitem-text {
-                color: var(--color-exportinfo-navbar-text-primary) !important;
-            }
-        }
-        .p-submenu-list {
-            background-color: var(--color-exportinfo-navbar-background-primary);
-        }
-        .p-menuitem-link:hover {
-            background-color: var(--color-exportinfo-navbar-hover-background-primary) !important;
-        }
-        .p-menuitem-active > .p-menuitem-link {
-            background: var(--color-exportinfo-navbar-hover-background-primary) !important;
-        }
-        .p-menuitem-active > .p-menuitem-content {
-            background: var(--color-exportinfo-navbar-hover-background-primary) !important;
-        }
-        .p-focus > .p-menuitem-content {
-            background: var(--color-exportinfo-navbar-hover-background-primary) !important;
+    background-color: var(--color-black);
+    .p-menuitem-text {
+        color: var(--color-white);
+    }
+    /* .p-menuitem-link {
+        color: var(--color-white);
+    } */
+    .p-menuitem.p-highlight > .p-menuitem-content {
+        background-color: var(--color-black-soft);
+    }
+    .p-menuitem.p-focus > .p-menuitem-content {
+        background-color: var(--color-dark-grey);
+    }
+    .p-menuitem-content:hover {
+        /* background-color: inherit; */
+        background-color: var(--color-dark-grey);
+        .p-menuitem-text {
+            /* color: var(--link-hover-color); */
         }
     }
-}
-.bzr {
-    .p-menubar {
-        background-color: var(--color-bzr-navbar-background-primary);
-        @media screen and (min-width: 960px){
-            .p-menuitem-text {
-                color: var(--color-bzr-navbar-text-primary) !important;
-            }
-        }
-        .p-submenu-list {
-            background-color: var(--color-bzr-navbar-background-primary);
-        }
-        .p-menuitem-link:hover {
-            background-color: var(--color-bzr-navbar-hover-background-primary) !important;
-        }
-        .p-menuitem-active > .p-menuitem-link {
-            background: var(--color-bzr-navbar-hover-background-primary) !important;
-        }
-        .p-menuitem-active > .p-menuitem-content {
-            background: var(--color-bzr-navbar-hover-background-primary) !important;
-        }
-        .p-focus > .p-menuitem-content {
-            background: var(--color-bzr-navbar-hover-background-primary) !important;
-        }
+    .p-submenu-list {
+        background-color: var(--color-black-soft);
     }
 }
-.zzs {
-    .p-menubar {
-        background-color: var(--color-zzs-navbar-background-primary);
-        @media screen and (min-width: 960px){
-            .p-menuitem-text {
-                color: var(--color-zzs-navbar-text-primary) !important;
-            }
-        }
-        .p-submenu-list {
-            background-color: var(--color-zzs-navbar-background-primary);
-        }
-        .p-menuitem-link:hover {
-            background-color: var(--color-zzs-navbar-hover-background-primary) !important;
-        }
-        .p-menuitem-active > .p-menuitem-link {
-            background: var(--color-zzs-navbar-hover-background-primary) !important;
-        }
-        .p-menuitem-active > .p-menuitem-content {
-            background: var(--color-zzs-navbar-hover-background-primary) !important;
-        }
-        .p-focus > .p-menuitem-content {
-            background: var(--color-zzs-navbar-hover-background-primary) !important;
-        }
-    }
-}
-.container {
-    background-color: var(--color-body-background);
-}
+
 .p-datatable-scrollable .p-datatable-thead {
     z-index: 1 !important;
 }

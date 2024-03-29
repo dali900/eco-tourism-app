@@ -13,7 +13,14 @@
         "news": "E novine",
         "latestContentTitle": "Najnoviji sadržaj",
         "statisticsTitle": "Posećenost",
-        "suggestionTitle": "Zaronite u prirodne bajke i otkrijte tajne naših krajve"
+        "suggestionTitle": "Zaronite u prirodne bajke i otkrijte tajne naših krajve",
+        "partnersTitle": "Prijatelji i sponzori",
+        "partnersList": {
+            "p1": "Bojan Milovanović Lipovica",
+            "p2": "Bane Jovanović Sige",
+            "p3": "Udruženje žena Ćvodin",
+            "p4": "Farma Cvjetinović Zlatovo"
+        }
     },
     "footer": {
         "link1": "Radio stanice nasih opština",
