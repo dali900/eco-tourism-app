@@ -4,7 +4,7 @@ import PageNotFound from "../pages/PageNotFound.vue";
 import adminRoutes from "../modules/admin/routes/index"
 import ecoRoutes from "../modules/eco/routes/index"
 const router = createRouter({
-  history: createWebHistory(import.meta.env.VITE_BASE_URL),
+  history: createWebHistory(),
   routes: [
         {
             name: "AdminAuth",
@@ -29,6 +29,7 @@ const router = createRouter({
         {
             name: "Eco",
             path: "/",
+            alias: ['/home'],
             component: () => import("@eco/layouts/DefaultLayout.vue"),
             children: ecoRoutes,
         },
@@ -47,7 +48,7 @@ const router = createRouter({
     },
 })
 
-router.beforeEach((to, from, next) => {
+/* router.beforeEach((to, from, next) => {
     if(to.meta.requiresAuth && to.meta.adminPanel){
         const authStore = useAuthStore();
         //Auth user exists
@@ -74,7 +75,7 @@ router.beforeEach((to, from, next) => {
     } else {
         next();
     }
-})
+}) */
 
 export default router
 

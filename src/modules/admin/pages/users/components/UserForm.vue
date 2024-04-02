@@ -28,23 +28,9 @@
             </div>
             <div class="flex flex-column">
                 <div class="field flex flex-column">
-                    <label for="company_name">Naziv kompanije *</label>
-                    <InputText id="company_name" type="text" v-model="form.company_name" :class="{'p-invalid': formErrors.company_name}" @keyup.enter="save"/>
-                    <small id="company_name-help" class="p-error">{{formErrors.company_name}}</small>
-                </div>
-            </div>
-            <div class="flex flex-column">
-                <div class="field flex flex-column">
                     <label for="phone_number">Broj telefona *</label>
                     <InputText id="phone_number" type="text" v-model="form.phone_number" :class="{'p-invalid': formErrors.phone_number}" @keyup.enter="save"/>
                     <small id="phone_number-help" class="p-error">{{formErrors.phone_number}}</small>
-                </div>
-            </div>
-            <div class="flex flex-column">
-                <div class="field flex flex-column">
-                    <label for="position">Pozicija *</label>
-                    <InputText id="position" type="text" v-model="form.position" :class="{'p-invalid': formErrors.position}" @keyup.enter="save"/>
-                    <small id="position-help" class="p-error">{{formErrors.position}}</small>
                 </div>
             </div>
             <div class="flex flex-column">

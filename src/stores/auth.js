@@ -87,7 +87,7 @@ export const useAuthStore = defineStore('auth', {
             globalStore.setLoading();
             try {
                 const response = await http.get('/api/me');
-                if(response.data.data.user !== null){
+                if(response.user !== null){
                     this.user = response.data.data.user;
                     this.token = response.data.data.csrf_token;
                 }
@@ -99,7 +99,7 @@ export const useAuthStore = defineStore('auth', {
                 this.fetchingUser = false;
                 globalStore.setLoading(false);
                 this.user = null;
-                const message = response.data.message;
+                const message = response?.message || null;
                 errors.default = message;
                 throw error;
             }

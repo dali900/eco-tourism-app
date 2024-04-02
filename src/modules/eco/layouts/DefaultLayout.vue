@@ -16,7 +16,7 @@ import Footer from "./components/Footer.vue";
 
 <style lang="scss">
 @import "../../../assets/base.css";
-@import "../assets/base.css";
+/* @import "../assets/base.css"; */
 
 .container {
     min-height: 100vh;

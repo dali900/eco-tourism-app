@@ -8,7 +8,6 @@
                     <div>
                         <span>Korisnici</span>&nbsp;
                         <Button @click="openForm" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novog korisnika'"></Button>&nbsp;
-                        <Button @click="exportToExcel" icon="pi pi-file-excel" class="p-button-sm" v-tooltip="'Export u excel'"></Button>
                     </div>
                     <!-- <div>Opcija</div> -->
                 </div>
