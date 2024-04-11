@@ -32,6 +32,19 @@ const items = ref([
         ]
     },
     {
+        label: 'Znamenitosti',
+        items: [
+            {
+                label: 'Pregled',
+                route: '/attractions',
+            },
+            {
+                label: 'Kategorije',
+                route: '/attraction-categories',
+            }
+        ]
+    },
+    {
         label: 'Vesti',
         route: '/admin/news/'
     },
@@ -48,6 +61,7 @@ const items = ref([
             }
         ]
     },
+    
 ]);
 
 const menu = ref(null); //Gets <Menu> component via ref="meni"

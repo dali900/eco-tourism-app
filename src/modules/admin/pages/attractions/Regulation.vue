@@ -835,4 +835,4 @@ input.p-invalid{
     background-color: white;
     border: none;
 }
-</style>
+</style>@/modules/admin/stores/attraction

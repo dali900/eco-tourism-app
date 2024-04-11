@@ -5,16 +5,16 @@ import { defineStore } from 'pinia'
 import { useIndexStore } from './index'
 const env = import.meta.env.VITE_APP_ENV;
 
-export const useRegulationStore = defineStore('regulation', {
+export const useAttractionStore = defineStore('attraction', {
     state: () => ({
-        regulationType: null,
-        regulationTypes: null,
-        regulationTypesTotal: null,
-        regulation: null,
-        regulations: null,
-        regulationsTotal: null,
-        regulationRootTypes: null,
-        regulationSubtypes: null,
+        category: null,
+        categories: null,
+        categoriesTotal: null,
+        attraction: null,
+        attractions: null,
+        attractionsTotal: null,
+        attractionRootCategory: null,
+        attractionSubcategories: null,
         tree: null,
         treeCount: null
     }),
@@ -30,14 +30,14 @@ export const useRegulationStore = defineStore('regulation', {
     },
     actions: {
         //get filtered and paginated resources
-        async getRegulationTypes(params){
+        async getAttractionCategories(params){
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {
                 const urlParams = parseFilterParams(params);
-                const response = await http.get('/api/'+this.selectedApp+'/regulation-types', urlParams);
-                this.regulationTypes = response.data.data.regulation_types.results;
-                this.regulationTypesTotal = response.data.data.regulation_types.pagination.total;
+                const response = await http.get('/api/'+this.selectedApp+'/attraction-types', urlParams);
+                this.categories = response.data.data.regulation_types.results;
+                this.categoriesTotal = response.data.data.regulation_types.pagination.total;
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -53,8 +53,8 @@ export const useRegulationStore = defineStore('regulation', {
             indexStore.setLoading();
             try {
                 const urlParams = parseFilterParams(params);
-                const response = await http.get('/api/'+this.selectedApp+'/regulation-types/roots', urlParams);
-                this.regulationRootTypes = response.data.data.regulation_root_types;
+                const response = await http.get('/api/'+this.selectedApp+'/attraction-types/roots', urlParams);
+                this.attractionRootCategory = response.data.data.regulation_root_types;
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -70,7 +70,7 @@ export const useRegulationStore = defineStore('regulation', {
             indexStore.setLoading();
             try {
                 const urlParams = parseFilterParams(params);
-                const response = await http.get('/api/'+this.selectedApp+'/regulation-types/tree', urlParams);
+                const response = await http.get('/api/'+this.selectedApp+'/attraction-types/tree', urlParams);
                 this.tree = response.data.data.tree;
                 this.treeCount = response.data.data.count;
                 indexStore.setLoading(false);
@@ -86,7 +86,7 @@ export const useRegulationStore = defineStore('regulation', {
         async getFilterRegulationRootTypes(params){
             try {
                 const urlParams = parseFilterParams(params);
-                const response = await http.get('/api/'+this.selectedApp+'/regulation-types', urlParams);
+                const response = await http.get('/api/'+this.selectedApp+'/attraction-types', urlParams);
                 return response.data.data;
             } catch (error) {
                 if(env === 'local' || env === 'dev'){
@@ -99,13 +99,13 @@ export const useRegulationStore = defineStore('regulation', {
         async getRegulations(params){
             const indexStore = useIndexStore();
             indexStore.setLoading();
-            this.regulation = null;
+            this.attraction = null;
             try {
                 const urlParams = parseFilterParams(params);             
-                const response = await http.get('/api/'+this.selectedApp+'/regulations', urlParams);
-                this.regulations = response.data.data.regulations.results;
-                this.regulationsTotal = response.data.data.regulations.pagination.total;
-                this.regulationSubtypes = response.data.data.subtypes;
+                const response = await http.get('/api/'+this.selectedApp+'/attractions', urlParams);
+                this.attractions = response.data.data.attractions.results;
+                this.attractionsTotal = response.data.data.attractions.pagination.total;
+                this.attractionSubcategories = response.data.data.subtypes;
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -116,15 +116,15 @@ export const useRegulationStore = defineStore('regulation', {
                 throw error;
             }
         },
-        //fetch resource. Different resource form regulations. Needs to be fetched again if not selected
+        //fetch resource. Different resource form attractions. Needs to be fetched again if not selected
         async getRegulation(id){
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {
-                const response = await http.get('/api/'+this.selectedApp+'/regulations/'+id);
-                this.regulation = response.data.data.regulation;
+                const response = await http.get('/api/'+this.selectedApp+'/attractions/'+id);
+                this.attraction = response.data.data.attraction;
                 indexStore.setLoading(false);
-                return this.regulation; 
+                return this.attraction; 
             } catch (error) {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);
@@ -138,15 +138,15 @@ export const useRegulationStore = defineStore('regulation', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.post('/api/'+this.selectedApp+'/regulations', data);
-                const regulation = response.data.data.regulation;
-                //regulations are not loaded when regulation form is opened directly
-                if(this.regulations && this.regulations.length){
+                const response = await http.post('/api/'+this.selectedApp+'/attractions', data);
+                const attraction = response.data.data.attraction;
+                //attractions are not loaded when attraction form is opened directly
+                if(this.attractions && this.attractions.length){
                     //adds the object data to the beginning of the array
-                    this.regulations.unshift(regulation);
+                    this.attractions.unshift(attraction);
                 }
                 //set selected resource
-                this.regulation = regulation;
+                this.attraction = attraction;
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -163,16 +163,16 @@ export const useRegulationStore = defineStore('regulation', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.put('/api/'+this.selectedApp+'/regulations/'+data.id, data);
-                const regulation = response.data.data.regulation;
-                if(this.regulations && this.regulations.length){
+                const response = await http.put('/api/'+this.selectedApp+'/attractions/'+data.id, data);
+                const attraction = response.data.data.attraction;
+                if(this.attractions && this.attractions.length){
                     //replace the existing resource
-                    const regulationIndex = this.regulations.findIndex( el => el.id == data.id);
-                    this.regulations[regulationIndex] = regulation;
+                    const regulationIndex = this.attractions.findIndex( el => el.id == data.id);
+                    this.attractions[regulationIndex] = attraction;
                 }
-                //if selected regulation in form, update it
-                if(this.regulation){
-                    this.regulation = regulation;
+                //if selected attraction in form, update it
+                if(this.attraction){
+                    this.attraction = attraction;
                 }
                 indexStore.setLoading(false);
                 return response.data.data;
@@ -190,8 +190,8 @@ export const useRegulationStore = defineStore('regulation', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.delete('/api/'+this.selectedApp+'/regulations/'+id);
-                this.regulations = this.regulations.filter(el => el.id != id); 
+                const response = await http.delete('/api/'+this.selectedApp+'/attractions/'+id);
+                this.attractions = this.attractions.filter(el => el.id != id); 
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -202,15 +202,15 @@ export const useRegulationStore = defineStore('regulation', {
                 throw error;
             }
         },
-        //create new regulationType
+        //create new category
         async createType(data, errorFields){
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.post('/api/'+this.selectedApp+'/regulation-types', data);
-                const regulationType = response.data.data.regulation_type;
+                const response = await http.post('/api/'+this.selectedApp+'/attraction-types', data);
+                const category = response.data.data.regulation_type;
                 //adds the object data to the beginning of the array
-                this.regulationTypes.unshift(regulationType);
+                this.categories.unshift(category);
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -222,16 +222,16 @@ export const useRegulationStore = defineStore('regulation', {
                 throw error;
             }
         },
-        //update regulationType
+        //update category
         async updateType(data, errorFields){
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.put('/api/'+this.selectedApp+'/regulation-types/'+data.id, data);
-                const regulationType = response.data.data.regulation_type;
+                const response = await http.put('/api/'+this.selectedApp+'/attraction-types/'+data.id, data);
+                const category = response.data.data.regulation_type;
                 //replace the existing resource
-                const regulationIndex = this.regulationTypes.findIndex( el => el.id == data.id);
-                this.regulationTypes[regulationIndex] = regulationType;
+                const regulationIndex = this.categories.findIndex( el => el.id == data.id);
+                this.categories[regulationIndex] = category;
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -243,15 +243,15 @@ export const useRegulationStore = defineStore('regulation', {
                 throw error;
             }
         },
-        //delete regulationType
+        //delete category
         async deleteType(id, params){
             const urlParams = parseFilterParams(params);
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.delete('/api/'+this.selectedApp+'/regulation-types/'+id, urlParams);
-                this.regulationTypes = response.data.data.regulation_types.results;
-                this.regulationTypesTotal = response.data.data.regulation_types.pagination.total;
+                const response = await http.delete('/api/'+this.selectedApp+'/attraction-types/'+id, urlParams);
+                this.categories = response.data.data.regulation_types.results;
+                this.categoriesTotal = response.data.data.regulation_types.pagination.total;
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -267,16 +267,16 @@ export const useRegulationStore = defineStore('regulation', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                const response = await http.delete('/api/'+this.selectedApp+'/regulations/file/'+id);
-                const regulation = response.data.data.regulation;
+                const response = await http.delete('/api/'+this.selectedApp+'/attractions/file/'+id);
+                const attraction = response.data.data.attraction;
                 //delete file path from store
-                if(this.regulations && this.regulations.length){
-                    const regulationIndex = this.regulations.findIndex( el => el.id == id);
-                    this.regulations[regulationIndex].file_path = null;
+                if(this.attractions && this.attractions.length){
+                    const regulationIndex = this.attractions.findIndex( el => el.id == id);
+                    this.attractions[regulationIndex].file_path = null;
                 }
                 //update resource
-                if(this.regulation){
-                    this.regulation = regulation;
+                if(this.attraction){
+                    this.attraction = attraction;
                 }
                 indexStore.setLoading(false);
                 return response.data.data;
@@ -293,16 +293,16 @@ export const useRegulationStore = defineStore('regulation', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try { 
-                const response = await http.delete('/api/'+this.selectedApp+'/regulations/preview-file/'+id);
-                const regulation = response.data.data.regulation;
+                const response = await http.delete('/api/'+this.selectedApp+'/attractions/preview-file/'+id);
+                const attraction = response.data.data.attraction;
                 //delete file path from store
-                if(this.regulations && this.regulations.length){
-                    const regulationIndex = this.regulations.findIndex( el => el.id == id);
-                    this.regulations[regulationIndex].preview_file_path = null;
+                if(this.attractions && this.attractions.length){
+                    const regulationIndex = this.attractions.findIndex( el => el.id == id);
+                    this.attractions[regulationIndex].preview_file_path = null;
                 }
                 //update resource
-                if(this.regulation){
-                    this.regulation = regulation;
+                if(this.attraction){
+                    this.attraction = attraction;
                 }
                 indexStore.setLoading(false);
                 return response.data.data;
@@ -319,7 +319,7 @@ export const useRegulationStore = defineStore('regulation', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {            
-                await downloadFile('/api/'+this.selectedApp+'/regulations/download-file/'+id);
+                await downloadFile('/api/'+this.selectedApp+'/attractions/download-file/'+id);
                 indexStore.setLoading(false);
             } catch (error) {
                 if(env === 'local' || env === 'dev'){

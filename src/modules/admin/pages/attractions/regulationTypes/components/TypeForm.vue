@@ -165,4 +165,4 @@ const onHide = () => {
 
 <style>
 
-</style>
+</style>@/modules/admin/stores/attraction

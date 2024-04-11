@@ -374,4 +374,4 @@ const confirmDeleteResource = (data) => {
     margin-top: -13px;
     color: grey;
 }
-</style>
+</style>@/modules/admin/stores/attraction

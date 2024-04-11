@@ -251,4 +251,4 @@ const deleteResource = (id) => {
 :deep(.edit-table .p-datatable-tbody .delete-btn:hover) {
     background-color:red;
 }
-</style>
+</style>../../stores/attraction
