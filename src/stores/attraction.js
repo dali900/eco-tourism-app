@@ -2,7 +2,6 @@
 import axios from 'axios';
 import { http, parseFilterParams, fillFormErrors, downloadFile } from '@/util/apiClient';
 import { defineStore } from 'pinia'
-import { useIndexStore } from './index'
 const env = import.meta.env.VITE_APP_ENV;
 
 export const useAttractionStore = defineStore('attraction', {
@@ -192,10 +191,10 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         //create new category
-        async createCategory(data, errorFields){
+        async createType(data, errorFields){
             this.loading = true;
             try {            
-                const response = await http.post('/api/attraction-categories', data);
+                const response = await http.post('/api/attraction-types', data);
                 const category = response.data;
                 //adds the object data to the beginning of the array
                 this.categories.unshift(category);
@@ -211,10 +210,10 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         //update category
-        async updateCategory(data, errorFields){
+        async updateType(data, errorFields){
             this.loading = true;
             try {            
-                const response = await http.put('/api/attraction-categories/'+data.id, data);
+                const response = await http.put('/api/attraction-types/'+data.id, data);
                 const category = response.data;
                 //replace the existing resource
                 const index = this.categories.findIndex( el => el.id == data.id);
@@ -231,11 +230,11 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         //delete category
-        async deleteCategory(id, params){
+        async deleteType(id, params){
             const urlParams = parseFilterParams(params);
             this.loading = true;
             try {            
-                const response = await http.delete('/api/attraction-categories/'+id, urlParams);
+                const response = await http.delete('/api/attraction-types/'+id, urlParams);
                 this.categories = response.data.results;
                 this.categoriesTotal = response.data.pagination.total;
                 this.loading = false;
@@ -257,9 +256,7 @@ export const useAttractionStore = defineStore('attraction', {
                 //delete file path from store
                 if(this.attractions && this.attractions.length){
                     const index = this.attractions.findIndex( el => el.id == id);
-                    if (index !== -1) {
-                        this.attractions[index].file_path = null;
-                    }
+                    this.attractions[index].file_path = null;
                 }
                 //update resource
                 if(this.attraction){
@@ -267,6 +264,45 @@ export const useAttractionStore = defineStore('attraction', {
                 }
                 this.loading = false;
                 return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
+        //delete preview file
+        async deletePreviewFile(id){
+            this.loading = true;
+            try { 
+                const response = await http.delete('/api/attractions/preview-file/'+id);
+                const attraction = response.data;
+                //delete file path from store
+                if(this.attractions && this.attractions.length){
+                    const index = this.attractions.findIndex( el => el.id == id);
+                    this.attractions[index].preview_file_path = null;
+                }
+                //update resource
+                if(this.attraction){
+                    this.attraction = attraction;
+                }
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
+        //delete file
+        async downloadFile(id){
+            this.loading = true;
+            try {            
+                await downloadFile('/api/attractions/download-file/'+id);
+                this.loading = false;
             } catch (error) {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);

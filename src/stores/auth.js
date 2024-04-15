@@ -40,12 +40,12 @@ export const useAuthStore = defineStore('auth', {
             try {
                 await http.get('/sanctum/csrf-cookie');
                 const response = await http.post('/api/login', data);
-                this.user = response.data.data.user;
-                this.token = response.data.data.csrf_token;
-                this.apiAuthToken = response.data.data.auth_token;
+                this.user = response.data.user;
+                this.token = response.data.csrf_token;
+                this.apiAuthToken = response.data.auth_token;
                 storeAuthToken(this.apiAuthToken);
                 globalStore.setLoading(false);
-                return response.data.data;
+                return response.data;
             } catch (error) {
                 globalStore.setLoading(false);
                 console.log(error);
@@ -88,8 +88,8 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const response = await http.get('/api/me');
                 if(response.user !== null){
-                    this.user = response.data.data.user;
-                    this.token = response.data.data.csrf_token;
+                    this.user = response.data.user;
+                    this.token = response.data.csrf_token;
                 }
                 globalStore.setLoading(false);
                 this.fetchingUser = false;

@@ -32,6 +32,20 @@ const items = ref([
         ]
     },
     {
+        label: 'Atrakcije',
+        items: [
+            {
+                label: 'Pregled',
+                route: '/admin/attractions/',
+                //visible: authStore.hasAdminAccess()
+            },
+            {
+                label: 'Kategorie',
+                route: '/admin/attraction-categories'
+            },
+        ]
+    },
+    {
         label: 'Znamenitosti',
         items: [
             {
@@ -108,12 +122,12 @@ const onAppChange = (event) => {
             </template>
             <template #item="{ item, props, hasSubmenu }">
                 <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-                    <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+                    <a :href="href" v-bind="props.action" @click="navigate">
                         <span :class="item.icon" />
                         <span class="ml-2 p-menuitem-text">{{ item.label }}</span>
                     </a>
                 </router-link>
-                <a v-else v-ripple :href="item.url" :target="item.target" v-bind="props.action">
+                <a v-else :href="item.url" :target="item.target" v-bind="props.action">
                     <span :class="item.icon" />
                     <span class="ml-2 p-menuitem-text">{{ item.label }}</span>
                     <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down ml-2" />
@@ -149,6 +163,9 @@ const onAppChange = (event) => {
 <style lang="scss">
 @import "../../../assets/base.css";
 @import "../assets/base.css";
+body {
+    background-color: var(--color-background-mute);
+}
 .container {
     margin-top: 60px;
 }

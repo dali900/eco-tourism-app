@@ -35,13 +35,15 @@
                     </div>
                 </div>
                 <div class="items grid">
-                    <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in latestConent">
+                    <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in attractions">
                         <div class="item">
                             <router-link to="/" class="banner-link">
                                 <div class="img-wrapper" :key="key">
-                                    <img v-if="item.image_url" alt="content-img" :src="item.image_url">
+                                    <!-- <img v-if="item.image_url" alt="content-img" :src="item.image_url"> -->
+                                    <img v-if="item.default_image" alt="content-img" :src="apiBaseUrl+item.default_image.file_url">
+                                    <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
                                 </div>
-                                <div class="text">{{ item.text }}</div>
+                                <div class="text">{{ item.summary }}</div>
                             </router-link>
                         </div>
                     </div>
@@ -283,10 +285,32 @@
 <script setup>
 import { ref, unref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
 import AppButton from "@/components/Button/Button.vue"
+import { useAttractionStore } from '@/stores/attraction'
+import {FilterMatchMode} from 'primevue/api';
+
+const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
+const perPage = ref(20);
+const sort = ref({
+    sortField: "created_at",
+    sortOrder: -1,
+});
+const pagination = ref({
+    page: 1,
+    perPage: perPage.value,
+});
+const filters = ref({
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'content': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'approved': {value: null, matchMode: FilterMatchMode.EQUALS}
+});
+
+const attractionStore = useAttractionStore();
+attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
+const { attractions, attractionsTotal, loading } = storeToRefs(attractionStore)
 
 const { t } = useI18n();
 const latestConent = ref([
@@ -473,8 +497,12 @@ const observeVisibility = () => {
                     color: inherit;
                 }
                 .img-wrapper {
-                    max-width: 360px;
+                    height: 200px;
                     overflow: hidden;
+                    img {
+                        max-width: 360px;
+                        height: auto;
+                    }
                 }
                 .text {
                     max-width: 360px;

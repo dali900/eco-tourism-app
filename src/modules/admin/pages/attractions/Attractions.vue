@@ -1,14 +1,14 @@
 <template>
-    <div class="admin-regulations">
+    <div class="admin-attractions">
         <!-- <RegulationForm v-model="showForm" :formData="formData" @saved="formSaved"></RegulationForm> -->
         <!-- list -->
         <Card class="resource-list">
             <template #title>
                 <div class="flex justify-content-between">
                     <div>
-                        <span>Propisi</span>&nbsp;
-                        <router-link :to="{ name: 'AdminRegulation'}" class="btn-link">
-                            <Button icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novi propis'"/>
+                        <span>Atrakcije</span>&nbsp;
+                        <router-link :to="{ name: 'AdminAttraction'}" class="btn-link">
+                            <Button icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu atrakciju'"/>
                         </router-link>
                         <!-- <small>Forma:</small><Button @click="openForm" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novi propis'"></Button> -->
                     </div>
@@ -23,12 +23,12 @@
                     breakpoint="960px" 
                     editMode="cell" 
                     dataKey="id"
-                    :value="regulations" 
+                    :value="attractions" 
                     :globalLoading="globalLoading" 
                     :lazy="true"
                     :paginator="true" 
                     :rows="perPage" 
-                    :totalRecords="regulationsTotal" 
+                    :totalRecords="attractionsTotal" 
                     :rowsPerPageOptions="[20, 50, 100]"
                     :globalFilterFields="['name']"
                     :scrollable="windowWidth > 960 ? true : false"
@@ -47,7 +47,7 @@
                         </div>
                     </template>
                     <template #empty>
-                        <div v-if="globalLoading">
+                        <div v-if="loading">
                             Učitava se...
                         </div>
                         <div v-else>
@@ -62,26 +62,10 @@
                             {{data.name}}
                         </template>
                         <template #filter="{filterModel,filterCallback}">
-                            <InputText type="text" v-model="filterModel.value" @keyup="filterCallback()" class="p-column-filter" :placeholder="`Search by name`"/>
+                            <InputText type="text" v-model="filterModel.value" @keyup="filterCallback()" class="p-column-filter" :placeholder="`Pretrazi po nazivu`"/>
                         </template>
                     </Column>
-                    <Column field="messenger" header="Glasnik" :sortable="true" :style="mainColumnsWidth">
-                        <template #body="{data}">
-                            {{data.messenger}}
-                        </template>
-                        <template #filter="{filterModel,filterCallback}">
-                            <InputText type="text" v-model="filterModel.value" @keyup="filterCallback()" class="p-column-filter" :placeholder="`Search by messenger`"/>
-                        </template>
-                    </Column>
-                    <Column field="approved" header="Odobren" dataType="boolean" style="min-width: 6rem">
-                        <template #body="{ data }">
-                            <i class="pi" :class="{ 'pi-check-circle text-green-500': data.approved, 'pi-times-circle text-red-400': !data.approved }"></i>
-                        </template>
-                        <template #filter="{ filterModel, filterCallback }">
-                            <TriStateCheckbox v-model="filterModel.value" @change="filterCallback()" />
-                        </template>
-                    </Column>
-                    <Column field="created_at_formated" header="Created" :sortable="true" style="min-width:10%">
+                    <Column field="created_at_formated" header="Kreiran" :sortable="true" style="min-width:10%">
                         <template #body="{data, field}">
                             <div v-tooltip.top="data.created_at">
                                 {{data[field]}}
@@ -91,7 +75,7 @@
                     <!-- <Column field="updated_at_formated" header="Updated" :sortable="true"></Column> -->
                     <Column :exportable="false" style="min-width:10%">
                         <template #body="slotProps">
-                            <router-link :to="{ name: 'AdminRegulation', params: { regulationId: slotProps.data.id }}" class="btn-link">
+                            <router-link :to="{ name: 'AdminAttraction', params: { attractionId: slotProps.data.id }}" class="btn-link">
                                 <Button icon="pi pi-pencil" class="p-button-rounded p-button-outlined p-button-sm action-table-btn"/>
                             </router-link>
                             <!-- <Button icon="pi pi-pencil" class="p-button-rounded p-button-outlined p-button-sm action-table-btn" @click="openUpdateForm(slotProps.data, slotProps)" /> -->
@@ -102,7 +86,7 @@
             </template>
             <template #footer>
                 <div class="flex justify-content-between">
-                    <small>Total: {{regulationsTotal}}</small>
+                    <small>Ukupno: {{attractionsTotal}}</small>
                 </div>
             </template>
         </Card>
@@ -119,7 +103,7 @@ import Column from 'primevue/column';
 import {FilterMatchMode,FilterOperator} from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
 import { useAuthStore } from '@/stores/auth'
-import { useRegulationStore } from '../../stores/regulation'
+import { useAttractionStore } from '../../stores/attraction'
 
 const router = useRouter();
 const route = useRoute();
@@ -127,8 +111,8 @@ const toast = useToast();
 const confirm = useConfirm();
 
 const authStore = useAuthStore();
-const regulationStore = useRegulationStore();
-const { regulations, regulationsTotal, globalLoading } = storeToRefs(regulationStore)
+const attractionStore = useAttractionStore();
+const { attractions, attractionsTotal, loading } = storeToRefs(attractionStore)
 const { user } = storeToRefs(authStore)
 
 const timer = ref(null);
@@ -146,18 +130,19 @@ const pagination = ref({
 const filters = ref({
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'name': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'messenger': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'content': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'summary': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'approved': {value: null, matchMode: FilterMatchMode.EQUALS}
 });
 const formData = ref(null);
 
-regulationStore.getRegulations({sort: sort.value, pagination: pagination.value, filters: filters.value});
+attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
 const mainColumnsWidth = computed(() => { return {'min-width': (80/3).toFixed(2)+'%'} });
 
 //data and props ready, dom still not
 onBeforeMount( () => {
     //unselect if resource was selected in form
-    regulationStore.regulation = null;
+    attractionStore.attraction = null;
 });
 
 //dom ready
@@ -190,7 +175,7 @@ const openUpdateForm = (data, row) => {
 const onSort = (event) => {
     sort.value.sortField = event.sortField;
     sort.value.sortOrder = event.sortOrder;
-    regulationStore.getRegulations({sort: sort.value, pagination: pagination.value, filters: filters.value});
+    attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
 };
 
 const onPage = (event) => {
@@ -198,13 +183,13 @@ const onPage = (event) => {
     if(perPage.value != event.rows){
         pagination.value.perPage = event.rows;
     }
-    regulationStore.getRegulations({sort: sort.value, pagination: pagination.value, filters: filters.value});
+    attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
 }
 
 const onFilter = (event, e) => {
     clearTimeout(timer.value);
     timer.value = setTimeout(() => {
-        regulationStore.getRegulations({sort: sort.value, pagination: pagination.value, filters: filters.value});
+        attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
     },400);
 }
 
@@ -225,7 +210,7 @@ const confirmDeleteResource = (id) => {
 };
 
 const deleteResource = (id) => {
-    regulationStore.delete(id)
+    getAttractions.delete(id)
         .then(() => {
             toast.add({severity:'success', summary: 'Propis obrisan.', life: 3000});
         })
@@ -237,7 +222,10 @@ const deleteResource = (id) => {
 </script>
 
 <style scoped>
-
+.admin-attractions {
+    max-width: 1200px;
+    margin: auto;
+}
 :deep(.edit-table .p-editable-column.p-cell-editing) {
     padding-top: 0 !important;
     padding-bottom: 0 !important;

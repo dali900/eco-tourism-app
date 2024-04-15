@@ -48,20 +48,20 @@ export default [
         component: () => import("../pages/plans/Plans.vue"),
     },
     {
-        path: "regulations/",
-        name: "AdminRegulations",
-        component: () => import("../pages/regulations/Regulations.vue"),
+        path: "attractions",
+        name: "AdminAttractions",
+        component: () => import("../pages/attractions/Attractions.vue"),
     },
     {
-        path: "regulation/:regulationId?",
-        name: "AdminRegulation",
-        component: () => import("../pages/regulations/Regulation.vue"),
+        path: "attraction/:attractionId?",
+        name: "AdminAttraction",
+        component: () => import("../pages/attractions/Attraction.vue"),
     },
-    {
-        path: "regulation-types",
+    /* {
+        path: "attractions-categories/",
         name: "AdminRegulationTypes",
         component: () => import("../pages/regulations/regulationTypes/RegulationTypes.vue"),
-    },
+    }, */
     {
         path: "news/",
         name: "AdminNews",
