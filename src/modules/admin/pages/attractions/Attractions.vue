@@ -24,7 +24,7 @@
                     editMode="cell" 
                     dataKey="id"
                     :value="attractions" 
-                    :globalLoading="globalLoading" 
+                    :loading="loading" 
                     :lazy="true"
                     :paginator="true" 
                     :rows="perPage" 
@@ -210,7 +210,7 @@ const confirmDeleteResource = (id) => {
 };
 
 const deleteResource = (id) => {
-    getAttractions.delete(id)
+    attractionStore.delete(id)
         .then(() => {
             toast.add({severity:'success', summary: 'Propis obrisan.', life: 3000});
         })
