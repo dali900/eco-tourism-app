@@ -43,7 +43,7 @@
 
 <script setup>
 import Password from 'primevue/password';
-import { ref, reactive, computed, watch, onBeforeMount, onUnmounted } from 'vue'
+import { ref, reactive, computed, watch, onMounted, onBeforeMount, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter, useRoute } from 'vue-router'
@@ -74,14 +74,16 @@ onBeforeMount( () => {
     } 
 });
 
-watch( isAuthenticated, (newVal, oldVal) => {
+onMounted( () => {
+    if(isAuthenticated.value){
+        router.push({name: "AdminDashboard"});
+    }
+});
+
+watch( () => isAuthenticated, (newVal, oldVal) => {
     if(newVal)
     {
-        if(routerPreviousUrl.value){
-            router.push(routerPreviousUrl.value);
-        } else {
-            router.go(-1);
-        }
+        router.push({name: "AdminDashboard"});
     }
 });
 

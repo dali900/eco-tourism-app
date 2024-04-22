@@ -1,36 +1,31 @@
 <template>
-    <div class="places">
+    <div class="attractions">
         <!-- Header imag -->
         <div class="header-img">
-            <img alt="header-img" src="/images/place-page-header.jpg" />
-            <div class="msg">{{ t('places.headerMsg') }}</div>
+            <img alt="header-img" src="/images/attraction-page-header.jpeg" />
+            <div class="msg" v-if="category">{{ category.name }}</div>
         </div>
 
-        <div class="page-body" v-if="places">
-            <div class="items grid"  v-for="(item, key) in places">
-                <div class="col-12 md:col-6 lg:col-6 flex-justify-right pr-3">
-                    <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
-                        <div class="img-wrapper" :key="key">
-                            <img
-                                v-if="item.default_image"
-                                alt="content-img"
-                                :src="apiBaseUrl + item.default_image.file_url"
-                            />
-                            <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
-                        </div>
-                    </router-link>
-                </div>
-                <div class="col-12 md:col-6 lg:col-6 flex-justify-left pl-3">
+        <div class="page-body">
+            <div class="items grid" v-if="attractions">
+                <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in attractions">
                     <div class="item">
-                        <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
-                            <div class="name">{{ item.name }}</div>
-                            <div class="text">{{ item.description }}</div>
+                        <router-link :to="{ name: 'attraction', params: { id: item.id } }" class="text-link">
+                            <div class="img-wrapper" :key="key">
+                                <img
+                                    v-if="item.default_image"
+                                    alt="content-img"
+                                    :src="apiBaseUrl + item.default_image.file_url"
+                                />
+                                <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                            </div>
+                            <div class="summary text">{{ item.summary }}</div>
                         </router-link>
                     </div>
                 </div>
             </div>
-            <div class="col-12" v-if="places && placesTotal > 20">
-                <Paginator :first="(pagination.page*perPage)-1" :rows="perPage" :totalRecords="placesTotal" @page="onPage($event)" />
+            <div class="col-12" v-if="attractions && attractionsTotal > perPage">
+                <Paginator :first="(pagination.page*perPage)-1" :rows="perPage" :totalRecords="attractionsTotal" @page="onPage($event)" />
             </div>
         </div>
     </div>
@@ -40,7 +35,7 @@
 import { ref, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
-import { usePlaceStore } from '@/stores/place';
+import { useAttractionStore } from '@/stores/attraction';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 
@@ -49,8 +44,8 @@ const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 
-const placeStore = usePlaceStore();
-const { places, loading, placesTotal } = storeToRefs(placeStore);
+const attractionStore = useAttractionStore();
+const { attractions, category, loading, attractionsTotal } = storeToRefs(attractionStore);
 
 const perPage = ref(20);
 const sort = ref({
@@ -67,15 +62,16 @@ const filters = ref({
     content: { value: null, matchMode: FilterMatchMode.CONTAINS },
     summary: { value: null, matchMode: FilterMatchMode.CONTAINS },
     approved: { value: null, matchMode: FilterMatchMode.EQUALS },
-    category_id: {value: null, matchMode: FilterMatchMode.EQUALS},
 });
 
 onBeforeMount(() => {
-    placeStore.getPlaces({
-        sort: sort.value,
-        pagination: pagination.value,
-        filters: filters.value,
-    });
+    if (route.params.id) {
+        attractionStore.getCatagoryAttractions({
+            sort: sort.value,
+            pagination: pagination.value,
+            filters: filters.value,
+        }, route.params.id);
+    }
 });
 
 const onPage = (event) => {
@@ -84,16 +80,16 @@ const onPage = (event) => {
         pagination.value.perPage = event.rows;
     }
     router.replace({ query: { page: pagination.value.page } })
-    placeStore.getPlaces({
+    attractionStore.getCatagoryAttractions({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
-    });
+    }, route.params.id);
 };
 </script>
 
 <style scoped>
-.places {
+.attractions {
     .header-img {
         position: relative;
         max-width: var(--container-width);
@@ -110,7 +106,8 @@ const onPage = (event) => {
             text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
         }
         img {
-            top: -280px;
+            top: -190px;
+            right: -100px;
             position: absolute;
         }
         margin-bottom: 64px;
@@ -136,7 +133,7 @@ const onPage = (event) => {
         font-size: 40px;
         font-weight: 600;
     }
-    .place-content {
+    .attraction-content {
         margin-bottom: 64px;
     }
     .items {
@@ -150,21 +147,17 @@ const onPage = (event) => {
             .img-wrapper {
                 height: 200px;
                 overflow: hidden;
+                margin-bottom: 16px;
                 img {
                     max-width: 360px;
                     height: auto;
                 }
             }
-            .name {
-                font-size: 30px;
-                margin-bottom: 16px;
-            }
             .text {
-                max-width: 500px;
+                max-width: 360px;
             }
             margin-bottom: 16px;
         }
-        margin-bottom: 32px;
     }
 }
 .gallery-image-wrapper {

@@ -22,6 +22,21 @@
             "p4": "Farma Cvjetinović Zlatovo"
         }
     },
+    "attractions": {
+        "headerMsg": "Sve atrakcije"
+    },
+    "attraction": {
+        "headerMsg": "Prirodne odlike"
+    },
+    "places": {
+        "headerMsg": "Mesta"
+    },
+    "aboutUs": {
+        "headerMsg": "O nama"
+    },
+    "ecoCategories": {
+        "headerMsg": "Ekoturizam"
+    },
     "footer": {
         "link1": "Radio stanice nasih opština",
         "link2": "Zvanični sajtovi opština",

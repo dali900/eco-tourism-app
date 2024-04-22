@@ -10,7 +10,7 @@
         <div class="page-body">
             <!-- Banners -->
             <div class="banners grid">
-                <router-link to="/" class="col-12 md:col-6 lg:col-4 banner-link">
+                <router-link to="/eco-categories" class="col-12 md:col-6 lg:col-4 banner-link">
                     <div class="banner tourism">
                         <div class="msg">{{ t('home.tourism') }}</div>
                     </div>
@@ -37,13 +37,13 @@
                 <div class="items grid">
                     <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in attractions">
                         <div class="item">
-                            <router-link to="/" class="banner-link">
+                            <router-link :to="{name:'attraction', params:{id:item.id}}" class="banner-link">
                                 <div class="img-wrapper" :key="key">
                                     <!-- <img v-if="item.image_url" alt="content-img" :src="item.image_url"> -->
                                     <img v-if="item.default_image" alt="content-img" :src="apiBaseUrl+item.default_image.file_url">
                                     <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
                                 </div>
-                                <div class="text">{{ item.summary }}</div>
+                                <div class="text">{{ item.name }}</div>
                             </router-link>
                         </div>
                     </div>
@@ -289,7 +289,7 @@ import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
 import AppButton from "@/components/Button/Button.vue"
 import { useAttractionStore } from '@/stores/attraction'
-import {FilterMatchMode} from 'primevue/api';
+import { FilterMatchMode } from 'primevue/api';
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const perPage = ref(20);
@@ -358,32 +358,44 @@ const startCounting = () => {
     let targetCountA = 123;
     let targetCountB = 234;
     let targetCountC = 456;
-    let duration = 2000;
+    let duration = 1000;
     let intervalA = duration / targetCountA;
     let intervalB = duration / targetCountB;
     let intervalC = duration / targetCountC;
 
     let timerA = setInterval(() => {
-        currentCountA.value++;
+        if ( (currentCountA.value + 5) < targetCountA ) {
+            currentCountA.value += 5;
+        } else {
+            currentCountA.value++;
+        }
         if (currentCountA.value >= targetCountA) {
-        clearInterval(timerA);
-        countingA.value = false;
+            clearInterval(timerA);
+            countingA.value = false;
         }
     }, intervalA);
 
     let timerB = setInterval(() => {
-        currentCountB.value++;
+        if ( (currentCountB.value + 7) < targetCountB ) {
+            currentCountB.value += 7;
+        } else {
+            currentCountB.value++;
+        }
         if (currentCountB.value >= targetCountB) {
-        clearInterval(timerB);
-        countingB.value = false;
+            clearInterval(timerB);
+            countingB.value = false;
         }
     }, intervalB);
 
     let timerC = setInterval(() => {
-        currentCountC.value++;
+        if ( (currentCountC.value + 9) < targetCountC ) {
+            currentCountC.value += 9;
+        } else {
+            currentCountC.value++;
+        }
         if (currentCountC.value >= targetCountC) {
-        clearInterval(timerC);
-        countingC.value = false;
+            clearInterval(timerC);
+            countingC.value = false;
         }
     }, intervalC);
 };
@@ -412,14 +424,21 @@ const observeVisibility = () => {
         max-width: var(--container-width);
         height: 300px;
         overflow: hidden;
+        display: flex;
+        justify-content: end;
         .msg {
-            position: absolute;
-            right: 16px;
-            top: 170px;
+            z-index: 1;
+            align-self: center;
             color: var(--color-white);
             font-size: 40px;
             width: 401px;
             height: auto;
+            text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+        }
+        img {
+            top: -190px;
+            right: -40px;
+            position: absolute;
         }
         margin-bottom: 64px;
     }

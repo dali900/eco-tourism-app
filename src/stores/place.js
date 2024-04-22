@@ -1,39 +1,27 @@
 
-import axios from 'axios';
 import { http, parseFilterParams, fillFormErrors, downloadFile } from '@/util/apiClient';
 import { defineStore } from 'pinia'
 const env = import.meta.env.VITE_APP_ENV;
 
-export const useAttractionStore = defineStore('attraction', {
+export const usePlaceStore = defineStore('place', {
     state: () => ({
         loading: false,
-        category: null,
-        categories: null,
-        categoriesTotal: null,
-        attraction: null,
-        attractions: null,
-        attractionsTotal: null,
-        attractionRootCategories: null,
-        attractionRootCategoriesTotal: null,
-        attractionSubcategories: null,
+        place: null,
+        places: null,
+        placesTotal: null,
+        rootPlaces: null,
         tree: null,
         treeCount: null
     }),
-    getters: {
-        /* loading(state){
-            const indexStore = useIndexStore();
-            return indexStore.loading;
-        }, */
-    },
     actions: {
         //get filtered and paginated resources
-        async getAttractionCategories(params){
+        async getPlaces(params){
             this.loading = true;
             try {
                 const urlParams = parseFilterParams(params);
-                const response = await http.get('/api/attraction-categories', urlParams);
-                this.categories = response.data.results;
-                this.categoriesTotal = response.data.pagination.total;
+                const response = await http.get('/api/places', urlParams);
+                this.places = response.data.results;
+                this.placesTotal = response.data.pagination.total;
                 this.loading = false;
                 return response.data;
             } catch (error) {
@@ -44,91 +32,11 @@ export const useAttractionStore = defineStore('attraction', {
                 throw error;
             }
         },
-        async getAttractionRootCategories(params){
+        async getPlace(id){
             this.loading = true;
             try {
-                const urlParams = parseFilterParams(params);
-                const response = await http.get('/api/attraction-categories/roots', urlParams);
-                this.attractionRootCategories = response.data;
-                this.loading = false;
-                return response.data;
-            } catch (error) {
-                if(env === 'local' || env === 'dev'){
-                    console.log(error);
-                }
-                this.loading = false;
-                throw error;
-            }
-        },
-        async getAttractionCategoryTree(params){
-            this.loading = true;
-            try {
-                const urlParams = parseFilterParams(params);
-                const response = await http.get('/api/attraction-categories/tree', urlParams);
-                this.tree = response.data.tree;
-                this.treeCount = response.data.count;
-                this.loading = false;
-                return response.data;
-            } catch (error) {
-                if(env === 'local' || env === 'dev'){
-                    console.log(error);
-                }
-                this.loading = false;
-                throw error;
-            }
-        },
-        async getFilterAttractionRootCategories(params){
-            try {
-                const urlParams = parseFilterParams(params);
-                const response = await http.get('/api/attraction-categories', urlParams);
-                return response.data;
-            } catch (error) {
-                if(env === 'local' || env === 'dev'){
-                    console.log(error);
-                }
-                throw error;
-            }
-        },
-        async getCatagoryAttractions(params, id){
-            try {
-                const urlParams = parseFilterParams(params);
-                const response = await http.get('/api/attraction-categories/category/'+id, urlParams);
-                this.category = response.data.category;
-                this.attractions = response.data.attractions.results;
-                this.attractionsTotal = response.data.attractions.pagination.total;
-                return response.data;
-            } catch (error) {
-                if(env === 'local' || env === 'dev'){
-                    console.log(error);
-                }
-                throw error;
-            }
-        },
-        //get filtered and paginated resources
-        async getAttractions(params){
-            this.loading = true;
-            this.attraction = null;
-            try {
-                const urlParams = parseFilterParams(params);             
-                const response = await http.get('/api/attractions', urlParams);
-                this.attractions = response.data.results;
-                this.attractionsTotal = response.data.pagination.total;
-                this.loading = false;
-                return response.data;
-            } catch (error) {
-                if(env === 'local' || env === 'dev'){
-                    console.log(error);
-                }
-                this.loading = false;
-                throw error;
-            }
-        },
-        //fetch resource. Different resource form attractions. Needs to be fetched again if not selected
-        async getAttraction(id){
-            this.loading = true;
-            try {
-                const response = await http.get('/api/attractions/'+id);
-                this.attraction = response.data;
+                const response = await http.get('/api/places/'+id);
+                this.place = response.data;
                 this.loading = false;
                 return this.attraction; 
             } catch (error) {

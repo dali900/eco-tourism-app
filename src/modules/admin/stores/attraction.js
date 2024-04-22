@@ -96,7 +96,6 @@ export const useAttractionStore = defineStore('attraction', {
             try {
                 const urlParams = parseFilterParams(params);             
                 const response = await http.get('/api/attractions', urlParams);
-                console.log(response.data);
                 this.attractions = response.data.results;
                 this.attractionsTotal = response.data.pagination.total;
                 this.loading = false;

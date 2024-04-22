@@ -132,7 +132,8 @@ const filters = ref({
     'name': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'content': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'summary': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'approved': {value: null, matchMode: FilterMatchMode.EQUALS}
+    'approved': {value: null, matchMode: FilterMatchMode.EQUALS},
+    'category_id': {value: null, matchMode: FilterMatchMode.EQUALS},
 });
 const formData = ref(null);
 

@@ -1,46 +1,54 @@
 <template>
-    <div class="places">
+    <div class="attractions">
         <!-- Header imag -->
         <div class="header-img">
-            <img alt="header-img" src="/images/place-page-header.jpg" />
-            <div class="msg">{{ t('places.headerMsg') }}</div>
+            <img alt="header-img" src="/images/attraction-page-header.jpeg" />
+            <div class="msg">{{ t('ecoCategories.headerMsg') }}</div>
         </div>
 
-        <div class="page-body" v-if="places">
-            <div class="items grid"  v-for="(item, key) in places">
-                <div class="col-12 md:col-6 lg:col-6 flex-justify-right pr-3">
-                    <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
-                        <div class="img-wrapper" :key="key">
-                            <img
-                                v-if="item.default_image"
-                                alt="content-img"
-                                :src="apiBaseUrl + item.default_image.file_url"
-                            />
-                            <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+        <div class="page-body">
+            <div class="items" v-if="attractionRootCategories">
+                <div v-for="(category, key) in attractionRootCategories" class="item-row">
+                    <router-link :to="{ name: 'eco-category', params: {id: category.id} }" class="link-text">
+                        <div class="category-title">
+                            {{ category.name }}
                         </div>
                     </router-link>
-                </div>
-                <div class="col-12 md:col-6 lg:col-6 flex-justify-left pl-3">
-                    <div class="item">
-                        <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
-                            <div class="name">{{ item.name }}</div>
-                            <div class="text">{{ item.description }}</div>
+                    <div class="grid">
+                        <!-- Naprviti posebno 3 kolone, staviti sadrzaj kolone u flex, 1. flex poravnjati u levo, 2. centar i 3. desno -->
+                        <div class="col-12 md:col-6 lg:col-4" v-for="(attraction) in category.attractions">
+                            <div class="item">
+                                <router-link :to="{ name: 'attraction', params: { id: attraction.id } }" class="link-text">
+                                    <div class="img-wrapper" :key="attraction.id">
+                                        <img
+                                            v-if="attraction.default_image"
+                                            alt="content-img"
+                                            :src="apiBaseUrl + attraction.default_image.file_url"
+                                        />
+                                        <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                                    </div>
+                                    <div class="text">{{ attraction.summary }}</div>
+                                </router-link>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-justify-right">
+                        <router-link :to="{ name: 'eco-category', params: {id: category.id} }">
+                            <Button class="btn-d">Vise</Button>
                         </router-link>
                     </div>
                 </div>
-            </div>
-            <div class="col-12" v-if="places && placesTotal > 20">
-                <Paginator :first="(pagination.page*perPage)-1" :rows="perPage" :totalRecords="placesTotal" @page="onPage($event)" />
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, unref, reactive, computed, watch, onMounted, onUnmounted, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
-import { usePlaceStore } from '@/stores/place';
+import { useToast } from 'primevue/usetoast';
+import { useAttractionStore } from '@/stores/attraction';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 
@@ -49,10 +57,10 @@ const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 
-const placeStore = usePlaceStore();
-const { places, loading, placesTotal } = storeToRefs(placeStore);
+const attractionStore = useAttractionStore();
+const { loading, attractionRootCategories, attra } = storeToRefs(attractionStore);
 
-const perPage = ref(20);
+const perPage = ref(10);
 const sort = ref({
     sortField: 'sortField' in route.query ? route.query.sortField : 'id',
     sortOrder: 'sortOrder' in route.query ? route.query.sortOrder : -1,
@@ -67,11 +75,10 @@ const filters = ref({
     content: { value: null, matchMode: FilterMatchMode.CONTAINS },
     summary: { value: null, matchMode: FilterMatchMode.CONTAINS },
     approved: { value: null, matchMode: FilterMatchMode.EQUALS },
-    category_id: {value: null, matchMode: FilterMatchMode.EQUALS},
 });
 
 onBeforeMount(() => {
-    placeStore.getPlaces({
+    attractionStore.getAttractionRootCategories({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
@@ -84,7 +91,7 @@ const onPage = (event) => {
         pagination.value.perPage = event.rows;
     }
     router.replace({ query: { page: pagination.value.page } })
-    placeStore.getPlaces({
+    attractionStore.getAttractions({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
@@ -93,7 +100,7 @@ const onPage = (event) => {
 </script>
 
 <style scoped>
-.places {
+.attractions {
     .header-img {
         position: relative;
         max-width: var(--container-width);
@@ -110,7 +117,8 @@ const onPage = (event) => {
             text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
         }
         img {
-            top: -280px;
+            top: -190px;
+            right: -100px;
             position: absolute;
         }
         margin-bottom: 64px;
@@ -124,6 +132,10 @@ const onPage = (event) => {
         }
         margin-bottom: 64px;
     }
+    .category-title {
+        font-size: 30px;
+        margin-bottom: 16px;
+    }
     .separator {
         background-color: var(--color-white);
         height: 14px;
@@ -136,35 +148,28 @@ const onPage = (event) => {
         font-size: 40px;
         font-weight: 600;
     }
-    .place-content {
+    .attraction-content {
         margin-bottom: 64px;
     }
     .items {
+        .item-row {
+            margin-bottom: 32px;
+        }
         .item {
-            display: flex;
-            justify-content: center;
-            a {
-                text-decoration: none;
-                color: inherit;
-            }
             .img-wrapper {
                 height: 200px;
                 overflow: hidden;
+                margin-bottom: 16px;
                 img {
                     max-width: 360px;
                     height: auto;
                 }
             }
-            .name {
-                font-size: 30px;
-                margin-bottom: 16px;
-            }
             .text {
-                max-width: 500px;
+                max-width: 370px;
             }
             margin-bottom: 16px;
         }
-        margin-bottom: 32px;
     }
 }
 .gallery-image-wrapper {

@@ -27,7 +27,7 @@
                         <div class="field col-12">
                             <label for="content" :class="{'p-error': formErrors.content}">Sadržaj</label>
                             <div>
-                                <Textarea id="content" type="text" v-model="form.content" :class="{'p-invalid': formErrors.content}" @keyup.enter="save" rows="4"/>
+                                <Textarea id="content" type="text" v-model="form.content" :class="{'p-invalid': formErrors.content}" rows="10"/>
                             </div>
                             <small class="p-error">{{formErrors.content}}</small>
                         </div>

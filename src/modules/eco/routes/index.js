@@ -17,6 +17,32 @@ export default [
         name: "places",
         component: () => import("@eco/pages/places/Places.vue"),
     },
+    {
+        path: "place/:id?",
+        name: "place",
+        component: () => import("@eco/pages/places/Place.vue"),
+    },
+    {
+        path: "attraction/:id?",
+        alias: "atrakcije/",
+        name: "attraction",
+        component: () => import("@eco/pages/attractions/Attraction.vue"),
+    },
+    {
+        path: "attractions/",
+        name: "attractions",
+        component: () => import("@eco/pages/attractions/Attractions.vue"),
+    },
+    {
+        path: "eco-categories/",
+        name: "eco-categories",
+        component: () => import("@eco/pages/ecoCategories/Categories.vue"),
+    },
+    {
+        path: "eco-category/:id",
+        name: "eco-category",
+        component: () => import("@eco/pages/ecoCategories/Category.vue"),
+    },
     /* {
         path: "user/:userId/",
         name: "AdminUser",

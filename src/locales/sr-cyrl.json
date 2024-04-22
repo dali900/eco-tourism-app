@@ -22,6 +22,21 @@
             "p4": "Фарма Цвјетиновић Златово"
         }
     },
+    "attractions": {
+        "headerMsg": "Све атракције"
+    },
+    "attraction": {
+        "headerMsg": "Природне одлике"
+    },
+    "ecoCategories": {
+        "headerMsg": "Екотуризам"
+    },
+    "places": {
+        "headerMsg": "Места"
+    },
+    "aboutUs": {
+        "headerMsg": "О нама"
+    },
     "footer": {
         "link1": "Радио станице насих општина",
         "link2": "Званични сајтови општина",

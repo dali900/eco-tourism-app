@@ -21,7 +21,7 @@ import Footer from "./components/Footer.vue";
 .container {
     min-height: 100vh;
     position: relative;
-    background-color: var(--color-bzr-body-background);
+    background-color: var(--color-grey);
     padding-top: 60px;
     overflow: auto;
     /* color: rgb(209, 213, 219); */
@@ -32,7 +32,7 @@ import Footer from "./components/Footer.vue";
     position: relative;
     max-width: var(--container-width);
     margin: 0 auto;
-    background-color: var(--color-grey);
+    background-color: var(--color-background);
     padding-bottom: 1px; /** fix da visina ide to futera */
 }
 
