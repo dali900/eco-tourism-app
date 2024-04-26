@@ -1,22 +1,17 @@
 <template>
-    <div class="attraction">
+    <div class="place">
         <!-- Header imag -->
         <div class="header-img">
-            <img alt="header-img" src="/images/attraction-page-header.jpeg">
-            <div class="msg">{{ t('attraction.headerMsg') }}</div>
+            <img alt="header-img" src="/images/place-page-header.jpg">
+            <div class="msg" v-if="place">{{ place.name }}</div>
         </div>
 
-        <div class="page-body" v-if="attraction">
-            <div class="title">
-                <div>
-                    {{ attraction.name }}
-                </div>
-            </div>
-            <div class="attraction-content" v-html="attractionContent"></div>
+        <div class="page-body" v-if="place">
+            <div class="place-content" v-html="placeContent"></div>
             
-            <div>
+            <!-- <div>
                 <Galleria
-                    :value="attraction.images"
+                    :value="place.images"
                     :responsiveOptions="responsiveOptions"
                     :numVisible="5"
                 >
@@ -40,7 +35,7 @@
                         </div>
                     </template>
                 </Galleria>
-            </div>
+            </div> -->
         </div>
 
     </div>
@@ -60,7 +55,7 @@ import {
 import { storeToRefs } from "pinia";
 import { useRouter, useRoute } from "vue-router";
 import { useToast } from "primevue/usetoast";
-import { useAttractionStore } from "@/stores/attraction";
+import { usePlaceStore } from "@/stores/place";
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import { useI18n } from "vue-i18n";
@@ -69,9 +64,9 @@ const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
 const { t } = useI18n();
 
-const attractionStore = useAttractionStore();
-const { attraction, loading, attractionRootCategories } =
-    storeToRefs(attractionStore);
+const placeStore = usePlaceStore();
+const { place, loading } =
+    storeToRefs(placeStore);
 
 const responsiveOptions = ref([
     {
@@ -86,19 +81,19 @@ const responsiveOptions = ref([
 
 onBeforeMount(() => {
     if (route.params.id) {
-        attractionStore.getAttraction(route.params.id);
+        placeStore.getPlace(route.params.id);
     }
 });
 
-const attractionContent = computed( () => {
-    console.log(attraction);
-    if (!attraction.value || !attraction.value.content) return null;
-    return attraction.value.content.replace(/\n/g, "<br />");
+const placeContent = computed( () => {
+    console.log(place);
+    if (!place.value || !place.value.description) return null;
+    return place.value.description.replace(/\n/g, "<br />");
 })
 </script>
 
 <style scoped >
-.attraction {
+.place {
     .header-img {
         position: relative;
         max-width: var(--container-width);
@@ -142,7 +137,7 @@ const attractionContent = computed( () => {
         font-size: 40px;
         font-weight: 600;
     }
-    .attraction-content {
+    .place-content {
         margin-bottom: 64px;
     }
 }
