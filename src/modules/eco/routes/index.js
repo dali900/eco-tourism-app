@@ -24,7 +24,7 @@ export default [
     },
     {
         path: "attraction/:id?",
-        alias: "atrakcije/",
+        alias: "znamenitosti/",
         name: "attraction",
         component: () => import("@eco/pages/attractions/Attraction.vue"),
     },

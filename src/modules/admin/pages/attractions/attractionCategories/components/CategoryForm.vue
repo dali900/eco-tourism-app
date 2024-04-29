@@ -1,7 +1,7 @@
 <template>
     <Dialog v-model:visible="openDialog" :modal="true" :style="{top: '0px'}" @hide="onHide">
         <template #header>
-            <h3>{{ form.name ? 'Izmeni' : 'Dodaj novi tip'}}</h3>
+            <h3>{{ form.name ? 'Izmeni' : 'Dodaj novu kategoriju'}}</h3>
         </template>
 
         <div class="app-form flex flex-column">
@@ -25,12 +25,10 @@
 </template>
 
 <script setup>
-import { ref, toRefs, toRef, unref, reactive, computed, watch, onMounted, onBeforeMount } from 'vue'
+import { ref, reactive, watch, onMounted, onBeforeMount } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
-import { FilterMatchMode } from 'primevue/api';
-import { useRegulationStore } from '@admin/stores/regulation'
+import { useAttractionStore } from '@/stores/attraction'
 
 const props = defineProps({
     modelValue: {
@@ -39,18 +37,17 @@ const props = defineProps({
     formData: {
         default: null
     },
-    typeStore: {
+    categoryStore: {
         default: null
     }
 });
 
 const emit = defineEmits(['update:modelValue', 'created', 'updated']);
 
-const regulationStore = useRegulationStore();
-const { regulationTypes, loading } = storeToRefs(regulationStore)
+const attractionStore = useAttractionStore();
+const { loading } = storeToRefs(attractionStore)
 const openDialog = ref(false);
 const toast = useToast();
-const timer = ref(null);
 
 const form = reactive({
     name: "",
@@ -89,14 +86,6 @@ watch( openDialog, (newVal, oldVal) => {
     emit('update:modelValue', newVal);
 });
 
-onBeforeMount(() => {
-    
-});
-
-onMounted(() => {   
-});
-
-
 const setFormData = (formData) => {
     if(formData){
         for (const field in form) {
@@ -130,30 +119,30 @@ const save = async () => {
     if(props.formData && props.formData.id)
     {
         form.id = props.formData.id;
-        props.typeStore.updateType(form, formErrors)
+        props.categoryStore.updateCategory(form, formErrors)
             .then((responseData) => {
-                toast.add({severity:'success', summary: 'Tip propis je ažuriran!', detail: form.name, life: 3000});
-                emit('updated', responseData.regulation_type);
+                toast.add({severity:'success', summary: 'Kategorija je ažuriran!', detail: form.name, life: 3000});
+                emit('updated', responseData);
+                closeAndClearForm();
             })
             .catch((err) => {
                 console.log(err);
                 toast.add({severity:'error', summary: 'Greška tokom ažuriranja.', detail: form.name, life: 3000});
             })
-        closeForm();
     } 
     //Create
     else 
     {
-        regulationStore.createType(form, formErrors)
+        attractionStore.createCategory(form, formErrors)
             .then((responseData) => {
-                toast.add({severity:'success', summary: 'Kreiran novi tip propis!', detail: form.name, life: 3000});
-                emit('created', responseData.regulation_type);
+                toast.add({severity:'success', summary: 'Kreiran nova kategorija!', detail: form.name, life: 3000});
+                emit('created', responseData);
+                closeAndClearForm();
             })
             .catch((err) => {
                 console.log(err);
                 toast.add({severity:'error', summary: 'Greška tokom kreiranja.', detail: form.name, life: 3000});
             })
-        closeForm();
     }
 };
 
@@ -165,4 +154,4 @@ const onHide = () => {
 
 <style>
 
-</style>@/modules/admin/stores/attraction
+</style>

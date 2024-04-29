@@ -32,7 +32,7 @@ const items = ref([
         ]
     },
     {
-        label: 'Atrakcije',
+        label: 'Znamenitosti',
         items: [
             {
                 label: 'Pregled',
@@ -46,17 +46,8 @@ const items = ref([
         ]
     },
     {
-        label: 'Znamenitosti',
-        items: [
-            {
-                label: 'Pregled',
-                route: '/attractions',
-            },
-            {
-                label: 'Kategorije',
-                route: '/attraction-categories',
-            }
-        ]
+        label: 'Mesta',
+        route: '/admin/places'
     },
     {
         label: 'Vesti',

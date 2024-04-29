@@ -28,14 +28,14 @@
             </div>
     
             <!-- Latest content -->
-            <div class="latest-content">
+            <div class="latest-content" v-if="latestConent">
                 <div class="title">
                     <div>
                         {{ t('home.latestContentTitle') }}
                     </div>
                 </div>
                 <div class="items grid">
-                    <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in attractions">
+                    <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in latestConent">
                         <div class="item">
                             <router-link :to="{name:'attraction', params:{id:item.id}}" class="banner-link">
                                 <div class="img-wrapper" :key="key">
@@ -43,7 +43,10 @@
                                     <img v-if="item.default_image" alt="content-img" :src="apiBaseUrl+item.default_image.file_url">
                                     <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
                                 </div>
-                                <div class="text">{{ item.name }}</div>
+                                <div class="item-card-body">
+                                    <div class="item-title">{{ item.name }}</div>
+                                    <div class="text">{{ item.summary }}</div>
+                                </div>
                             </router-link>
                         </div>
                     </div>
@@ -289,12 +292,13 @@ import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
 import AppButton from "@/components/Button/Button.vue"
 import { useAttractionStore } from '@/stores/attraction'
+import { useGlobalStore } from '@/stores/global'
 import { FilterMatchMode } from 'primevue/api';
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const perPage = ref(20);
 const sort = ref({
-    sortField: "created_at",
+    sortField: "id",
     sortOrder: -1,
 });
 const pagination = ref({
@@ -309,36 +313,14 @@ const filters = ref({
 });
 
 const attractionStore = useAttractionStore();
-attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
-const { attractions, attractionsTotal, loading } = storeToRefs(attractionStore)
+/* attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
+const { attractions, attractionsTotal, loading } = storeToRefs(attractionStore); */
+
+const globalStore = useGlobalStore();
+globalStore.getHomePageData();
+const { latestConent, suggestedAttractions, loading } = storeToRefs(globalStore);
 
 const { t } = useI18n();
-const latestConent = ref([
-    {
-        image_url: "/images/thumbnails/t1.png",
-        text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley "
-    },
-    {
-        image_url: "/images/thumbnails/t2.png",
-        text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley "
-    },
-    {
-        image_url: "/images/thumbnails/t3.png",
-        text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley "
-    },
-    {
-        image_url: "/images/thumbnails/n1.png",
-        text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley "
-    },
-    {
-        image_url: "/images/thumbnails/t4.png",
-        text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley "
-    },
-    {
-        image_url: "/images/thumbnails/t5.png",
-        text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley "
-    },
-]);
 
 const countingA = ref(false);
 const countingB = ref(false);
@@ -511,6 +493,20 @@ const observeVisibility = () => {
             .item {
                 display: flex;
                 justify-content: center;
+                padding-bottom: 8px;
+                height: 400px;
+                width: 360px;
+                -webkit-box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
+                -moz-box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
+                box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
+                box-sizing: border-box;
+                border-radius: 31px;
+                overflow: hidden;
+                transition: 0.1s linear;
+                &:hover {
+                    transform: scale(1.1);
+                    box-shadow: 1px 5px 19px -6px rgba(0,0,0,0.75);
+                }
                 a {
                     text-decoration: none;
                     color: inherit;
@@ -523,8 +519,21 @@ const observeVisibility = () => {
                         height: auto;
                     }
                 }
-                .text {
-                    max-width: 360px;
+                .item-card-body {
+                    padding: 8px;
+                    .item-title {
+                        font-size: var(--font-size-content);
+                        font-weight: 600;
+                        margin-top: 4px;
+                        margin-bottom: 8px;
+                    }
+                    .text {
+                        max-width: 360px;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 8;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                    }
                 }
                 margin-bottom: 16px;
             }

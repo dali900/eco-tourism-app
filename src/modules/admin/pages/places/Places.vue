@@ -1,18 +1,15 @@
 <template>
-    <div class="admin-attractions">
-        <!-- <RegulationForm v-model="showForm" :formData="formData" @saved="formSaved"></RegulationForm> -->
+    <div class="admin-places">
         <!-- list -->
         <Card class="resource-list">
             <template #title>
                 <div class="flex justify-content-between">
                     <div>
-                        <span>Znamenitosti</span>&nbsp;
-                        <router-link :to="{ name: 'AdminAttraction'}" class="btn-link">
+                        <span>Mesta</span>&nbsp;
+                        <router-link :to="{ name: 'AdminPlace'}" class="btn-link">
                             <Button icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu atrakciju'"/>
                         </router-link>
-                        <!-- <small>Forma:</small><Button @click="openForm" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novi propis'"></Button> -->
                     </div>
-                    <!-- <div>Opcija</div> -->
                 </div>
             </template>
             <template #content>
@@ -23,12 +20,12 @@
                     breakpoint="960px" 
                     editMode="cell" 
                     dataKey="id"
-                    :value="attractions" 
+                    :value="places" 
                     :loading="loading" 
                     :lazy="true"
                     :paginator="true" 
                     :rows="perPage" 
-                    :totalRecords="attractionsTotal" 
+                    :totalRecords="placesTotal" 
                     :rowsPerPageOptions="[20, 50, 100]"
                     :globalFilterFields="['name']"
                     :scrollable="windowWidth > 960 ? true : false"
@@ -75,7 +72,7 @@
                     <!-- <Column field="updated_at_formated" header="Updated" :sortable="true"></Column> -->
                     <Column :exportable="false" style="min-width:10%">
                         <template #body="slotProps">
-                            <router-link :to="{ name: 'AdminAttraction', params: { attractionId: slotProps.data.id }}" class="btn-link">
+                            <router-link :to="{ name: 'AdminPlace', params: { id: slotProps.data.id }}" class="btn-link">
                                 <Button icon="pi pi-pencil" class="p-button-rounded p-button-outlined p-button-sm action-table-btn"/>
                             </router-link>
                             <!-- <Button icon="pi pi-pencil" class="p-button-rounded p-button-outlined p-button-sm action-table-btn" @click="openUpdateForm(slotProps.data, slotProps)" /> -->
@@ -86,7 +83,7 @@
             </template>
             <template #footer>
                 <div class="flex justify-content-between">
-                    <small>Ukupno: {{attractionsTotal}}</small>
+                    <small>Ukupno: {{placesTotal}}</small>
                 </div>
             </template>
         </Card>
@@ -100,10 +97,10 @@ import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import {FilterMatchMode,FilterOperator} from 'primevue/api';
+import { FilterMatchMode } from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
 import { useAuthStore } from '@/stores/auth'
-import { useAttractionStore } from '../../stores/attraction'
+import { usePlaceStore } from '@/stores/place'
 
 const router = useRouter();
 const route = useRoute();
@@ -111,8 +108,8 @@ const toast = useToast();
 const confirm = useConfirm();
 
 const authStore = useAuthStore();
-const attractionStore = useAttractionStore();
-const { attractions, attractionsTotal, loading } = storeToRefs(attractionStore)
+const placeStore = usePlaceStore();
+const { places, placesTotal, loading } = storeToRefs(placeStore)
 const { user } = storeToRefs(authStore)
 
 const timer = ref(null);
@@ -130,20 +127,16 @@ const pagination = ref({
 const filters = ref({
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'name': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'content': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'summary': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'approved': {value: null, matchMode: FilterMatchMode.EQUALS},
-    'category_id': {value: null, matchMode: FilterMatchMode.EQUALS},
+    'description': {value: null, matchMode: FilterMatchMode.CONTAINS},
 });
-const formData = ref(null);
 
-attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
+placeStore.getAll({sort: sort.value, pagination: pagination.value, filters: filters.value});
 const mainColumnsWidth = computed(() => { return {'min-width': (80/3).toFixed(2)+'%'} });
 
 //data and props ready, dom still not
 onBeforeMount( () => {
     //unselect if resource was selected in form
-    attractionStore.attraction = null;
+    placeStore.place = null;
 });
 
 //dom ready
@@ -161,22 +154,11 @@ onUnmounted( () => {
     timer.value = null;
 });
 
-const openForm = () => {
-    formData.value = null;
-    showForm.value = true;
-}
-
-
-const openUpdateForm = (data, row) => {
-    //updatingIndex.value = row.index;
-    formData.value = data;
-    showForm.value = true;
-}
 
 const onSort = (event) => {
     sort.value.sortField = event.sortField;
     sort.value.sortOrder = event.sortOrder;
-    attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
+    placeStore.getAll({sort: sort.value, pagination: pagination.value, filters: filters.value});
 };
 
 const onPage = (event) => {
@@ -184,13 +166,13 @@ const onPage = (event) => {
     if(perPage.value != event.rows){
         pagination.value.perPage = event.rows;
     }
-    attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
+    placeStore.getAll({sort: sort.value, pagination: pagination.value, filters: filters.value});
 }
 
 const onFilter = (event, e) => {
     clearTimeout(timer.value);
     timer.value = setTimeout(() => {
-        attractionStore.getAttractions({sort: sort.value, pagination: pagination.value, filters: filters.value});
+        placeStore.getAll({sort: sort.value, pagination: pagination.value, filters: filters.value});
     },400);
 }
 
@@ -211,9 +193,9 @@ const confirmDeleteResource = (id) => {
 };
 
 const deleteResource = (id) => {
-    attractionStore.delete(id)
+    placeStore.delete(id)
         .then(() => {
-            toast.add({severity:'success', summary: 'Propis obrisan.', life: 3000});
+            toast.add({severity:'success', summary: 'Mesto je obrisano.', life: 3000});
         })
         .catch(() => {
             toast.add({severity:'error', summary: 'Greška tokom brisanja.', life: 3000});
@@ -223,7 +205,7 @@ const deleteResource = (id) => {
 </script>
 
 <style scoped>
-.admin-attractions {
+.admin-places {
     max-width: 1200px;
     margin: auto;
 }
@@ -240,4 +222,4 @@ const deleteResource = (id) => {
 :deep(.edit-table .p-datatable-tbody .delete-btn:hover) {
     background-color:red;
 }
-</style>../../stores/attraction
+</style>

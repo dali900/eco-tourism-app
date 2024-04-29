@@ -1,5 +1,5 @@
 <template>
-    <div class="attractions">
+    <div class="categories">
         <!-- Header imag -->
         <div class="header-img">
             <img alt="header-img" src="/images/attraction-page-header.jpeg" />
@@ -9,33 +9,35 @@
         <div class="page-body">
             <div class="items" v-if="attractionRootCategories">
                 <div v-for="(category, key) in attractionRootCategories" class="item-row">
-                    <router-link :to="{ name: 'eco-category', params: {id: category.id} }" class="link-text">
-                        <div class="category-title">
-                            {{ category.name }}
-                        </div>
-                    </router-link>
-                    <div class="grid">
-                        <!-- Naprviti posebno 3 kolone, staviti sadrzaj kolone u flex, 1. flex poravnjati u levo, 2. centar i 3. desno -->
-                        <div class="col-12 md:col-6 lg:col-4" v-for="(attraction) in category.attractions">
-                            <div class="item">
-                                <router-link :to="{ name: 'attraction', params: { id: attraction.id } }" class="link-text">
-                                    <div class="img-wrapper" :key="attraction.id">
-                                        <img
-                                            v-if="attraction.default_image"
-                                            alt="content-img"
-                                            :src="apiBaseUrl + attraction.default_image.file_url"
-                                        />
-                                        <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
-                                    </div>
-                                    <div class="text">{{ attraction.summary }}</div>
-                                </router-link>
+                    <div class="category" v-if="category.attractions.length">
+                        <router-link :to="{ name: 'eco-category', params: {id: category.id} }" class="link-text">
+                            <div class="category-title">
+                                {{ category.name }}
+                            </div>
+                        </router-link>
+                        <div class="grid">
+                            <!-- Naprviti posebno 3 kolone, staviti sadrzaj kolone u flex, 1. flex poravnjati u levo, 2. centar i 3. desno -->
+                            <div class="col-12 md:col-6 lg:col-4" v-if="category.attractions[0]">
+                                <div class="item">
+                                    <CategoryItem :attraction="category.attractions[0]" />
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6 lg:col-4" v-if="category.attractions[1]">
+                                <div class="item">
+                                    <CategoryItem :attraction="category.attractions[1]" />
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6 lg:col-4" v-if="category.attractions[2]">
+                                <div class="item">
+                                    <CategoryItem :attraction="category.attractions[2]" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="flex-justify-right">
-                        <router-link :to="{ name: 'eco-category', params: {id: category.id} }">
-                            <Button class="btn-d">Vise</Button>
-                        </router-link>
+                        <div class="btn-see-more" v-if="category.attractions.length >= 3">
+                            <router-link :to="{ name: 'eco-category', params: {id: category.id} }">
+                                <Button class="btn-d">Vise</Button>
+                            </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,15 +46,14 @@
 </template>
 
 <script setup>
-import { ref, unref, reactive, computed, watch, onMounted, onUnmounted, onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
-import { useToast } from 'primevue/usetoast';
 import { useAttractionStore } from '@/stores/attraction';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
+import CategoryItem from './CategoryItem.vue'
 
-const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
@@ -100,7 +101,7 @@ const onPage = (event) => {
 </script>
 
 <style scoped>
-.attractions {
+.categories {
     .header-img {
         position: relative;
         max-width: var(--container-width);
@@ -155,6 +156,18 @@ const onPage = (event) => {
         .item-row {
             margin-bottom: 32px;
         }
+        @media screen and (min-width: 992px) {
+            .grid {
+                > div:nth-child(2) {
+                    display: flex;
+                    justify-content: center;
+                }
+                > div:nth-child(3) {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+            }
+        }
         .item {
             .img-wrapper {
                 height: 200px;
@@ -169,6 +182,25 @@ const onPage = (event) => {
                 max-width: 370px;
             }
             margin-bottom: 16px;
+        }
+        .btn-see-more {
+            display: flex;
+            justify-content: right;
+        }
+        @media screen and (max-width: 768px) {
+            .category-title {
+                text-align: center;
+            }
+            .btn-see-more {
+                display: flex;
+                justify-content: center;
+            }
+            .grid {
+                div {
+                    display: flex;
+                    justify-content: center;
+                }
+            }
         }
     }
 }

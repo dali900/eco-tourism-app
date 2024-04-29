@@ -1,15 +1,17 @@
 <template>
     <div class="place">
         <!-- Header imag -->
-        <div class="header-img">
+        <!-- <div class="header-img">
             <img alt="header-img" src="/images/place-page-header.jpg">
             <div class="msg" v-if="place">{{ place.name }}</div>
-        </div>
+        </div> -->
 
         <div class="page-body" v-if="place">
-            <div class="place-content" v-html="placeContent"></div>
-            
-            <!-- <div>
+            <div class="title">
+                {{ place.name }}
+            </div>
+            <div class="resource-content" v-html="placeContent"></div>           
+            <div>
                 <Galleria
                     :value="place.images"
                     :responsiveOptions="responsiveOptions"
@@ -35,7 +37,7 @@
                         </div>
                     </template>
                 </Galleria>
-            </div> -->
+            </div>
         </div>
 
     </div>
@@ -44,12 +46,7 @@
 <script setup>
 import {
     ref,
-    unref,
-    reactive,
     computed,
-    watch,
-    onMounted,
-    onUnmounted,
     onBeforeMount,
 } from "vue";
 import { storeToRefs } from "pinia";
@@ -81,12 +78,11 @@ const responsiveOptions = ref([
 
 onBeforeMount(() => {
     if (route.params.id) {
-        placeStore.getPlace(route.params.id);
+        placeStore.get(route.params.id);
     }
 });
 
 const placeContent = computed( () => {
-    console.log(place);
     if (!place.value || !place.value.description) return null;
     return place.value.description.replace(/\n/g, "<br />");
 })
@@ -116,29 +112,22 @@ const placeContent = computed( () => {
         }
         margin-bottom: 64px;
     }
-    .title {
-        display: flex;
-        justify-content: center;
-        div {
-            border-bottom: 2px solid var(--color-black);
-            padding: 16px;
-        }
-        margin-bottom: 64px;
-    }
-    .separator {
-        background-color: var(--color-white);
-        height: 14px;
-        width: 100%;
-    }
     .page-body {
-        padding: 0 64px;
-    }
-    .title {
-        font-size: 40px;
-        font-weight: 600;
-    }
-    .place-content {
-        margin-bottom: 64px;
+        padding: 16px 64px;
+        .title {
+            display: flex;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 600;
+            div {
+                border-bottom: 2px solid var(--color-black);
+                padding: 16px;
+            }
+            margin-bottom: 64px;
+        }
+        .resource-content {
+            margin-bottom: 64px;
+        }
     }
 }
 .gallery-image-wrapper {

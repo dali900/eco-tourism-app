@@ -9,29 +9,36 @@ const env = import.meta.env.VITE_APP_ENV;
 export const useGlobalStore = defineStore('global', {
     state: () => ({
         loading: false,
-        appIsOpen: env == 'local' ? true : false,
+        latestConent: null,
+        suggestedAttractions: null,
     }),
     getters: {
-        isLoading(state){
-            return !!state.loading;
-        },
         appName(){
             return getAppNameFromUrl();
         }
     },
     actions: {
-        setLoading(loading = true){
-            this.loading = loading;
-        },
-        openApp(status = true){
-            this.appIsOpen = status;
-        },
         async getMenuItems(data, formErrors){
             this.loading = true;
             try {
                 const response = await http.get('/api/'+getAppNameFromUrl()+'/menu');
                 this.loading = false;
                 return response.data.data;
+            } catch (error) {
+                this.loading = false;
+                console.log(error);
+                const response = error.response;
+                throw error;
+            }
+        },
+        async getHomePageData(){
+            this.loading = true;
+            try {
+                const response = await http.get('/api/home-page-data');
+                this.latestConent = response.data.attractions;
+                this.suggestedAttractions = response.data.suggested_attractions;
+                this.loading = false;
+                return response.data;
             } catch (error) {
                 this.loading = false;
                 console.log(error);

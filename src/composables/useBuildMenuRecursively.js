@@ -4,12 +4,12 @@ export function useBuildMenuRecursively() {
     /**
      * 
      * @param {Array} menuItems created menu array
-     * @param {Array} types items to insert
+     * @param {Array} categories items to insert
      * @param {string} menuName url link
      * @returns 
      */
-    const insertMenuItems = (menuItems, types, menuName) => {
-        types.forEach((type) => {
+    const insertMenuItems = (menuItems, categories, menuName) => {
+        categories.forEach((type) => {
             const menuItem = {
                 label: type.name,
                 to: "/" + menuName + "/" + type.id,
@@ -28,11 +28,11 @@ export function useBuildMenuRecursively() {
     /**
      * 
      * @param {Array} nodes created tree array
-     * @param {Array} types items to insert
+     * @param {Array} categories items to insert
      * @returns 
      */
-    const insertTreeItems = (nodes, types) => {
-        types.forEach((type) => {
+    const insertTreeItems = (nodes, categories) => {
+        categories.forEach((type) => {
             const menuItem = {
                 id: type.id,
                 label: type.name,

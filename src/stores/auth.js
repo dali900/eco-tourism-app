@@ -2,7 +2,6 @@
 import axios from 'axios';
 import { http, storeAuthToken, removeAuthToken, getAuthToken } from '@/util/apiClient';
 import { defineStore } from 'pinia'
-import { useGlobalStore } from './global'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -11,14 +10,11 @@ export const useAuthStore = defineStore('auth', {
         fetchingUser: false,
         redirectUrl: null,
         apiAuthToken: null,
+        loading: false
     }),
     getters: {
         isAuthenticated(state){
             return !!state.user;
-        },
-        loading(state){
-            const globalStore = useGlobalStore();
-            return globalStore.loading;
         },
         hasUserAdminAccess(state){
             return state.user && (
@@ -35,8 +31,7 @@ export const useAuthStore = defineStore('auth', {
     },
     actions: {
         async login(data, formErrors){
-            const globalStore = useGlobalStore();
-            globalStore.setLoading();
+            this.loading = true;
             try {
                 await http.get('/sanctum/csrf-cookie');
                 const response = await http.post('/api/login', data);
@@ -44,10 +39,10 @@ export const useAuthStore = defineStore('auth', {
                 this.token = response.data.csrf_token;
                 this.apiAuthToken = response.data.auth_token;
                 storeAuthToken(this.apiAuthToken);
-                globalStore.setLoading(false);
+                this.loading = false;
                 return response.data;
             } catch (error) {
-                globalStore.setLoading(false);
+                this.loading = false;
                 console.log(error);
                 const response = error.response;
                 if(error.response.status == 422){
@@ -66,11 +61,10 @@ export const useAuthStore = defineStore('auth', {
             }
         },
         async logout(errors = {}){
-            const globalStore = useGlobalStore();
-            globalStore.setLoading();
+            this.loading = ture;
             try {
                 await http.get('/api/logout');
-                globalStore.setLoading(false);
+                this.loading = false;
                 this.user = null;
                 removeAuthToken();
                 return true
@@ -83,21 +77,20 @@ export const useAuthStore = defineStore('auth', {
         }, 
         async getAuthUser(errors = {}){
             this.fetchingUser = true;
-            const globalStore = useGlobalStore();
-            globalStore.setLoading();
+            this.loading = true;
             try {
                 const response = await http.get('/api/me');
                 if(response.user !== null){
                     this.user = response.data.user;
                     this.token = response.data.csrf_token;
                 }
-                globalStore.setLoading(false);
+                this.loading = false;
                 this.fetchingUser = false;
                 return response.data.data;
             } catch (error) {
                 const response = error.response;
                 this.fetchingUser = false;
-                globalStore.setLoading(false);
+                this.loading = false;
                 this.user = null;
                 const message = response?.message || null;
                 errors.default = message;

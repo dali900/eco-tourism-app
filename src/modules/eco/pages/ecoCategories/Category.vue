@@ -1,5 +1,5 @@
 <template>
-    <div class="attractions">
+    <div class="category">
         <!-- Header imag -->
         <div class="header-img">
             <img alt="header-img" src="/images/attraction-page-header.jpeg" />
@@ -89,7 +89,7 @@ const onPage = (event) => {
 </script>
 
 <style scoped>
-.attractions {
+.category {
     .header-img {
         position: relative;
         max-width: var(--container-width);

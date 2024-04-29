@@ -57,11 +57,21 @@ export default [
         name: "AdminAttraction",
         component: () => import("../pages/attractions/Attraction.vue"),
     },
-    /* {
-        path: "attractions-categories/",
-        name: "AdminRegulationTypes",
-        component: () => import("../pages/regulations/regulationTypes/RegulationTypes.vue"),
-    }, */
+    {
+        path: "attraction-categories",
+        name: "AdminAttractionCategories",
+        component: () => import("../pages/attractions/attractionCategories/AttractionCategories.vue"),
+    },
+    {
+        path: "places",
+        name: "AdminPlaces",
+        component: () => import("../pages/places/Places.vue"),
+    },
+    {
+        path: "place/:id?",
+        name: "AdminPlace",
+        component: () => import("../pages/places/Place.vue"),
+    },
     {
         path: "news/",
         name: "AdminNews",

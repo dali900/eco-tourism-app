@@ -34,6 +34,8 @@
     --error-color: var(--red-400);
 
     --link-hover-color: var(--color-turquoise);
+
+    --font-size-content: 16px;
 }
 
 :root {

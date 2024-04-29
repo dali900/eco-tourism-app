@@ -6,30 +6,32 @@
             <div class="msg">{{ t('places.headerMsg') }}</div>
         </div>
 
-        <div class="page-body" v-if="places">
-            <div class="items grid"  v-for="(item, key) in places">
-                <div class="col-12 md:col-6 lg:col-6 flex-justify-right pr-3">
-                    <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
-                        <div class="img-wrapper" :key="key">
-                            <img
-                                v-if="item.default_image"
-                                alt="content-img"
-                                :src="apiBaseUrl + item.default_image.file_url"
-                            />
-                            <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
-                        </div>
-                    </router-link>
-                </div>
-                <div class="col-12 md:col-6 lg:col-6 flex-justify-left pl-3">
-                    <div class="item">
+        <div class="page-body " v-if="places">
+            <div class="items">
+                <div class="grid item"  v-for="(item, key) in places">
+                    <div class="col-12 md:col-6 lg:col-6">
                         <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
-                            <div class="name">{{ item.name }}</div>
-                            <div class="text">{{ item.description }}</div>
+                            <div class="img-wrapper" :key="key">
+                                <img
+                                    v-if="item.default_image"
+                                    alt="content-img"
+                                    :src="apiBaseUrl + item.default_image.file_url"
+                                />
+                                <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                            </div>
                         </router-link>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-6">
+                        <div class="">
+                            <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
+                                <div class="name">{{ item.name }}</div>
+                                <div class="text">{{ item.description }}</div>
+                            </router-link>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12" v-if="places && placesTotal > 20">
+            <div class="col-12" v-if="places && placesTotal > perPage">
                 <Paginator :first="(pagination.page*perPage)-1" :rows="perPage" :totalRecords="placesTotal" @page="onPage($event)" />
             </div>
         </div>
@@ -71,7 +73,7 @@ const filters = ref({
 });
 
 onBeforeMount(() => {
-    placeStore.getPlaces({
+    placeStore.getAll({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
@@ -84,7 +86,7 @@ const onPage = (event) => {
         pagination.value.perPage = event.rows;
     }
     router.replace({ query: { page: pagination.value.page } })
-    placeStore.getPlaces({
+    placeStore.getAll({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
@@ -143,6 +145,16 @@ const onPage = (event) => {
         .item {
             display: flex;
             justify-content: center;
+            > div:nth-child(1) {
+                display: flex;
+                justify-content: right;
+                padding-right: 16px;
+            }
+            > div:nth-child(2) {
+                display: flex;
+                justify-content: left;
+                padding-left: 16px;
+            }
             a {
                 text-decoration: none;
                 color: inherit;
@@ -163,6 +175,39 @@ const onPage = (event) => {
                 max-width: 500px;
             }
             margin-bottom: 16px;
+        }
+        @media screen and (max-width: 768px) {
+            .item {
+                > div:nth-child(1) {
+                    justify-content: center;
+                    padding-bottom: 0;
+                }
+                > div:nth-child(2) {
+                    justify-content: center;
+                    padding-top: 0;
+                }
+                .name {
+                    text-align: center;
+                    margin-bottom: 8px;
+                }
+                .text {
+                    max-width: 390px;
+                    margin-bottom: 64px;
+                }
+            }
+            /* .category-title {
+                text-align: center;
+            }
+            .btn-see-more {
+                display: flex;
+                justify-content: center;
+            }
+            .grid {
+                div {
+                    display: flex;
+                    justify-content: center;
+                }
+            } */
         }
         margin-bottom: 32px;
     }

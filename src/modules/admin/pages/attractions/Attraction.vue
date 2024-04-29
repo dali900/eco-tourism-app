@@ -5,8 +5,8 @@
             <div v-else-if="route.params.attractionId">Nema podataka.</div>
         </div>
         <div class="attraction-content">
-            <h2 v-if="route.params.attractionId">Atrakcija</h2>
-            <h2 v-else>Nova atrakcija</h2>
+            <h2 v-if="route.params.attractionId">Znamenitost</h2>
+            <h2 v-else>Nova znamenitost</h2>
             <div class="grid" v-if="authStore.hasAuthorAccess()">
                 <div class="field col-12 align-self-start">
                     <div class="grid">
@@ -15,24 +15,30 @@
                             <div>
                                 <InputText id="name" type="text" v-model="form.name" :class="{'p-invalid': formErrors.name}" @keyup.enter="save"/>
                             </div>
-                            <small class="p-error">{{formErrors.name}}</small>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.name}}</small>
+                            </div>
                         </div>
                         <div class="field col-12">
                             <label for="summary" :class="{'p-error': formErrors.summary}">Sažetak *</label>
                             <div>
                                 <InputText id="summary" type="text" v-model="form.summary" :class="{'p-invalid': formErrors.summary}" @keyup.enter="save"/>
                             </div>
-                            <small class="p-error">{{formErrors.summary}}</small>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.summary}}</small>
+                            </div>
                         </div>
                         <div class="field col-12">
                             <label for="content" :class="{'p-error': formErrors.content}">Sadržaj</label>
                             <div>
                                 <Textarea id="content" type="text" v-model="form.content" :class="{'p-invalid': formErrors.content}" rows="10"/>
                             </div>
-                            <small class="p-error">{{formErrors.content}}</small>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.content}}</small>
+                            </div>
                         </div>
                         <div class="field col-12 md:col-6 lg:col-4">
-                            <label for="root_category" :class="{'p-error': formErrors.category_id}">Kategorija</label>
+                            <label for="root_category" :class="{'p-error': formErrors.category_id}">Kategorija *</label>
                             <div>
                                 <Dropdown v-model="categoryDropdowns.values.rootCategory" 
                                     placeholder="" 
@@ -44,7 +50,52 @@
                                     @change="onCategoryIdChange"
                                 />
                             </div>
-                            <small class="p-error">{{formErrors.category_id}}</small>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.category_id}}</small>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-4">
+                            <label for="root_category" :class="{'p-error': formErrors.order_num}">Redni broj za naj noviji sadržaj</label>
+                            <div>
+                                <Dropdown v-model="form.order_num" 
+                                    placeholder="" 
+                                    :options="orderNumOptions" 
+                                    :showClear="true" 
+                                    :class="{'p-invalid': formErrors.order_num}"
+                                    @change="onOrderNumChange"
+                                />
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.order_num}}</small>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-4">
+                            <div>
+                                <Checkbox
+                                    inputId="suggested"
+                                    v-model="form.suggested"
+                                    :binary="true"
+                                    :class="{ 'p-invalid': formErrors.suggested }"
+                                />&nbsp;
+                                <label for="suggested" :class="{'p-error': formErrors.suggested}">Preporuka</label>
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.suggested}}</small>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-4" v-if="authStore.hasEditorAccess()">
+                            <div>
+                                <Checkbox
+                                    inputId="visible"
+                                    v-model="form.visible"
+                                    :binary="true"
+                                    :class="{ 'p-invalid': formErrors.visible }"
+                                />&nbsp;
+                                <label for="visible" :class="{'p-error': formErrors.visible}">Vidljiv</label>
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.visible}}</small>
+                            </div>
                         </div>
                         <div v-if="canEdit" class="field col-12 md:col-12 lg:col-12">
                             <label :class="{'p-error': formErrors.images}">Slike</label>
@@ -317,19 +368,26 @@ const categoryDropdowns = reactive({
         subCategory2: null,
     }
 });
+const orderNumOptions = [1,2,3,4,5,6,7,8,9,10,11,12];
 const filters = ref({
     'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
 });
 const form = reactive({
     category_id: null,
     name: "",
+    order_num: null,
+    suggested: false,
+    visible: true,
     summary: "",
     content: "",
     images: [],//file to display information on frontend
     tmp_files: [],//files inforamtion for backend
 });
 const formErrors = reactive({
-    category_id: null,
+    category_id: "",
+    order_num: "",
+    suggested: "",
+    visible: "",
     name: "",
     summary: "",
     content: "",
@@ -337,6 +395,9 @@ const formErrors = reactive({
 });
 const clearFormErrors = () => {
     formErrors.category_id = "";
+    formErrors.order_num = "";
+    formErrors.suggested = "";
+    formErrors.visible = "";
     formErrors.name = "";
     formErrors.summary = "";
     formErrors.content = "";
@@ -466,7 +527,7 @@ const save = async () => {
         disabledSaveBtn.value = true;
         attractionStore.create(form, formErrors)
             .then((responseData) => {
-                toast.add({severity:'success', summary: 'Atrakcija kreirana!', detail: form.name, life: 2000});
+                toast.add({severity:'success', summary: 'Znamenitost kreirana!', detail: form.name, life: 2000});
                 //redirect user from create to update page
                 router.push({name: 'AdminAttraction', params: { attractionId: attraction.value.id }})
                 disabledSaveBtn.value = false;
@@ -625,6 +686,10 @@ const setSelectedAttractionCategoryId = () => {
         || categoryDropdowns.values.rootCategory;
 }
 
+const onOrderNumChange = () => {
+    formErrors.order_num = "";f
+}
+
 </script>
 
 <style scoped>
@@ -635,12 +700,16 @@ const setSelectedAttractionCategoryId = () => {
 .field {
     padding-right: 10px;
     align-self: end;
+    margin-bottom: 4px;
 }
 .field input, .calendar-field, .field .p-dropdown, .field textarea{
     width: 100%;
 }
 input.p-invalid{
     border-color: red !important;
+}
+.error-field {
+    height: 15px;
 }
 .file-not-saved {
     color: var(--orange-600)
