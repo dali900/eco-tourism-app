@@ -78,19 +78,9 @@ export default [
         component: () => import("../pages/news/News.vue"),
     },
     {
-        path: "/documents",
-        name: "AdminDocuments",
-        component: () => import("../pages/documents/Documents.vue"),
-    },
-    {
-        path: "/document/:documentId?",
-        name: "AdminDocument",
-        component: () => import("../pages/documents/Document.vue"),
-    },
-    {
-        path: "/document-types",
-        name: "AdminDocumentTypes",
-        component: () => import("../pages/documents/documentTypes/DocumentTypes.vue"),
+        path: "news/:id?",
+        name: "AdminNewsForm",
+        component: () => import("../pages/news/NewsForm.vue"),
     },
     {
         path: "articles/",
@@ -106,21 +96,6 @@ export default [
         path: "article-types/",
         name: "AdminArticleTypes",
         component: () => import("../pages/articles/articleTypes/ArticleTypes.vue"),
-    },
-    {
-        path: "questions/",
-        name: "AdminQuestions",
-        component: () => import("../pages/questions/Questions.vue"),
-    },
-    {
-        path: "question-types/",
-        name: "AdminQuestionTypes",
-        component: () => import("../pages/questions/questionTypes/QuestionTypes.vue"),
-    },
-    {
-        path: "videos/",
-        name: "AdminVideos",
-        component: () => import("../pages/videos/Videos.vue"),
     },
     {
         path: "banners/",

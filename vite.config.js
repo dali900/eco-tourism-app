@@ -13,15 +13,14 @@ export default defineConfig({
             "@modules": fileURLToPath(
                 new URL("./src/modules/", import.meta.url)
             ),
-            "@ei": fileURLToPath(new URL("./src/modules/ei", import.meta.url)),
             "@eco": fileURLToPath(
                 new URL("./src/modules/eco", import.meta.url)
             ),
             "@admin": fileURLToPath(
                 new URL("./src/modules/admin", import.meta.url)
             ),
-            "@zzs": fileURLToPath(
-                new URL("./src/modules/zzs", import.meta.url)
+            "@news": fileURLToPath(
+                new URL("./src/modules/news", import.meta.url)
             ),
         },
     },

@@ -91,7 +91,7 @@ const userMenuItems = ref([
 
 const logout = async () => {
     await authStore.logout();
-    router.push({name: 'Login'});
+    router.push({name: 'AdminLogin'});
 }
 
 const onAppChange = (event) => {

@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
     <div class="admin-news">
         <!-- list -->
@@ -67,7 +63,9 @@
                     </Column>
                     <Column :exportable="false" style="min-width:10%">
                         <template #body="slotProps">
-                            <Button icon="pi pi-pencil" class="p-button-rounded p-button-outlined p-button-sm action-table-btn" @click="openUpdateForm(slotProps.data, slotProps)" />
+                            <router-link :to="{ name: 'AdminNewsForm', params: { id: slotProps.data.id }}" class="btn-link">
+                                <Button icon="pi pi-pencil" class="p-button-rounded p-button-outlined p-button-sm action-table-btn"/>
+                            </router-link>
                             <Button icon="pi pi-trash" class="p-button-rounded p-button-outlined p-button-sm p-button-warning action-table-btn delete-btn" @click="confirmDeleteResource(slotProps.data.id)" />
                         </template>
                     </Column>
@@ -79,7 +77,7 @@
                 </div>
             </template>
         </Card>
-        <NewsForm v-model="showForm" :formData="formData"></NewsForm>
+        <!-- <NewsForm v-model="showForm" :formData="formData"></NewsForm> -->
     </div>
 </template>
 
@@ -90,10 +88,80 @@ import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import {FilterMatchMode,FilterOperator} from 'primevue/api';
-import NewsForm from './components/NewsForm.vue'
-import { useNewsStore } from '@admin/stores/news'
+import { FilterMatchMode, FilterOperator } from 'primevue/api';
+import { useNewsStore } from '@/stores/news'
 import { useConfirm } from "primevue/useconfirm";
+
+const nodes = ref(
+    [
+                {
+                    key: '0',
+                    label: 'Documents',
+                    data: 'Documents Folder',
+                    icon: 'pi pi-fw pi-inbox',
+                    children: [
+                        {
+                            key: '0-0',
+                            label: 'Work',
+                            data: 'Work Folder',
+                            icon: 'pi pi-fw pi-cog',
+                            children: [
+                                { key: '0-0-0', label: 'Expenses.doc', icon: 'pi pi-fw pi-file', data: 'Expenses Document' },
+                                { key: '0-0-1', label: 'Resume.doc', icon: 'pi pi-fw pi-file', data: 'Resume Document' }
+                            ]
+                        },
+                        {
+                            key: '0-1',
+                            label: 'Home',
+                            data: 'Home Folder',
+                            icon: 'pi pi-fw pi-home',
+                            children: [{ key: '0-1-0', label: 'Invoices.txt', icon: 'pi pi-fw pi-file', data: 'Invoices for this month' }]
+                        }
+                    ]
+                },
+                {
+                    key: 1,
+                    label: 'Events',
+                    data: 'Events Folder',
+                    icon: 'pi pi-fw pi-calendar',
+                    children: [
+                        { key: 99, label: 'Meeting', icon: 'pi pi-fw pi-calendar-plus', data: 'Meeting' },
+                        { key: '1-1', label: 'Product Launch', icon: 'pi pi-fw pi-calendar-plus', data: 'Product Launch' },
+                        { key: '1-2', label: 'Report Review', icon: 'pi pi-fw pi-calendar-plus', data: 'Report Review' }
+                    ]
+                },
+                {
+                    key: '2',
+                    label: 'Movies',
+                    data: 'Movies Folder',
+                    icon: 'pi pi-fw pi-star-fill',
+                    children: [
+                        {
+                            key: '2-0',
+                            icon: 'pi pi-fw pi-star-fill',
+                            label: 'Al Pacino',
+                            data: 'Pacino Movies',
+                            children: [
+                                { key: '2-0-0', label: 'Scarface', icon: 'pi pi-fw pi-video', data: 'Scarface Movie' },
+                                { key: '2-0-1', label: 'Serpico', icon: 'pi pi-fw pi-video', data: 'Serpico Movie' }
+                            ]
+                        },
+                        {
+                            key: '2-1',
+                            label: 'Robert De Niro',
+                            icon: 'pi pi-fw pi-star-fill',
+                            data: 'De Niro Movies',
+                            children: [
+                                { key: '2-1-0', label: 'Goodfellas', icon: 'pi pi-fw pi-video', data: 'Goodfellas Movie' },
+                                { key: '2-1-1', label: 'Untouchables', icon: 'pi pi-fw pi-video', data: 'Untouchables Movie' }
+                            ]
+                        }
+                    ]
+                }
+            ]
+);
+const selectedValue = ref(null);
+
 const confirm = useConfirm();
 
 const router = useRouter();

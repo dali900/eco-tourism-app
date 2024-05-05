@@ -53,6 +53,7 @@ export const removeAuthToken = () => {
 }
 
 export const parseFilterParams = (params = {}) => {
+    if (!params) return null;
     const {
         sort = null, 
         pagination = null, 

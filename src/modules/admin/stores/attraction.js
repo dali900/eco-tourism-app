@@ -27,7 +27,7 @@ export const useAttractionStore = defineStore('attraction', {
     },
     actions: {
         //get filtered and paginated resources
-        async getAttractionCategories(params){
+        async getCategories(params){
             this.loading = true;
             try {
                 const urlParams = parseFilterParams(params);
@@ -44,7 +44,7 @@ export const useAttractionStore = defineStore('attraction', {
                 throw error;
             }
         },
-        async getAttractionRootCategories(params){
+        async getCategories(params){
             this.loading = true;
             try {
                 const urlParams = parseFilterParams(params);

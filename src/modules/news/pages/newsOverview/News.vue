@@ -1,22 +1,38 @@
 <template>
-    <div class="attraction">
-        <!-- Header imag -->
-        <div class="header-img">
-            <img alt="header-img" src="/images/attraction-page-header.jpeg">
-            <div class="msg">{{ t('attraction.headerMsg') }}</div>
+    <div class="news-overview">
+        <!-- Header -->
+        <div class="news-header">
+            <Breadcrumb :home="breadcrumbHome" :model="breadcrumbItems">
+                <template #item="{ item, props }">
+                    <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+                        <a :href="href" v-bind="props.action" @click="navigate">
+                            <span :class="[item.icon, 'text-color']" />
+                            <span class="text-primary font-semibold">{{ item.label }}</span>
+                        </a>
+                    </router-link>
+                    <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+                        <span class="text-color">{{ item.label }}</span>
+                    </a>
+                </template>
+            </Breadcrumb>
         </div>
 
-        <div class="page-body" v-if="attraction">
+        <div class="page-body" v-if="one_news">
             <div class="title">
                 <div>
-                    {{ attraction.name }}
+                    {{ one_news.title }}
                 </div>
             </div>
-            <div class="attraction-content" v-html="attractionContent"></div>
-            
+            <div class="news-content" v-html="newsContent"></div>
+            <div class="news-footer">               
+                <small>
+                    <i class="pi pi-clock"></i> 
+                    {{ one_news.publish_date_formated }}
+                </small>
+            </div>
             <div>
                 <Galleria
-                    :value="attraction.images"
+                    :value="one_news.images"
                     :responsiveOptions="responsiveOptions"
                     :numVisible="5"
                 >
@@ -49,12 +65,14 @@
 <script setup>
 import {
     ref,
+    watch,
     computed,
     onBeforeMount,
 } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
-import { useAttractionStore } from "@/stores/attraction";
+import { useNewsStore } from "@/stores/news";
+import Breadcrumb from 'primevue/breadcrumb';
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import { useI18n } from "vue-i18n";
@@ -63,9 +81,14 @@ const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
 const { t } = useI18n();
 
-const attractionStore = useAttractionStore();
-const { attraction, loading } =
-    storeToRefs(attractionStore);
+const newsStore = useNewsStore();
+const { one_news, newsCategories, loading } = storeToRefs(newsStore);
+
+const breadcrumbHome = ref({
+    icon: 'pi pi-home',
+    route: '/news'
+});
+const breadcrumbItems = ref([]);
 
 const responsiveOptions = ref([
     {
@@ -80,25 +103,30 @@ const responsiveOptions = ref([
 
 onBeforeMount(() => {
     if (route.params.id) {
-        attractionStore.getAttraction(route.params.id);
+        newsStore.getOneNews(route.params.id);
     }
 });
 
-const attractionContent = computed( () => {
-    if (!attraction.value || !attraction.value.content) return null;
-    return attraction.value.content.replace(/\n/g, "<br />");
+watch( newsCategories, (newVal, oldVal) => {
+    if(newVal && newVal.length)
+    {
+        console.log(newVal);
+        const bradcrumbArray = newVal[0].map((c) => { return {label: c.name, route: '/news/news-category/'+c.id} });
+        breadcrumbItems.value = bradcrumbArray.reverse();
+    }
+});
+
+const newsContent = computed( () => {
+    if (!one_news.value || !one_news.value.text) return null;
+    return one_news.value.text.replace(/\n/g, "<br />");
 })
 </script>
 
 <style scoped >
-.attraction {
-    .header-img {
+.news-overview {
+    .news-header {
         position: relative;
         max-width: var(--container-width);
-        height: 155px;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
         .msg {
             z-index: 1;
             align-self: center;
@@ -107,18 +135,16 @@ const attractionContent = computed( () => {
             height: auto;
             text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
         }
-        img {
-            top: -190px;
-            right: -100px;
-            position: absolute;
-        }
-        margin-bottom: 64px;
+        /* margin-bottom: 64px; */
+    }
+    :deep(.p-breadcrumb){
+        border: none;
     }
     .title {
         display: flex;
         justify-content: center;
         div {
-            border-bottom: 2px solid var(--color-black);
+            border-bottom: 2px solid var(--text-primary-color);
             padding: 16px;
         }
         margin-bottom: 64px;
@@ -135,7 +161,11 @@ const attractionContent = computed( () => {
         font-size: 40px;
         font-weight: 600;
     }
-    .attraction-content {
+    .news-content {
+        margin-bottom: 16px;
+    }
+    .news-footer {
+        color: var(--text-light-color);
         margin-bottom: 64px;
     }
 }

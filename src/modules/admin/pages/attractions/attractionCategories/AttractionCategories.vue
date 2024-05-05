@@ -1,7 +1,7 @@
 <template>
     <div class="categories p-3">
         <div class="top-section mb-2">
-            <div class="title">Kategorije znamenitost</div>
+            <div class="title">Kategorije znamenitosti</div>
             <div>
                 <Button @click="openAddNewRootCategoryForm()" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu kategoriju'"></Button>
             </div>
@@ -12,7 +12,7 @@
             @created="insertNode" 
             @updated="updateNode"
         />
-        <Tree :value="tree" class="w-full">
+        <Tree :value="tree" class="category-tree">
             <template #default="slotProps">
                 <div class="tree-item">
                     <span :class="{'root-category': slotProps.node.parent_id == null}">{{ slotProps.node.name }}</span> 
@@ -52,7 +52,6 @@ import Tree from 'primevue/tree';
 import { useConfirm } from "primevue/useconfirm";
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useAttractionStore } from '@/stores/attraction'
-import { useBuildMenuRecursively } from '@/composables/useBuildMenuRecursively'
 import CategoryForm from './components/CategoryForm.vue'
 import dateTool from '@/util/dateTool'
 import { useAuthStore } from '@/stores/auth'
@@ -67,7 +66,6 @@ const attractionStore = useAttractionStore();
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore)
 const { tree, treeCount, loading } = storeToRefs(attractionStore);
-const { insertTreeItems } = useBuildMenuRecursively();
 
 const timer = ref(null);
 const categoryFilterTimer = ref(null);
@@ -92,7 +90,7 @@ const filters = ref({
 const formData = ref(null);
 
 attractionStore.getAttractionCategoryTree();
-attractionStore.getAttractionCategories({sort: sort.value, pagination: pagination.value, filters: filters.value});
+attractionStore.getCategories({sort: sort.value, pagination: pagination.value, filters: filters.value});
 
 //dom ready
 onMounted(() => {
@@ -292,5 +290,14 @@ const confirmDeleteResource = (data) => {
 .node-info {
     margin-top: -13px;
     color: grey;
+}
+:deep(.p-treenode-content){
+    padding: 2px 0;
+    border: 2px solid transparent;
+    max-width: 600px;
+}
+:deep(.p-treenode-content:hover){
+    background-color: var(--color-background-mute);
+    border: 2px solid grey;
 }
 </style>@/modules/admin/stores/attraction

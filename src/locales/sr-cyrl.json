@@ -31,6 +31,9 @@
     "ecoCategories": {
         "headerMsg": "Екотуризам"
     },
+    "ecoNews": {
+        "headerMsg": "Е новине"
+    },
     "places": {
         "headerMsg": "Места"
     },

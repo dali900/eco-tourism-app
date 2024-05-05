@@ -1,20 +1,25 @@
 <template>
     <div class="category-item" v-if="props.attraction">
-        <router-link :to="{ name: 'attraction', params: { id: props.attraction.id } }" class="link-text">
-            <div class="img-wrapper" :key="attraction.id">
-                <img
-                    v-if="props.attraction.default_image"
-                    alt="content-img"
-                    :src="apiBaseUrl + props.attraction.default_image.file_url"
-                />
-                <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
-            </div>
-            <div class="text">{{ props.attraction.summary }}</div>
+        <router-link :to="{ name: 'attraction', params: { id: props.attraction.id } }" class="text-link">
+            <AppCard>
+                <template #image>
+                    <img
+                        v-if="props.attraction.default_image"
+                        alt="content-img"
+                        :src="apiBaseUrl + props.attraction.default_image.file_url"
+                    />
+                    <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                </template>
+                <template #content>
+                    {{ props.attraction.summary }}
+                </template>
+            </AppCard>
         </router-link>
     </div>
 </template>
 
 <script setup>
+import AppCard from '@/components/appCard/AppCard.vue';
 
 const props = defineProps({
     attraction: {

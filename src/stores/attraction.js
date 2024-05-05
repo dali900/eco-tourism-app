@@ -13,9 +13,9 @@ export const useAttractionStore = defineStore('attraction', {
         attraction: null,
         attractions: null,
         attractionsTotal: null,
-        attractionRootCategories: null,
-        attractionRootCategoriesTotal: null,
-        attractionSubcategories: null,
+        rootCategories: null,
+        rootCategoriesTotal: null,
+        subcategories: null,
         tree: null,
         treeCount: null
     }),
@@ -27,7 +27,7 @@ export const useAttractionStore = defineStore('attraction', {
     },
     actions: {
         //get filtered and paginated resources
-        async getAttractionCategories(params){
+        async getCategories(params){
             this.loading = true;
             try {
                 const urlParams = parseFilterParams(params);
@@ -44,12 +44,12 @@ export const useAttractionStore = defineStore('attraction', {
                 throw error;
             }
         },
-        async getAttractionRootCategories(params){
+        async getRootCategories(params){
             this.loading = true;
             try {
                 const urlParams = parseFilterParams(params);
                 const response = await http.get('/api/attraction-categories/roots', urlParams);
-                this.attractionRootCategories = response.data;
+                this.rootCategories = response.data;
                 this.loading = false;
                 return response.data;
             } catch (error) {

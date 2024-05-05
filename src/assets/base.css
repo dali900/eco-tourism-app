@@ -163,12 +163,16 @@ z-index: 2;
     height: 50px !important;
 }
 
-.link-text {
+.text-link {
     text-decoration: none;
     color: inherit;
     .msg {
         text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     }
+}
+
+.p-galleria .p-galleria-thumbnail-container {
+    background-color: var(--color-black-soft);
 }
 
 @media print {

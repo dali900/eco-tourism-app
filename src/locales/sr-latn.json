@@ -37,6 +37,9 @@
     "ecoCategories": {
         "headerMsg": "Ekoturizam"
     },
+    "ecoNews": {
+        "headerMsg": "E novine"
+    },
     "footer": {
         "link1": "Radio stanice nasih opština",
         "link2": "Zvanični sajtovi opština",

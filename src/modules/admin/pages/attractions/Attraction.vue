@@ -44,7 +44,7 @@
                                     placeholder="" 
                                     optionLabel="name" 
                                     optionValue="id" 
-                                    :options="attractionRootCategories" 
+                                    :options="rootCategories" 
                                     :showClear="true" 
                                     :class="{'p-invalid': formErrors.category_id}"
                                     @change="onCategoryIdChange"
@@ -325,7 +325,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
-import { useAttractionStore } from '@admin/stores/attraction'
+import { useAttractionStore } from '@/stores/attraction'
 import { useAuthStore } from '@/stores/auth'
 import { useFileStore } from '@admin/stores/file'
 import { getSelectedApp } from '../../util/general'
@@ -348,7 +348,7 @@ const attractionStore = useAttractionStore();
 const authStore = useAuthStore();
 const fileStore = useFileStore();
 const { user } = storeToRefs(authStore)
-const { attraction, loading, attractionRootCategories } = storeToRefs(attractionStore);
+const { attraction, loading, rootCategories } = storeToRefs(attractionStore);
 const { token, authToken } = storeToRefs(authStore)
 const disabledSaveBtn = ref(false);
 const fileFrame = ref(null);
@@ -415,7 +415,7 @@ const responsiveOptions = ref([
     }
 ]);
 
-attractionStore.getAttractionRootCategories();
+attractionStore.getCategories();
 //data and props ready, dom still not
 onBeforeMount( () => {
     if(route.params.attractionId){
@@ -450,7 +450,7 @@ watch( attraction, (newVal, oldVal) => {
 watch( () => categoryDropdowns.values.rootCategory, (newVal, oldVal) => {
     if(newVal)
     {
-        attractionStore.getAttractionCategories({filters: {"parent_id": {value: newVal, matchMode: FilterMatchMode.EQUALS}}})
+        attractionStore.getCategories({filters: {"parent_id": {value: newVal, matchMode: FilterMatchMode.EQUALS}}})
             .then( responseData => {
                 categoryDropdowns.options.subCategory1 = responseData.results
             })
@@ -461,7 +461,7 @@ watch( () => categoryDropdowns.values.rootCategory, (newVal, oldVal) => {
 watch( () => categoryDropdowns.values.subCategory1, (newVal, oldVal) => {
     if(newVal)
     {
-        attractionStore.getAttractionCategories({filters: {"parent_id": {value: newVal, matchMode: FilterMatchMode.EQUALS}}})
+        attractionStore.getCategories({filters: {"parent_id": {value: newVal, matchMode: FilterMatchMode.EQUALS}}})
             .then( responseData => { 
                 categoryDropdowns.options.subCategory2 = responseData.results
             })
@@ -548,7 +548,7 @@ const formateDateFields = () => {
 const onFilterCategories = (event) => {
     clearTimeout(timer.value);
     timer.value = setTimeout(() => {
-        attractionStore.getAttractionCategories({filters: filters.value});
+        attractionStore.getCategories({filters: filters.value});
     },400);
 }
 
@@ -739,7 +739,8 @@ input.p-invalid{
 }
 :deep(.gallery-image) {
     width: 100%;
-    height: auto;
+    max-height: 500px;
+    /* height: auto; */
     display: block;
 }
 .gallery-thumbnail-wrapper {

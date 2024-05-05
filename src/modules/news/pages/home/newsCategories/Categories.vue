@@ -7,14 +7,14 @@
         </div>
 
         <div class="page-body">
-            <div class="items" v-if="rootCategories">
-                <div v-for="(category, key) in rootCategories" class="item-row">
+            <div class="items" v-if="attractionRootCategories">
+                <div v-for="(category, key) in attractionRootCategories" class="item-row">
                     <div class="category" v-if="category.attractions.length">
                         <router-link :to="{ name: 'eco-category', params: {id: category.id} }" class="text-link">
-                            <div class="">
+                            <div class="category-title">
                                 <Divider align="left" type="solid">
-                                    <b class="category-title">{{ category.name }}</b>
-                                </Divider> 
+                                    <b>{{ category.name }}</b>
+                                </Divider>                            
                             </div>
                         </router-link>
                         <div class="grid">
@@ -62,7 +62,7 @@ const route = useRoute();
 const { t } = useI18n();
 
 const attractionStore = useAttractionStore();
-const { loading, rootCategories, attra } = storeToRefs(attractionStore);
+const { loading, attractionRootCategories, attra } = storeToRefs(attractionStore);
 
 const perPage = ref(10);
 const sort = ref({
@@ -82,7 +82,7 @@ const filters = ref({
 });
 
 onBeforeMount(() => {
-    attractionStore.getRootCategories({
+    attractionStore.getCategories({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
@@ -137,8 +137,7 @@ const onPage = (event) => {
         margin-bottom: 64px;
     }
     .category-title {
-        font-size: 26px;
-        font-weight: 500;
+        font-size: 30px;
         margin-bottom: 16px;
     }
     .separator {

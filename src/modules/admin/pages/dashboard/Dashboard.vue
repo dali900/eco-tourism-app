@@ -59,7 +59,7 @@ const dashboardStore = useDashboardStore();
 const { rowCounts, loading } = storeToRefs(dashboardStore);
 
 onBeforeMount( () => {
-    dashboardStore.getRowCounts();
+    //dashboardStore.getRowCounts();
 });
 
 

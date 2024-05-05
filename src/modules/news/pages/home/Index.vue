@@ -1,16 +1,15 @@
 <template>
-    <div class="categories">
+    <div class="news-home">
         <!-- Header imag -->
-        <div class="header-img">
-            <img alt="header-img" src="/images/attraction-page-header.jpeg" />
-            <div class="msg">{{ t('ecoCategories.headerMsg') }}</div>
+        <div class="header">
+            <div class="msg">{{ t('ecoNews.headerMsg') }}</div>
         </div>
 
         <div class="page-body">
             <div class="items" v-if="rootCategories">
                 <div v-for="(category, key) in rootCategories" class="item-row">
-                    <div class="category" v-if="category.attractions.length">
-                        <router-link :to="{ name: 'eco-category', params: {id: category.id} }" class="text-link">
+                    <div class="category" v-if="category.news.length">
+                        <router-link :to="{ name: 'news-category', params: {id: category.id} }" class="text-link">
                             <div class="">
                                 <Divider align="left" type="solid">
                                     <b class="category-title">{{ category.name }}</b>
@@ -19,24 +18,24 @@
                         </router-link>
                         <div class="grid">
                             <!-- Naprviti posebno 3 kolone, staviti sadrzaj kolone u flex, 1. flex poravnjati u levo, 2. centar i 3. desno -->
-                            <div class="col-12 md:col-6 lg:col-4" v-if="category.attractions[0]">
+                            <div class="col-12 md:col-6 lg:col-4" v-if="category.news[0]">
                                 <div class="item">
-                                    <CategoryItem :attraction="category.attractions[0]" />
+                                    <CategoryItem :item="category.news[0]" />
                                 </div>
                             </div>
-                            <div class="col-12 md:col-6 lg:col-4" v-if="category.attractions[1]">
+                            <div class="col-12 md:col-6 lg:col-4" v-if="category.news[1]">
                                 <div class="item">
-                                    <CategoryItem :attraction="category.attractions[1]" />
+                                    <CategoryItem :item="category.news[1]" />
                                 </div>
                             </div>
-                            <div class="col-12 md:col-6 lg:col-4" v-if="category.attractions[2]">
+                            <div class="col-12 md:col-6 lg:col-4" v-if="category.news[2]">
                                 <div class="item">
-                                    <CategoryItem :attraction="category.attractions[2]" />
+                                    <CategoryItem :item="category.news[2]" />
                                 </div>
                             </div>
                         </div>
-                        <div class="btn-see-more" v-if="category.attractions.length >= 3">
-                            <router-link :to="{ name: 'eco-category', params: {id: category.id} }">
+                        <div class="btn-see-more" v-if="category.news.length >= 3">
+                            <router-link :to="{ name: 'news-category', params: {id: category.id} }">
                                 <Button class="btn-d">Vise</Button>
                             </router-link>
                         </div>
@@ -51,18 +50,18 @@
 import { ref, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
-import { useAttractionStore } from '@/stores/attraction';
+import { useNewsStore } from '@/stores/news';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
-import CategoryItem from './CategoryItem.vue'
+import CategoryItem from './newsCategories/CategoryItem.vue'
 import Divider from 'primevue/divider';
 
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 
-const attractionStore = useAttractionStore();
-const { loading, rootCategories, attra } = storeToRefs(attractionStore);
+const newsStore = useNewsStore();
+const { loading, rootCategories, news} = storeToRefs(newsStore);
 
 const perPage = ref(10);
 const sort = ref({
@@ -75,14 +74,14 @@ const pagination = ref({
 });
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    content: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    title: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    subtitle: { value: null, matchMode: FilterMatchMode.CONTAINS },
     summary: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    approved: { value: null, matchMode: FilterMatchMode.EQUALS },
+    text: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
 onBeforeMount(() => {
-    attractionStore.getRootCategories({
+    newsStore.getRootCategories({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
@@ -95,7 +94,7 @@ const onPage = (event) => {
         pagination.value.perPage = event.rows;
     }
     router.replace({ query: { page: pagination.value.page } })
-    attractionStore.getAttractions({
+    newsStore.getNews({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
@@ -104,27 +103,20 @@ const onPage = (event) => {
 </script>
 
 <style scoped>
-.categories {
-    .header-img {
+.news-home {
+    .header {
         position: relative;
         max-width: var(--container-width);
-        height: 155px;
         overflow: hidden;
         display: flex;
         justify-content: center;
         .msg {
             z-index: 1;
             align-self: center;
-            color: var(--color-white);
             font-size: 40px;
             height: auto;
-            text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
         }
-        img {
-            top: -190px;
-            right: -100px;
-            position: absolute;
-        }
+        padding-top: 16px;
         margin-bottom: 64px;
     }
     .title {

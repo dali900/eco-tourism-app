@@ -1,8 +1,0 @@
-.p-button {
-  background: #860007;
-  border: #860007;
-}
-/* TODO: ovo treba definisati kao var */
-.p-button:hover {
-  background: #5d5d5d !important;
-}

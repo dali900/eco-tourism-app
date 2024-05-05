@@ -20,7 +20,7 @@
                         <div class="msg">{{ t('home.market') }}</div>
                     </div>
                 </router-link>
-                <router-link to="/" class="col-12 md:col-6 lg:col-4 banner-link">
+                <router-link to="/news" class="col-12 md:col-6 lg:col-4 banner-link">
                     <div class="banner news">
                         <div class="msg">{{ t('home.news') }}</div>
                     </div>
@@ -37,16 +37,27 @@
                 <div class="items grid">
                     <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in latestConent">
                         <div class="item">
-                            <router-link :to="{name:'attraction', params:{id:item.id}}" class="banner-link">
-                                <div class="img-wrapper" :key="key">
-                                    <!-- <img v-if="item.image_url" alt="content-img" :src="item.image_url"> -->
+                            <router-link :to="{name:'attraction', params:{id:item.id}}" class="text-link">
+                               <!--  <div class="img-wrapper" :key="key">
                                     <img v-if="item.default_image" alt="content-img" :src="apiBaseUrl+item.default_image.file_url">
                                     <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
                                 </div>
                                 <div class="item-card-body">
                                     <div class="item-title">{{ item.name }}</div>
                                     <div class="text">{{ item.summary }}</div>
-                                </div>
+                                </div> -->
+                                <AppCard>
+                                    <template #image>
+                                        <img v-if="item.default_image" alt="content-img" :src="apiBaseUrl+item.default_image.file_url">
+                                        <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
+                                    </template>
+                                    <template #title>
+                                        {{ item.name }}
+                                    </template>
+                                    <template #content>
+                                        {{ item.summary }}
+                                    </template>
+                                </AppCard>
                             </router-link>
                         </div>
                     </div>
@@ -294,6 +305,7 @@ import AppButton from "@/components/Button/Button.vue"
 import { useAttractionStore } from '@/stores/attraction'
 import { useGlobalStore } from '@/stores/global'
 import { FilterMatchMode } from 'primevue/api';
+import AppCard from '@/components/appCard/AppCard.vue';
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const perPage = ref(20);
@@ -491,7 +503,8 @@ const observeVisibility = () => {
         }
         .items {
             .item {
-                display: flex;
+                /** Moze da se brise, premesteno u AppCard */
+                /* display: flex;
                 justify-content: center;
                 padding-bottom: 8px;
                 height: 400px;
@@ -504,8 +517,7 @@ const observeVisibility = () => {
                 overflow: hidden;
                 transition: 0.1s linear;
                 &:hover {
-                    transform: scale(1.1);
-                    box-shadow: 1px 5px 19px -6px rgba(0,0,0,0.75);
+                    box-shadow: 1px 5px 19px -3px rgba(15, 49, 53, 0.75);
                 }
                 a {
                     text-decoration: none;
@@ -535,7 +547,7 @@ const observeVisibility = () => {
                         overflow: hidden;
                     }
                 }
-                margin-bottom: 16px;
+                margin-bottom: 16px; */
             }
         }
         margin-bottom: 64px;

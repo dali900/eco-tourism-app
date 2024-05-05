@@ -4,9 +4,7 @@
             "@/*": ["./src/*"],
             "@admin/*": ["./src/modules/admin/*"],
             "@eco/*": ["./src/modules/eco/*"],
-            "@bzr/*": ["./src/modules/bzr/*"],
-            "@ei/*": ["./src/modules/ei/*"],
-            "@zzs/*": ["./src/modules/zzs/*"]
+            "@news/*": ["./src/modules/news/*"],
         }
     },
     "exclude": ["node_modules", "dist"]

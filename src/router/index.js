@@ -3,6 +3,7 @@ import { useAuthStore } from '@/stores/auth'
 import PageNotFound from "../pages/PageNotFound.vue";
 import adminRoutes from "../modules/admin/routes/index"
 import ecoRoutes from "../modules/eco/routes/index"
+import newsRoutes from "../modules/news/routes/index"
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -24,7 +25,7 @@ const router = createRouter({
             path: "/admin",
             component: () => import("@admin/layouts/DefaultLayout.vue"),
             children: adminRoutes,
-            meta: {requiresAuth: true, adminPanel: true},
+            meta: {requiresAuth: true, admin:true},
         },
         {
             name: "Eco",
@@ -32,6 +33,13 @@ const router = createRouter({
             alias: ['/home'],
             component: () => import("@eco/layouts/DefaultLayout.vue"),
             children: ecoRoutes,
+        },
+        {
+            name: "NewsModule",
+            path: "/news",
+            alias: ['/e-novine'],
+            component: () => import("@news/layouts/DefaultLayout.vue"),
+            children: newsRoutes,
         },
         {
             path: "/:pathMatch(.*)*",
@@ -48,21 +56,25 @@ const router = createRouter({
     },
 })
 
-/* router.beforeEach((to, from, next) => {
-    if(to.meta.requiresAuth && to.meta.adminPanel){
+router.beforeEach((to, from, next) => {
+    if(to.meta.requiresAuth){
         const authStore = useAuthStore();
         //Auth user exists
-        if(authStore.isAuthenticated && authStore.hasAccessLevel(1)){
+        if(authStore.isAuthenticated){
             next();
         }
         //Fetching user from api
         else if (authStore.fetchingUser){
             authStore.$subscribe((mutation, state) => {
-                if(state.user && authStore.hasAccessLevel(1)){
+                if(state.user){
                     next();
                 } else {
                     authStore.redirectUrl = to.fullPath;
-                    next({ name: 'AdminLogin', params: {error: 'no-access'} }); 
+                    if(to.meta.requiresAuth) {
+                        next({ name: 'AdminLogin', params: {error: 'no-access'} }); 
+                    } else {
+                        next({ name: 'Login' });
+                    }
                 }
             });
         }
@@ -70,12 +82,16 @@ const router = createRouter({
         else {
             authStore.redirectUrl = to.fullPath;
             //next({ name: 'Login', query: { from: loginpath } });
-            next({ name: 'AdminLogin' });
+            if(to.meta.requiresAuth) {
+                next({ name: 'AdminLogin' });
+            } else {
+                next({ name: 'Login' });
+            }
         }
     } else {
         next();
     }
-}) */
+})
 
 export default router
 

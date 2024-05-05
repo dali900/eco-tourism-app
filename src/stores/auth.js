@@ -61,7 +61,7 @@ export const useAuthStore = defineStore('auth', {
             }
         },
         async logout(errors = {}){
-            this.loading = ture;
+            this.loading = true;
             try {
                 await http.get('/api/logout');
                 this.loading = false;

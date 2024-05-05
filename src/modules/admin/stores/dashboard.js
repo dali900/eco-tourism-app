@@ -24,7 +24,7 @@ export const useDashboardStore = defineStore('dashboard', {
             const indexStore = useIndexStore();
             indexStore.setLoading();
             try {
-                const response = await http.get('/api/'+this.selectedApp+'/dashboard');
+                const response = await http.get('/api/dashboard');
                 this.rowCounts = response.data.data.row_counts;
                 indexStore.setLoading(false);
                 return response.data.data;

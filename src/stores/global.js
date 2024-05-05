@@ -21,7 +21,7 @@ export const useGlobalStore = defineStore('global', {
         async getMenuItems(data, formErrors){
             this.loading = true;
             try {
-                const response = await http.get('/api/'+getAppNameFromUrl()+'/menu');
+                const response = await http.get('/api/menu');
                 this.loading = false;
                 return response.data.data;
             } catch (error) {
