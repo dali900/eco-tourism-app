@@ -415,7 +415,7 @@ const responsiveOptions = ref([
     }
 ]);
 
-attractionStore.getCategories();
+attractionStore.getRootCategories();
 //data and props ready, dom still not
 onBeforeMount( () => {
     if(route.params.attractionId){
