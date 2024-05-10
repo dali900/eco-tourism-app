@@ -14,7 +14,14 @@
             </div>
             <div class="attraction-content" v-html="attractionContent"></div>
             
-            <div>
+            <div class="place" v-if="attraction.place">
+                {{ t('attraction.place') }}: 
+                <RouterLink :to="{name: 'place', params: {id: attraction.place.id}}" class="app-link">
+                    {{ attraction.place.name }}
+                </RouterLink>
+            </div>
+
+            <div class="galleria">
                 <Galleria
                     :value="attraction.images"
                     :responsiveOptions="responsiveOptions"
@@ -136,6 +143,9 @@ const attractionContent = computed( () => {
         font-weight: 600;
     }
     .attraction-content {
+        margin-bottom: 32px;
+    }
+    .place {
         margin-bottom: 64px;
     }
 }

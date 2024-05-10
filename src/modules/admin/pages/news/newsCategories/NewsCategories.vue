@@ -1,13 +1,13 @@
 <template>
     <div class="categories p-3">
         <div class="top-section mb-2">
-            <div class="title">Kategorije znamenitosti</div>
+            <div class="title">Kategorije vesti</div>
             <div>
                 <Button @click="openAddNewRootCategoryForm()" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu kategoriju'"></Button>
             </div>
         </div>
         <CategoryForm v-model="showCategoryForm" 
-            :categoryStore="attractionStore"
+            :categoryStore="newsStore"
             :formData="formData" 
             @created="insertNode" 
             @updated="updateNode"
@@ -51,7 +51,7 @@ import { useToast } from "primevue/usetoast";
 import Tree from 'primevue/tree';
 import { useConfirm } from "primevue/useconfirm";
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
-import { useAttractionStore } from '@/stores/attraction'
+import { useNewsStore } from '@/stores/news'
 import CategoryForm from './components/CategoryForm.vue'
 import dateTool from '@/util/dateTool'
 import { useAuthStore } from '@/stores/auth'
@@ -62,10 +62,10 @@ const route = useRoute();
 const toast = useToast();
 const confirm = useConfirm();
 
-const attractionStore = useAttractionStore();
+const newsStore = useNewsStore();
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore)
-const { tree, treeCount, loading } = storeToRefs(attractionStore);
+const { tree, treeCount, loading } = storeToRefs(newsStore);
 
 const timer = ref(null);
 const categoryFilterTimer = ref(null);
@@ -89,7 +89,7 @@ const filters = ref({
 });
 const formData = ref(null);
 
-attractionStore.getAttractionCategoryTree();
+newsStore.getNewsCategoryTree();
 
 //dom ready
 onMounted(() => {
@@ -147,7 +147,7 @@ const confirmDeleteNode = (node) => {
 
 const deleteResource = (node) => {
     const deleted = findAndDeleteObjectById(unref(tree), node.id);
-    attractionStore.deleteCategory(node.id)
+    newsStore.deleteCategory(node.id)
         .then(() => {
             toast.add({severity:'success', summary: 'Kategorija obrisana.', life: 3000});
         })
@@ -229,7 +229,7 @@ const openUpdateForm = (data, row) => {
 const onSort = (event) => {
     sort.value.sortField = event.sortField;
     sort.value.sortOrder = event.sortOrder;
-    attractionStore.getRegulationTypes({sort: sort.value, pagination: pagination.value, filters: filters.value});
+    newsStore.getRegulationTypes({sort: sort.value, pagination: pagination.value, filters: filters.value});
 };
 
 const onPage = (event) => {
@@ -237,13 +237,13 @@ const onPage = (event) => {
     if(perPage.value != event.rows){
         pagination.value.perPage = event.rows;
     }
-    attractionStore.getRegulationTypes({sort: sort.value, pagination: pagination.value, filters: filters.value});
+    newsStore.getRegulationTypes({sort: sort.value, pagination: pagination.value, filters: filters.value});
 }
 
 const onFilter = (event, e) => {
     clearTimeout(timer.value);
     timer.value = setTimeout(() => {
-        attractionStore.getRegulationTypes({sort: sort.value, pagination: pagination.value, filters: filters.value});
+        newsStore.getRegulationTypes({sort: sort.value, pagination: pagination.value, filters: filters.value});
     },400);
 }
 

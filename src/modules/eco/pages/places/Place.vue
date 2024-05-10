@@ -11,7 +11,7 @@
                 {{ place.name }}
             </div>
             <div class="resource-content" v-html="placeContent"></div>           
-            <div>
+            <div class="galleria">
                 <Galleria
                     :value="place.images"
                     :responsiveOptions="responsiveOptions"
@@ -38,6 +38,18 @@
                     </template>
                 </Galleria>
             </div>
+            <div class="attractions" v-if="place.attractions">
+                <div class="section-subtitle">
+                    {{ t('places.attractions') }}
+                </div>
+                <div class="grid">
+                    <div class="col-12 md:col-6 lg:col-4" v-for="attraction in place.attractions">
+                        <div class="item">
+                            <CategoryItem :attraction="attraction" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -56,6 +68,7 @@ import { usePlaceStore } from "@/stores/place";
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import { useI18n } from "vue-i18n";
+import CategoryItem from '../ecoCategories/CategoryItem.vue'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
@@ -128,6 +141,16 @@ const placeContent = computed( () => {
         .resource-content {
             margin-bottom: 64px;
         }
+    }
+    .galleria {
+        margin-bottom: 64px;
+    }
+    .attractions {
+        .section-subtitle {
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        margin-bottom: 64px;
     }
 }
 .gallery-image-wrapper {

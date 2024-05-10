@@ -13,6 +13,8 @@ export const useNewsStore = defineStore('news', {
         selectedCategories: null,
         rootCategories: null,
         category: null,
+        cetegories: null,
+        categoriesTotal: null,
         newsCategories: null,
         loading: false
     }),
@@ -100,6 +102,62 @@ export const useNewsStore = defineStore('news', {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);
                 }
+                throw error;
+            }
+        },
+        //create new category
+        async createCategory(data, errorFields){
+            this.loading = true;
+            try {            
+                const response = await http.post('/api/news-categories', data);
+                const category = response.data;
+                //adds the object data to the beginning of the array
+                //this.categories.unshift(category);
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                fillFormErrors(errorFields, error);
+                this.loading = false;
+                throw error;
+            }
+        },
+        //update category
+        async updateCategory(data, errorFields){
+            this.loading = true;
+            try {            
+                const response = await http.put('/api/news-categories/'+data.id, data);
+                const category = response.data;
+                //replace the existing resource
+                const index = this.categories.findIndex( el => el.id == data.id);
+                this.categories[index] = category;
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                fillFormErrors(errorFields, error);
+                this.loading = false;
+                throw error;
+            }
+        },
+        //delete category
+        async deleteCategory(id, params){
+            const urlParams = parseFilterParams(params);
+            this.loading = true;
+            try {            
+                const response = await http.delete('/api/news-categories/'+id, urlParams);
+                this.categories = response.data.results;
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
                 throw error;
             }
         },

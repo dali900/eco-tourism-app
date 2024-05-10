@@ -170,6 +170,13 @@ z-index: 2;
         text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     }
 }
+.app-link {
+    text-decoration: none;
+    color: var(--color-turquoise);
+    &:hover {
+        color: var(--color-turquoise2);
+    }
+}
 
 .p-galleria .p-galleria-thumbnail-container {
     background-color: var(--color-black-soft);

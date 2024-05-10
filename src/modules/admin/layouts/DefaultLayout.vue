@@ -51,7 +51,16 @@ const items = ref([
     },
     {
         label: 'Vesti',
-        route: '/admin/news/'
+        items: [
+            {
+                label: 'Pregled',
+                route: '/admin/news/',
+            },
+            {
+                label: 'Kategorie',
+                route: '/admin/news-categories'
+            },
+        ]
     },
     {
         label: 'Članci',

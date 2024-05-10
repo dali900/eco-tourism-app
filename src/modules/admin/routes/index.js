@@ -83,6 +83,11 @@ export default [
         component: () => import("../pages/news/NewsForm.vue"),
     },
     {
+        path: "news-categories",
+        name: "admin-news-categories",
+        component: () => import("../pages/news/newsCategories/NewsCategories.vue"),
+    },
+    {
         path: "articles/",
         name: "AdminArticles",
         component: () => import("../pages/articles/Articles.vue"),

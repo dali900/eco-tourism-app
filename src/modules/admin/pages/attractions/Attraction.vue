@@ -54,7 +54,7 @@
                                 <small class="p-error">{{formErrors.category_id}}</small>
                             </div>
                         </div>
-                        <div class="field col-12 md:col-6 lg:col-4">
+                        <!-- <div class="field col-12 md:col-6 lg:col-4">
                             <label for="root_category" :class="{'p-error': formErrors.order_num}">Redni broj za naj noviji sadržaj</label>
                             <div>
                                 <Dropdown v-model="form.order_num" 
@@ -67,6 +67,26 @@
                             </div>
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.order_num}}</small>
+                            </div>
+                        </div> -->
+                        <div class="field col-12 md:col-6 lg:col-4">
+                            <label for="place_id" :class="{'p-error': formErrors.place_id}">Mesto</label>
+                            <div>
+                                <Dropdown v-model="form.place_id" 
+                                    placeholder="" 
+                                    optionLabel="name" 
+                                    optionValue="id" 
+                                    filterPlaceholder="Pretraži"
+                                    :options="places" 
+                                    :showClear="true" 
+                                    :filter="true"
+                                    :class="{'p-invalid': formErrors.place_id}"
+                                    @change="onOrderNumChange"
+                                    @filter="onFilterPlacesDropdown"
+                                />
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.place_id}}</small>
                             </div>
                         </div>
                         <div class="field col-12 md:col-6 lg:col-4">
@@ -326,6 +346,7 @@ import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
 import { useAttractionStore } from '@/stores/attraction'
+import { usePlaceStore } from '@/stores/place'
 import { useAuthStore } from '@/stores/auth'
 import { useFileStore } from '@admin/stores/file'
 import { getSelectedApp } from '../../util/general'
@@ -345,10 +366,12 @@ const uploadMultipleUrl = apiBaseUrl + '/api/files/upload-multiple';
 const maxFileSize = 1000000 * 30; //30MB
 
 const attractionStore = useAttractionStore();
+const placeStore = usePlaceStore();
 const authStore = useAuthStore();
 const fileStore = useFileStore();
 const { user } = storeToRefs(authStore)
 const { attraction, loading, rootCategories } = storeToRefs(attractionStore);
+const { places } = storeToRefs(placeStore);
 const { token, authToken } = storeToRefs(authStore)
 const disabledSaveBtn = ref(false);
 const fileFrame = ref(null);
@@ -376,6 +399,7 @@ const form = reactive({
     category_id: null,
     name: "",
     order_num: null,
+    place_id: null,
     suggested: false,
     visible: true,
     summary: "",
@@ -386,6 +410,7 @@ const form = reactive({
 const formErrors = reactive({
     category_id: "",
     order_num: "",
+    place_id: "",
     suggested: "",
     visible: "",
     name: "",
@@ -396,6 +421,7 @@ const formErrors = reactive({
 const clearFormErrors = () => {
     formErrors.category_id = "";
     formErrors.order_num = "";
+    formErrors.place_id = "";
     formErrors.suggested = "";
     formErrors.visible = "";
     formErrors.name = "";
@@ -415,6 +441,7 @@ const responsiveOptions = ref([
     }
 ]);
 
+placeStore.getAll();
 attractionStore.getRootCategories();
 //data and props ready, dom still not
 onBeforeMount( () => {
@@ -476,6 +503,14 @@ const setFormData = (data) => {
                 const dataField = data[field];
                 form[field] = dataField;
             } 
+        }
+
+        //Append doropdown option if not exists in paginated options
+        if (places.value && data.place) {
+            const index = places.value.findIndex( el => el.id == data.id);
+            if (index == -1) {
+                places.value.push({id: data.place.id, name: data.place.name});
+            }
         }
 
         // parents (categories)
@@ -688,6 +723,10 @@ const setSelectedAttractionCategoryId = () => {
 
 const onOrderNumChange = () => {
     formErrors.order_num = "";f
+}
+
+const onFilterPlacesDropdown = (event) => {
+    placeStore.getAll({filters: {'name': {value: event.value, matchMode: FilterMatchMode.STARTS_WITH}}})
 }
 
 </script>

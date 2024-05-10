@@ -48,7 +48,7 @@
                                 </div> -->
                                 <AppCard>
                                     <template #image>
-                                        <img v-if="item.default_image" alt="content-img" :src="apiBaseUrl+item.default_image.file_url">
+                                        <img v-if="item.thumbnail_image" alt="content-img" :src="apiBaseUrl+item.thumbnail_image.file_url">
                                         <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
                                     </template>
                                     <template #title>
@@ -546,8 +546,8 @@ const observeVisibility = () => {
                         -webkit-box-orient: vertical;
                         overflow: hidden;
                     }
-                }
-                margin-bottom: 16px; */
+                }*/
+                margin-bottom: 16px; 
             }
         }
         margin-bottom: 64px;

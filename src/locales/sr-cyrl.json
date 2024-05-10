@@ -13,8 +13,8 @@
         "news": "E новине",
         "latestContentTitle": "Најновији садржај",
         "statisticsTitle": "Посећеност",
-        "suggestionTitle": "ПосећеЗароните у природне бајке и откријте тајне наших крајвеност",
-        "partnersTitle": "Пријатељи и спонзори",
+        "suggestionTitle": "Наша препорука",
+        "partnersTitle": "Оснивачи и пријатељи сајта",
         "partnersList": {
             "p1": "Бојан Миловановић Липовица",
             "p2": "Бане Јовановић Сиге",
@@ -26,7 +26,8 @@
         "headerMsg": "Све знаменитости"
     },
     "attraction": {
-        "headerMsg": "Природне одлике"
+        "headerMsg": "Природне одлике",
+        "place": "Место"
     },
     "ecoCategories": {
         "headerMsg": "Екотуризам"
@@ -35,7 +36,8 @@
         "headerMsg": "Е новине"
     },
     "places": {
-        "headerMsg": "Места"
+        "headerMsg": "Места",
+        "attractions": "Знаменитости"
     },
     "aboutUs": {
         "headerMsg": "О нама"

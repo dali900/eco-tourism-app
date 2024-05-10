@@ -32,7 +32,7 @@ const currentYear = computed(() => new Date().getFullYear());
                 </div>
                 <div class="socials">
                     <div>{{ t('footer.contact') }} 123123123</div>
-                    <div>E-mail email@example.com</div>
+                    <div>E-mail selona3klika@gmail.com</div>
                     <div class="social-links">
                         <a href="//twitter.com" target="_blank">
                             <img alt="Logo" src="/images/twitter.svg" to="/">
