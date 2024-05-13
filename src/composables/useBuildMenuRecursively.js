@@ -9,15 +9,16 @@ export function useBuildMenuRecursively() {
      * @returns 
      */
     const insertMenuItems = (menuItems, categories, menuName) => {
-        categories.forEach((type) => {
+        categories.forEach((category) => {
             const menuItem = {
-                label: type.name,
-                to: "/" + menuName + "/" + type.id,
-                items: [],
+                label: category.name,
+                to: "/" + menuName + "/" + category.id,
+                route: {name: menuName, params: {id: category.id}},
             };
 
-            if (type.children.length > 0) {
-                insertMenuItems(menuItem.items, type.children, menuName);
+            if (category.children.length > 0) {
+                menuItem.items = [];
+                insertMenuItems(menuItem.items, category.children, menuName);
             }
 
             menuItems.push(menuItem);
@@ -32,16 +33,16 @@ export function useBuildMenuRecursively() {
      * @returns 
      */
     const insertTreeItems = (nodes, categories) => {
-        categories.forEach((type) => {
+        categories.forEach((category) => {
             const menuItem = {
-                id: type.id,
-                label: type.name,
-                created: type.created_at_formated,
+                id: category.id,
+                label: category.name,
+                created: category.created_at_formated,
                 children: [],
             };
 
-            if (type.children.length > 0) {
-                insertTreeItems(menuItem.children, type.children);
+            if (category.children.length > 0) {
+                insertTreeItems(menuItem.children, category.children);
             }
 
             nodes.push(menuItem);

@@ -32,7 +32,7 @@
     -moz-box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
     box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
     box-sizing: border-box;
-    border-radius: 31px;
+    border-radius: 15px;
     overflow: hidden;
     transition: 0.1s linear;
     &:hover {

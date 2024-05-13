@@ -7,12 +7,17 @@
         "places": "О селима"
     },
     "home": {
-        "headerMsg": "Пружите себи одмор какав заслужујете",
+        "headerMsg": "Село на 3 клика",
+        "headerSmallMsg": "Петровац - Деспотовац - Жагубица",
         "tourism": "Екотуризам",
         "market": "E пијаца",
         "news": "E новине",
         "latestContentTitle": "Најновији садржај",
-        "statisticsTitle": "Посећеност",
+        "statisticsTitle": "Садржај",
+        "attractions": "Знаменитости",
+        "newsStatistics": "Вести",
+        "places": "Места",
+        "tours": "Туре",
         "suggestionTitle": "Наша препорука",
         "partnersTitle": "Оснивачи и пријатељи сајта",
         "partnersList": {

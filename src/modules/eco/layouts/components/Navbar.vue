@@ -100,8 +100,10 @@
 <template>
     <Menubar :model="menuItems">
         <template #start>
-            <a href="/" class="logo">
-                <img alt="Logo" src="/images/app-logo.svg" to="/">
+            <a href="/" class="logo-link">
+                <div class="app-logo-wrapper">
+                    <img alt="Logo" src="/images/app-logo1.svg" to="/">
+                </div>
             </a>
         </template>
         <template #item="{ item, props, hasSubmenu }">
@@ -143,13 +145,25 @@
 </template>
 
 <style scoped lang="scss">
-    .logo {
+    .logo-link {
         width: auto;
         color: white;
         padding-right: 30px;
         text-decoration: none;
-        img {
-            max-height: 50px;
+        .app-logo-wrapper {
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            margin-top: 15px;
+            height: 40px;
+            width: 39px;
+            position: relative;
+            img {
+                height: 50px;
+                position: absolute;
+                top: -6px;
+                left: -5px;
+            }
         }
         span {
             bottom: 8px;

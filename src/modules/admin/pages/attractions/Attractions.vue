@@ -103,7 +103,7 @@ import Column from 'primevue/column';
 import {FilterMatchMode,FilterOperator} from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
 import { useAuthStore } from '@/stores/auth'
-import { useAttractionStore } from '../../stores/attraction'
+import { useAttractionStore } from '@/stores/attraction'
 
 const router = useRouter();
 const route = useRoute();

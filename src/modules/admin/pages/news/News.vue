@@ -3,7 +3,16 @@
         <!-- list -->
         <Card class="resource-list">
             <template #title>
-                <span>Vesti</span> <Button @click="openForm" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu vest'"></Button>
+                <div class="flex justify-content-between">
+                    <div>
+                        <span>Vesti</span>&nbsp;
+                        <router-link :to="{ name: 'AdminNewsForm'}" class="btn-link">
+                            <Button icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu vest'"/>
+                        </router-link>
+                        <!-- <small>Forma:</small><Button @click="openForm" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novi propis'"></Button> -->
+                    </div>
+                    <!-- <div>Opcija</div> -->
+                </div>
             </template>
             <template #content>
                 <DataTable class="edit-table" 

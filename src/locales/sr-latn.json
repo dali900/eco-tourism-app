@@ -7,12 +7,17 @@
         "places": "O selima"
     },
     "home": {
-        "headerMsg": "Pružite sebi odmor kakav zaslužujete",
+        "headerMsg": "Selo na 3 klika",
+        "headerSmallMsg": "Petrovac - Despotovac - Žagubica",
         "tourism": "Ekoturizam",
         "market": "E pijaca",
         "news": "E novine",
         "latestContentTitle": "Najnoviji sadržaj",
-        "statisticsTitle": "Posećenost",
+        "statisticsTitle": "Sadržaj",
+        "attractions": "Znamenitosti",
+        "newsStatistics": "Vesti",
+        "places": "Mesta",
+        "tours": "Ture",
         "suggestionTitle": "Naša preporuka",
         "partnersTitle": "Osnvači i prijatelji sajta",
         "partnersList": {

@@ -9,7 +9,9 @@ const env = import.meta.env.VITE_APP_ENV;
 export const useGlobalStore = defineStore('global', {
     state: () => ({
         loading: false,
-        latestConent: null,
+        attractions: null,
+        news: null,
+        counts: null,
         suggestedAttractions: null,
     }),
     getters: {
@@ -23,7 +25,7 @@ export const useGlobalStore = defineStore('global', {
             try {
                 const response = await http.get('/api/menu');
                 this.loading = false;
-                return response.data.data;
+                return response.data;
             } catch (error) {
                 this.loading = false;
                 console.log(error);
@@ -35,7 +37,9 @@ export const useGlobalStore = defineStore('global', {
             this.loading = true;
             try {
                 const response = await http.get('/api/home-page-data');
-                this.latestConent = response.data.attractions;
+                this.attractions = response.data.attractions;
+                this.news = response.data.news;
+                this.counts = response.data.counts;
                 this.suggestedAttractions = response.data.suggested_attractions;
                 this.loading = false;
                 return response.data;

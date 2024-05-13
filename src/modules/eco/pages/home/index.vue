@@ -2,9 +2,10 @@
     <div class="home">
 
         <!-- Header imag -->
-        <div class="header-img">
+        <div class="header">
+            <img src="/images/app-logo1.svg">
             <div class="msg">{{ t('home.headerMsg') }}</div>
-            <img alt="header-img" src="/images/watter.png">
+            <div class="small-msg">{{ t('home.headerSmallMsg') }}</div>
         </div>
 
         <div class="page-body">
@@ -28,24 +29,16 @@
             </div>
     
             <!-- Latest content -->
-            <div class="latest-content" v-if="latestConent">
+            <div class="latest-content" v-if="attractions || news">
                 <div class="title">
                     <div>
                         {{ t('home.latestContentTitle') }}
                     </div>
                 </div>
                 <div class="items grid">
-                    <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in latestConent">
+                    <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in attractions">
                         <div class="item">
                             <router-link :to="{name:'attraction', params:{id:item.id}}" class="text-link">
-                               <!--  <div class="img-wrapper" :key="key">
-                                    <img v-if="item.default_image" alt="content-img" :src="apiBaseUrl+item.default_image.file_url">
-                                    <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
-                                </div>
-                                <div class="item-card-body">
-                                    <div class="item-title">{{ item.name }}</div>
-                                    <div class="text">{{ item.summary }}</div>
-                                </div> -->
                                 <AppCard>
                                     <template #image>
                                         <img v-if="item.thumbnail_image" alt="content-img" :src="apiBaseUrl+item.thumbnail_image.file_url">
@@ -56,6 +49,32 @@
                                     </template>
                                     <template #content>
                                         {{ item.summary }}
+                                    </template>
+                                </AppCard>
+                            </router-link>
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in news">
+                        <div class="item">
+                            <router-link :to="{name:'news-overview', params:{id:item.id}}" class="text-link">
+                                <AppCard>
+                                    <template #image>
+                                        <img v-if="item.thumbnail_image" alt="content-img" :src="apiBaseUrl+item.thumbnail_image.file_url">
+                                        <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
+                                    </template>
+                                    <template #title>
+                                        {{ item.title }}
+                                    </template>
+                                    <template #content>
+                                        <div class="small-section">
+                                            <span v-if="item.publish_date_formated">
+                                                <i class="pi pi-clock"></i> 
+                                                {{ item.publish_date_formated }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            {{ item.summary }}
+                                        </div>
                                     </template>
                                 </AppCard>
                             </router-link>
@@ -79,7 +98,7 @@
                             <div class="number flex-justify-center">
                                 <div class=""><span :key="currentCountA">{{ currentCountA }}</span></div>
                             </div>
-                            <div class="number-title">Despotovac</div>
+                            <div class="number-title">{{ t('home.attractions') }}</div>
                         </div>
                     </div>
                     <div class="col-12 md:col-6 lg:col-4 flex-justify-center">
@@ -87,7 +106,7 @@
                             <div class="number flex-justify-center">
                                 <div class=""><span :key="currentCountB">{{ currentCountB }}</span></div>
                             </div>
-                            <div class="number-title">Petrovac na Mlavi</div>
+                            <div class="number-title">{{ t('home.newsStatistics') }}</div>
                         </div>
                     </div>
                     <div class="col-12 md:col-6 lg:col-4 flex-justify-center">
@@ -95,7 +114,7 @@
                             <div class="number flex-justify-center">
                                 <div class=""><span :key="currentCountC">{{ currentCountC }}</span></div>
                             </div>
-                            <div class="number-title">Zagubica</div>
+                            <div class="number-title">{{ t('home.places') }}</div>
                         </div>
                     </div>
                 </div>
@@ -329,14 +348,24 @@ const attractionStore = useAttractionStore();
 const { attractions, attractionsTotal, loading } = storeToRefs(attractionStore); */
 
 const globalStore = useGlobalStore();
-globalStore.getHomePageData();
-const { latestConent, suggestedAttractions, loading } = storeToRefs(globalStore);
+globalStore.getHomePageData()
+    .then(responseData => {
+        if (responseData.counts) {
+            targetCountA.value = responseData.counts.attractions;
+            targetCountB.value = responseData.counts.news;
+            targetCountC.value = responseData.counts.places;
+        }
+    })
+const { attractions, news, counts, suggestedAttractions, loading } = storeToRefs(globalStore);
 
 const { t } = useI18n();
 
 const countingA = ref(false);
 const countingB = ref(false);
 const countingC = ref(false);
+const targetCountA = ref(0);
+const targetCountB = ref(0);
+const targetCountC = ref(0);
 const currentCountA = ref(0);
 const currentCountB = ref(0);
 const currentCountC = ref(0);
@@ -349,45 +378,45 @@ const startCounting = () => {
     countingA.value = true;
     countingB.value = true;
     countingC.value = true;
-    let targetCountA = 123;
-    let targetCountB = 234;
-    let targetCountC = 456;
     let duration = 1000;
-    let intervalA = duration / targetCountA;
-    let intervalB = duration / targetCountB;
-    let intervalC = duration / targetCountC;
+    let intervalA = duration / targetCountA.value;
+    let intervalB = duration / targetCountB.value;
+    let intervalC = duration / targetCountC.value;
 
     let timerA = setInterval(() => {
-        if ( (currentCountA.value + 5) < targetCountA ) {
+        /* if ( (currentCountA.value + 5) < targetCountA.value ) {
             currentCountA.value += 5;
         } else {
             currentCountA.value++;
-        }
-        if (currentCountA.value >= targetCountA) {
+        } */
+        currentCountA.value++;
+        if (currentCountA.value >= targetCountA.value) {
             clearInterval(timerA);
             countingA.value = false;
         }
     }, intervalA);
 
     let timerB = setInterval(() => {
-        if ( (currentCountB.value + 7) < targetCountB ) {
-            currentCountB.value += 7;
+        /* if ( (currentCountB.value + 5) < targetCountB.value ) {
+            currentCountB.value += 5;
         } else {
             currentCountB.value++;
-        }
-        if (currentCountB.value >= targetCountB) {
+        } */
+        currentCountB.value++;
+        if (currentCountB.value >= targetCountB.value) {
             clearInterval(timerB);
             countingB.value = false;
         }
     }, intervalB);
 
     let timerC = setInterval(() => {
-        if ( (currentCountC.value + 9) < targetCountC ) {
-            currentCountC.value += 9;
+        /* if ( (currentCountC.value + 5) < targetCountC.value ) {
+            currentCountC.value += 5;
         } else {
             currentCountC.value++;
-        }
-        if (currentCountC.value >= targetCountC) {
+        } */
+        currentCountC.value++;
+        if (currentCountC.value >= targetCountC.value) {
             clearInterval(timerC);
             countingC.value = false;
         }
@@ -413,26 +442,25 @@ const observeVisibility = () => {
 
 <style scoped>
 .home {
-    .header-img {
+    .header {
         position: relative;
         max-width: var(--container-width);
-        height: 300px;
-        overflow: hidden;
         display: flex;
-        justify-content: end;
+        flex-direction: column;
+        justify-content: center;
+        img {
+            max-height: 150px;
+        }
         .msg {
-            z-index: 1;
-            align-self: center;
-            color: var(--color-white);
             font-size: 40px;
-            width: 401px;
-            height: auto;
+            text-align: center;
+            text-transform: uppercase;
             text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
         }
-        img {
-            top: -190px;
-            right: -40px;
-            position: absolute;
+        .small-msg {
+            font-size: 14px;
+            text-align: center;
+            text-transform: uppercase;
         }
         margin-bottom: 64px;
     }
@@ -503,6 +531,11 @@ const observeVisibility = () => {
         }
         .items {
             .item {
+                .small-section {
+                    color: var(--text-light-color) !important;
+                    font-size: 14px;
+                    margin-bottom: 8px;
+                }
                 /** Moze da se brise, premesteno u AppCard */
                 /* display: flex;
                 justify-content: center;
@@ -565,7 +598,7 @@ const observeVisibility = () => {
         .data-wrapper {
             .number {
                 margin: 0 auto;
-                border-radius: 20px;
+                border-radius: 15px;
                 background-color: var(--color-blue);
                 color: var(--color-white);
                 font-size: 30px;
