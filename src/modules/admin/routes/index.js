@@ -88,6 +88,16 @@ export default [
         component: () => import("../pages/news/newsCategories/NewsCategories.vue"),
     },
     {
+        path: "trips/",
+        name: "admin-trips",
+        component: () => import("../pages/trip/Trips.vue"),
+    },
+    {
+        path: "trips/:id?",
+        name: "admin-trip",
+        component: () => import("../pages/trip/Trip.vue"),
+    },
+    {
         path: "articles/",
         name: "AdminArticles",
         component: () => import("../pages/articles/Articles.vue"),

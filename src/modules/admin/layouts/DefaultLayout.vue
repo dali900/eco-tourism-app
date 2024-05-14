@@ -63,6 +63,10 @@ const items = ref([
         ]
     },
     {
+        label: 'Ture',
+        route: '/admin/trips/',
+    },
+    /* {
         label: 'Članci',
         items: [
             {
@@ -74,7 +78,7 @@ const items = ref([
                 route: '/article-types',
             }
         ]
-    },
+    }, */
     
 ]);
 

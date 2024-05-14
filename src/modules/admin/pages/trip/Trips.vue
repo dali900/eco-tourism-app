@@ -5,13 +5,11 @@
             <template #title>
                 <div class="flex justify-content-between">
                     <div>
-                        <span>Vesti</span>&nbsp;
-                        <router-link :to="{ name: 'AdminNewsForm'}" class="btn-link">
-                            <Button icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu vest'"/>
+                        <span>Turističke ture</span>&nbsp;
+                        <router-link :to="{ name: 'admin-trip'}" class="btn-link">
+                            <Button icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu turu'"/>
                         </router-link>
-                        <!-- <small>Forma:</small><Button @click="openForm" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novi propis'"></Button> -->
                     </div>
-                    <!-- <div>Opcija</div> -->
                 </div>
             </template>
             <template #content>
@@ -22,11 +20,11 @@
                     breakpoint="960px" 
                     v-model:filters="filters" filterDisplay="row" 
                     :globalFilterFields="['title']"
-                    :value="news" 
+                    :value="trips" 
                     :loading="loading" :lazy="true"
                     :paginator="true" 
                     :rows="perPage" 
-                    :totalRecords="newsTotal" 
+                    :totalRecords="tripsTotal" 
                     :rowsPerPageOptions="[20, 50, 100]"
                     :scrollable="windowWidth > 960 ? true : false"
                     :scrollHeight="windowWidth > 960 ? 'flex' : null"
@@ -82,7 +80,7 @@
             </template>
             <template #footer>
                 <div class="flex justify-content-between">
-                    <small>Total: {{newsTotal}}</small>
+                    <small>Total: {{tripsTotal}}</small>
                 </div>
             </template>
         </Card>
@@ -98,7 +96,7 @@ import { useToast } from "primevue/usetoast";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
-import { useNewsStore } from '@/stores/news'
+import { useTripStore } from '@/stores/trip'
 import { useConfirm } from "primevue/useconfirm";
 
 const confirm = useConfirm();
@@ -106,8 +104,8 @@ const router = useRouter();
 const route = useRoute();
 const toast = useToast();
 
-const newsStore = useNewsStore();
-const { news, newsTotal, loading } = storeToRefs(newsStore);
+const tripStore = useTripStore();
+const { trips, tripsTotal, loading } = storeToRefs(tripStore);
 
 const timer = ref(null);
 const windowWidth = ref("");
@@ -126,7 +124,7 @@ const filters = ref({
     'subtitle': {value: null, matchMode: FilterMatchMode.CONTAINS}
 });
 
-newsStore.getNews({sort: sort.value, pagination: pagination.value, filters: filters.value});
+tripStore.getAll({sort: sort.value, pagination: pagination.value, filters: filters.value});
 const mainColumnsWidth = computed(() => { return {'min-width': (90/3).toFixed(2)+'%'} });
 
 //dom ready
@@ -146,7 +144,7 @@ onUnmounted( () => {
 const onSort = (event) => {
     sort.value.sortField = event.sortField;
     sort.value.sortOrder = event.sortOrder;
-    newsStore.getNews({sort: sort.value, pagination: pagination.value, filters: filters.value});
+    tripStore.getNews({sort: sort.value, pagination: pagination.value, filters: filters.value});
 };
 
 const onPage = (event) => {
@@ -154,13 +152,13 @@ const onPage = (event) => {
     if(perPage.value != event.rows){
         pagination.value.perPage = event.rows;
     }
-    newsStore.getNews({sort: sort.value, pagination: pagination.value, filters: filters.value});
+    tripStore.getAll({sort: sort.value, pagination: pagination.value, filters: filters.value});
 }
 
 const onFilter = (event, e) => {
     clearTimeout(timer.value);
     timer.value = setTimeout(() => {
-        newsStore.getNews({sort: sort.value, pagination: pagination.value, filters: filters.value});
+        tripStore.getAll({sort: sort.value, pagination: pagination.value, filters: filters.value});
     },400);
 }
 
@@ -181,7 +179,7 @@ const confirmDeleteResource = (id) => {
 };
 
 const deleteResource = (id) => {
-    newsStore.delete(id)
+    tripStore.delete(id)
         .then(() => {
             toast.add({severity:'success', summary: 'Vest obrisana.', life: 3000});
         })
