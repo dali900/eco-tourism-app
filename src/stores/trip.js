@@ -26,7 +26,7 @@ export const useTripStore = defineStore('trip', {
                 const urlParams = parseFilterParams(params);
                 const response = await http.get('/api/trips', urlParams);
                 this.trips = response.data.results;
-                this.newsTotal = response.data.pagination.total;
+                this.tripsTotal = response.data.pagination.total;
                 this.loading = false;
                 return response.data;
             } catch (error) {
@@ -39,7 +39,7 @@ export const useTripStore = defineStore('trip', {
             this.loading = true;
             try {
                 const response = await http.get('/api/trips/'+id);
-                this.trip = response.data.news;
+                this.trip = response.data;
                 this.selectedAttractions = response.data.selected_attractions;
                 this.loading = false;
                 return response.data;
@@ -51,7 +51,7 @@ export const useTripStore = defineStore('trip', {
                 throw error;
             }
         },
-        //create new news
+        //create
         async create(data, errorFields){             
             this.loading = true;
             try {            
@@ -70,7 +70,7 @@ export const useTripStore = defineStore('trip', {
                 throw error;
             }
         },
-        //update news
+        //update
         async update(data, errorFields){            
             this.loading = true;
             try {            
@@ -78,7 +78,7 @@ export const useTripStore = defineStore('trip', {
                 const trip = response.data;
                 //replace the existing resource
                 const tripIndex = this.trips.findIndex( el => el.id == data.id);
-                this.trips[tripIndex] = news;
+                this.trips[tripIndex] = trip;
                 this.trip = trip;
                 this.loading = false;
                 return response.data;
@@ -91,7 +91,7 @@ export const useTripStore = defineStore('trip', {
                 throw error;
             }
         },
-        //delete news
+        //delete
         async delete(id){            
             this.loading = true;
             try {            

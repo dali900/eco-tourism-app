@@ -34,6 +34,16 @@ export default [
         component: () => import("@eco/pages/attractions/Attractions.vue"),
     },
     {
+        path: "trips/",
+        name: "trips",
+        component: () => import("@eco/pages/trips/Trips.vue"),
+    },
+    {
+        path: "trip/:id?",
+        name: "trip",
+        component: () => import("@eco/pages/trips/Trip.vue"),
+    },
+    {
         path: "eco-categories/",
         name: "eco-categories",
         component: () => import("@eco/pages/ecoCategories/Categories.vue"),

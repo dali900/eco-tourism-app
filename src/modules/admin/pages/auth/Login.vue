@@ -80,7 +80,7 @@ onMounted( () => {
     }
 });
 
-watch( () => isAuthenticated, (newVal, oldVal) => {
+watch( () => isAuthenticated.value, (newVal, oldVal) => {
     if(newVal)
     {
         router.push({name: "AdminDashboard"});

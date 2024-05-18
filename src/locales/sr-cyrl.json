@@ -40,6 +40,13 @@
     "ecoNews": {
         "headerMsg": "Е новине"
     },
+    "trips": {
+        "headerMsg": "Туристичке туре"
+    },
+    "trip": {
+        "headerMsg": "Туристичка тура",
+        "attractions": "Знаменитости"
+    },
     "places": {
         "headerMsg": "Места",
         "attractions": "Знаменитости"

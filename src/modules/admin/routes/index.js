@@ -93,7 +93,7 @@ export default [
         component: () => import("../pages/trip/Trips.vue"),
     },
     {
-        path: "trips/:id?",
+        path: "trip/:id?",
         name: "admin-trip",
         component: () => import("../pages/trip/Trip.vue"),
     },

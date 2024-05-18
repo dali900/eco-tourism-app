@@ -179,7 +179,15 @@ z-index: 2;
 }
 
 .p-galleria .p-galleria-thumbnail-container {
-    background-color: var(--color-black-soft);
+    background-color: transparent;
+}
+.p-galleria .p-galleria-thumbnail-prev, 
+.p-galleria .p-galleria-thumbnail-next {
+    color: var(--color-black-soft);
+}
+.p-galleria .p-disabled.p-galleria-thumbnail-prev,
+.p-galleria .p-disabled.p-galleria-thumbnail-next {
+    color: var(--color-grey);
 }
 
 @media print {

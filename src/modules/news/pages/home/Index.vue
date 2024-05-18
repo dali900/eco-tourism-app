@@ -1,6 +1,6 @@
 <template>
     <div class="news-home">
-        <!-- Header imag -->
+        <!-- Header -->
         <div class="header">
             <div class="msg">{{ t('ecoNews.headerMsg') }}</div>
         </div>

@@ -1,10 +1,10 @@
 <template>
-    <div class="admin-news-form p-3">
+    <div class="admin-trip-form p-3">
         <div class="loading" v-if="!trip">
             <div v-if="loading">Učitava se...</div>
             <div v-else-if="route.params.id">Nema podataka.</div>
         </div>
-        <div class="news-text">
+        <div class="trip-text">
             <h2 v-if="route.params.id">Turistička tura</h2>
             <h2 v-else>Nova turistička tura</h2>
             <div class="grid" v-if="authStore.hasAuthorAccess()">
@@ -19,28 +19,58 @@
                                 <small class="p-error">{{formErrors.title}}</small>
                             </div>
                         </div>
-                        <div class="field col-12">
-                            <label for="subtitle" :class="{'p-error': formErrors.subtitle}">Podnaslov *</label>
+                        <!-- <div class="field col-12">
+                            <label for="subtitle" :class="{'p-error': formErrors.subtitle}">Podnaslov</label>
                             <div>
                                 <InputText id="subtitle" type="text" v-model="form.subtitle" :class="{'p-invalid': formErrors.subtitle}" @keyup.enter="save"/>
                             </div>
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.subtitle}}</small>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="field col-12">
-                            <label for="summary" :class="{'p-error': formErrors.summary}">Sažetak *</label>
+                            <label for="summary" :class="{'p-error': formErrors.summary}">Sažetak</label>
                             <div>
                                 <InputText id="summary" type="text" v-model="form.summary" :class="{'p-invalid': formErrors.summary}" @keyup.enter="save"/>
                             </div>
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.summary}}</small>
                             </div>
-                        </div>
+                        </div> 
                         <div class="field col-12">
-                            <label for="text" :class="{'p-error': formErrors.text}">Sadržaj</label>
+                            <label for="text" :class="{'p-error': formErrors.text}">Text *</label>
                             <div>
-                                <Textarea id="text" type="text" v-model="form.text" :class="{'p-invalid': formErrors.text}" rows="10"/>
+                                <!-- <Textarea id="text" type="text" v-model="form.text" :class="{'p-invalid': formErrors.text}" rows="10"/> -->
+                                <jodit-editor 
+                                    v-model="form.text" 
+                                    :config="{height: 400, zIndex: 21}"
+                                    :buttons="[
+                                        'source', '|',
+                                        'bold',
+                                        'strikethrough',
+                                        'underline',
+                                        'italic', '|',
+                                        'ul',
+                                        'ol', '|',
+                                        'outdent', 'indent',  '|',
+                                        'font',
+                                        'fontsize',
+                                        'brush',
+                                        'paragraph', '|',
+                                        /* 'file',
+                                        'image',
+                                        'video',
+                                        'table',
+                                        'link', '|', */
+                                        'align', 'undo', 'redo', '|',
+                                        'hr',
+                                        'eraser',
+                                        'copyformat', '|',
+                                        'symbol',
+                                        'fullsize',
+                                        'print',
+                                        'about']"
+                                />
                             </div>
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.text}}</small>
@@ -49,7 +79,7 @@
                         <div class="field col-12 md:col-6 lg:col-4">
                             <label for="root_category" :class="{'p-error': formErrors.category_id}">Znamenitosti</label>
                             <div>
-                                <MultiSelect v-model="selectedAttractionValues" :options="attractions" filter optionLabel="name" placeholder="Izaberi"
+                                <MultiSelect v-model="selectedAttractions" :options="attractions" filter optionLabel="name" placeholder="Izaberi"
                                     class="w-full md:w-20rem" 
                                     autoFilterFocus
                                     :filterFields="['name', 'content', 'title', 'subtitle', 'summary']"
@@ -123,7 +153,7 @@
                         </div>
                         <div v-if="canEdit" class="field col-12">
                             <div class="flex justify-text-end">
-                                <router-link :to="{ name: 'AdminNewsForm'}" class="btn-link">
+                                <router-link :to="{ name: 'admin-trips'}" class="btn-link">
                                     <Button label="Nazad" icon="pi pi-arrow-left" class="mr-2" />
                                 </router-link>
                                 <Button label="Sačuvaj" icon="pi pi-check" @click="save" :loading="loading" :disabled="disabledSaveBtn" :title="trip && trip.id ? 'Ažuriraj' : 'Novi unos'"/>
@@ -158,6 +188,8 @@ import dateTool from '@/util/dateTool'
 import NoAccess from '../noAccess/NoAccess.vue'
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
+import 'jodit/build/jodit.min.css'
+import { JoditEditor } from 'jodit-vue'
 
 const router = useRouter();
 const route = useRoute();
@@ -174,14 +206,14 @@ const authStore = useAuthStore();
 const fileStore = useFileStore();
 const attractionStore = useAttractionStore();
 const { user } = storeToRefs(authStore)
-const { trip, loading, selectedAttractions } = storeToRefs(tripStore);
+const { trip, loading } = storeToRefs(tripStore);
 const { attractions } = storeToRefs(attractionStore);
 const { token, authToken } = storeToRefs(authStore)
 const disabledSaveBtn = ref(false);
 const fileFrame = ref(null);
 const timer = ref(null);
 const uploadingImages = ref(false);
-const selectedAttractionValues = ref(null);
+const selectedAttractions = ref(null);
 
 const attractionFilters = ref({
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS}
@@ -259,12 +291,6 @@ watch( trip, (newVal, oldVal) => {
         setFormData(newVal);
     }
 });
-/* watch( selectedAttractions, (newVal, oldVal) => {
-    if(newVal)
-    {
-        selectedAttractionValues.value = {...newVal};
-    }
-}); */
 
 const setFormData = (data) => {
     if(data){
@@ -272,9 +298,28 @@ const setFormData = (data) => {
             if (data.hasOwnProperty(field)) {
                 const dataField = data[field];
                 form[field] = dataField;
-            } 
+            }
+        }
+        if (data.attractions && data.attractions.length) {
+            selectedAttractions.value = data.attractions;
+            copyMissingObject(selectedAttractions.value, attractions.value);
         }
     } 
+}
+
+const copyMissingObject = (array1, array2) => {
+    for (const obj1 of array1) {
+        let exists = false;
+        for (const obj2 of array2) {
+            if (obj1.id === obj2.id) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            array2.push(obj1);
+        }
+    }
 }
 
 const save = async () => {
@@ -284,8 +329,8 @@ const save = async () => {
     //format date fields
     clearFormErrors();
     formateDateFields();
-    if (selectedAttractionValues.value && selectedAttractionValues.value.length) {
-        form.attraction_ids = selectedAttractionValues.value.map(a => a.id)
+    if (selectedAttractions.value && selectedAttractions.value.length) {
+        form.attraction_ids = selectedAttractions.value.map(a => a.id)
     }
     //Update
     if(route.params.id)
@@ -298,9 +343,10 @@ const save = async () => {
                 toast.add({severity:'success', summary: 'Ažuriranje uspešno!', detail: form.title, life: 3000});
                 disabledSaveBtn.value = false;
                 form.tmp_files = [];
-                router.push({name: 'admin-trips', params: { id: trip.value.id }})
+                router.push({name: 'admin-trip', params: { id: trip.value.id }})
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
                 toast.add({severity:'error', summary: 'Greška tokom ažuriranja.', detail: form.title, life: 3000});
                 disabledSaveBtn.value = false;
             })
@@ -315,10 +361,11 @@ const save = async () => {
                 //redirect user from create to update page
                 disabledSaveBtn.value = false;
                 form.tmp_files = [];
-                router.push({name: 'admin-trips', params: { id: trip.value.id }})
+                router.push({name: 'admin-trip', params: { id: responseData.id }})
 
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
                 disabledSaveBtn.value = false;
                 toast.add({severity:'error', summary: 'Greška tokom kreiranja.', detail: form.title, life: 3000});
             })
@@ -417,7 +464,7 @@ const deleteOneOfMultipleFiles = async (fieldName, index) => {
 </script>
 
 <style scoped>
-.admin-news-form { 
+.admin-trip-form { 
     max-width: 1200px;
     margin: auto;
 }
@@ -474,5 +521,8 @@ input.p-invalid{
 .thumbnail-image {
     max-height: 100px;
     width: auto;
+}
+:deep(.jodit-toolbar__box) {
+    z-index: 1 !important;
 }
 </style>

@@ -70,7 +70,7 @@
                     </Column>
                     <Column :exportable="false" style="min-width:10%">
                         <template #body="slotProps">
-                            <router-link :to="{ name: 'AdminNewsForm', params: { id: slotProps.data.id }}" class="btn-link">
+                            <router-link :to="{ name: 'admin-trip', params: { id: slotProps.data.id }}" class="btn-link">
                                 <Button icon="pi pi-pencil" class="p-button-rounded p-button-outlined p-button-sm action-table-btn"/>
                             </router-link>
                             <Button icon="pi pi-trash" class="p-button-rounded p-button-outlined p-button-sm p-button-warning action-table-btn delete-btn" @click="confirmDeleteResource(slotProps.data.id)" />

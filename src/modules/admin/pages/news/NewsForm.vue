@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <div class="field col-12">
-                            <label for="subtitle" :class="{'p-error': formErrors.subtitle}">Podnaslov *</label>
+                            <label for="subtitle" :class="{'p-error': formErrors.subtitle}">Podnaslov</label>
                             <div>
                                 <InputText id="subtitle" type="text" v-model="form.subtitle" :class="{'p-invalid': formErrors.subtitle}" @keyup.enter="save"/>
                             </div>
@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="field col-12">
-                            <label for="summary" :class="{'p-error': formErrors.summary}">Sažetak *</label>
+                            <label for="summary" :class="{'p-error': formErrors.summary}">Sažetak</label>
                             <div>
                                 <InputText id="summary" type="text" v-model="form.summary" :class="{'p-invalid': formErrors.summary}" @keyup.enter="save"/>
                             </div>

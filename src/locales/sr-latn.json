@@ -47,6 +47,13 @@
     "ecoNews": {
         "headerMsg": "E novine"
     },
+    "trips": {
+        "headerMsg": "Turističke ture"
+    },
+    "trip": {
+        "headerMsg": "Turistička tura",
+        "attractions": "Znamenitosti"
+    },
     "footer": {
         "link1": "Radio stanice nasih opština",
         "link2": "Zvanični sajtovi opština",
