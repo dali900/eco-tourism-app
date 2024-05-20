@@ -86,7 +86,7 @@
             <div class="separator" style="margin-bottom: 32px"></div>
 
             <!-- Statistics -->
-            <div class="statistics">
+            <div class="statistics" :class="{hidden: loading}">
                 <div class="title flex-justify-center">
                     <div>
                         {{ t('home.statisticsTitle') }}
@@ -425,12 +425,12 @@ const startCounting = () => {
 
 const observeVisibility = () => {
     const options = {
-      threshold: 0.5
+      threshold: 0.8
     };
 
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
-        startCounting(100, 2000); // Start counting when the element is 50% visible
+        startCounting(); // Start counting when the element is 50% visible
         observer.disconnect(); // Disconnect observer after the animation starts
       }
     }, options);
@@ -710,6 +710,9 @@ const observeVisibility = () => {
             justify-content: center;
         }
         margin-bottom: 64px;
+    }
+    .hidden {
+        visibility: hidden;
     }
 }
 
