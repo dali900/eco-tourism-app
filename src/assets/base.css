@@ -190,6 +190,15 @@ z-index: 2;
     color: var(--color-grey);
 }
 
+/* .p-galleria-thumbnail-items {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+}
+.p-galleria-thumbnail-item {
+    flex: 0 1 auto !important;
+} */
+
 @media print {
     body *:not(.print-container):not(.print-container *) {
         display: none;

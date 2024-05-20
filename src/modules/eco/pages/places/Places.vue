@@ -13,9 +13,9 @@
                         <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
                             <div class="img-wrapper" :key="key">
                                 <img
-                                    v-if="item.default_image"
+                                    v-if="item.thumbnail"
                                     alt="content-img"
-                                    :src="apiBaseUrl + item.default_image.file_url"
+                                    :src="apiBaseUrl + item.thumbnail.file_url"
                                 />
                                 <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
                             </div>
@@ -160,7 +160,7 @@ const onPage = (event) => {
                 color: inherit;
             }
             .img-wrapper {
-                height: 200px;
+                max-height: 270px;
                 overflow: hidden;
                 img {
                     max-width: 360px;

@@ -46,6 +46,7 @@
                                     mode="basic" 
                                     name="files[]" 
                                     chooseLabel="Upload"
+                                    accept="image/*"
                                     :auto="true" 
                                     :multiple="true" 
                                     :withCredentials="true"
@@ -60,12 +61,22 @@
                                 <!-- files -->
                                 <div>
                                     <template v-for="(file, index) of form.images">
-                                        <div class="delete-file">
-                                            <span :title="file.name">
+                                        <div class="files">
+                                            <span :title="file.name" :class="{thumbnail: place && place.thumbnail?.file_path.includes('thumbnail_'+file.id)}">
                                                 <span v-if="file.is_tmp" class="file-not-saved">*</span>
                                                 {{file.original_name}}
                                             </span> 
-                                            <Button icon="pi pi-trash" @click="confirmDeleteOneOfMultipleFiles('images', index)" class="p-button-rounded p-button-danger p-button-text p-button-sm delete-file-btn" />
+                                            <Button icon="pi pi-image" 
+                                                v-if="!file.is_tmp && (!place.thumbnail || !place.thumbnail.file_path.includes('thumbnail_'+file.id))"
+                                                class="p-button-rounded p-button-text p-button-sm action-btn" 
+                                                v-tooltip.top="'Postavi na kakrtici'" 
+                                                @click="setThumbnail(file)" 
+                                            />
+                                            <Button icon="pi pi-trash" 
+                                                class="p-button-rounded p-button-danger p-button-text p-button-sm action-btn" 
+                                                v-tooltip.top="'Obriši sliku'" 
+                                                @click="confirmDeleteOneOfMultipleFiles('images', index)" 
+                                            />
                                         </div>
                                     </template>
                                 </div>
@@ -256,7 +267,7 @@ const save = async () => {
         disabledSaveBtn.value = true;
         placeStore.create(form, formErrors)
             .then((responseData) => {
-                toast.add({severity:'success', description: 'Znamenitost kreirana!', detail: form.name, life: 2000});
+                toast.add({severity:'success', description: 'Uspešno kreirano!', detail: form.name, life: 2000});
                 //redirect user from create to update page
                 router.push({name: 'AdminPlace', params: { id: place.value.id }})
                 disabledSaveBtn.value = false;
@@ -411,6 +422,13 @@ const setSelectedAttractionCategoryId = () => {
         || categoryDropdowns.values.rootCategory;
 }
 
+const setThumbnail = (file) => {
+    fileStore.setThumbnail(file.id)
+        .then(responseData => {
+            place.value.thumbnail = responseData;
+        })
+}
+
 </script>
 
 <style scoped>
@@ -431,22 +449,25 @@ input.p-invalid{
 .file-not-saved {
     color: var(--orange-600)
 }
-.delete-file{
+.files {
     height: 40px;
     display: flex;
     align-items: center;
 }
-.delete-file-btn {
+.action-btn {
     visibility: hidden;
 }
-.delete-file:hover .delete-file-btn{
+.files:hover .action-btn{
     visibility: visible;
 }
-.delete-file span {
+.files span {
     font-size: 13px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.thumbnail {
+    font-weight: 600;
 }
 .gallery-image-wrapper {
     height: 500px;

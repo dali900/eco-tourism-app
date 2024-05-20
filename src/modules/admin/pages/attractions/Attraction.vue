@@ -81,7 +81,7 @@
                                     :showClear="true" 
                                     :filter="true"
                                     :class="{'p-invalid': formErrors.place_id}"
-                                    @change="onOrderNumChange"
+                                    @change="onPlaceIdChange"
                                     @filter="onFilterPlacesDropdown"
                                 />
                             </div>
@@ -124,6 +124,7 @@
                                     mode="basic" 
                                     name="files[]" 
                                     chooseLabel="Upload"
+                                    accept="image/*"
                                     :auto="true" 
                                     :multiple="true" 
                                     :withCredentials="true"
@@ -138,12 +139,22 @@
                                 <!-- files -->
                                 <div>
                                     <template v-for="(file, index) of form.images">
-                                        <div class="delete-file">
-                                            <span :title="file.name">
+                                        <div class="files">
+                                            <span :title="file.name" :class="{thumbnail: attraction && attraction.thumbnail?.file_path.includes('thumbnail_'+file.id)}">
                                                 <span v-if="file.is_tmp" class="file-not-saved">*</span>
                                                 {{file.original_name}}
                                             </span> 
-                                            <Button icon="pi pi-trash" @click="confirmDeleteOneOfMultipleFiles('images', index)" class="p-button-rounded p-button-danger p-button-text p-button-sm delete-file-btn" />
+                                            <Button icon="pi pi-image" 
+                                                v-if="!file.is_tmp && (!attraction.thumbnail || !attraction.thumbnail.file_path.includes('thumbnail_'+file.id))"
+                                                class="p-button-rounded p-button-text p-button-sm action-btn" 
+                                                v-tooltip.top="'Postavi na kakrtici'" 
+                                                @click="setThumbnail(file)" 
+                                            />
+                                            <Button icon="pi pi-trash" 
+                                                class="p-button-rounded p-button-danger p-button-text p-button-sm action-btn" 
+                                                v-tooltip.top="'Obriši sliku'" 
+                                                @click="confirmDeleteOneOfMultipleFiles('images', index)" 
+                                            />
                                         </div>
                                     </template>
                                 </div>
@@ -629,7 +640,7 @@ const onMultipleUpload = (event, fieldName) => {
 const confirmDeleteFile = (fieldName) => {
     confirm.require({
         message: 'Da li želite da nastavite?',
-        header: 'Brisanje fajla',
+        header: 'Brisanje',
         icon: 'pi pi-exclamation-triangle',
         //yes
         accept: () => {
@@ -699,11 +710,19 @@ const deleteOneOfMultipleFiles = async (fieldName, index) => {
     }
 }
 
+const setThumbnail = (file) => {
+fileStore.setThumbnail(file.id)
+    .then(responseData => {
+        attraction.value.thumbnail = responseData;
+    })
+}
+
 // on change 2. dropdown gets new options, and 3. dropdown options will be empty
 const onCategoryIdChange = (event) => {
     categoryDropdowns.values.subCategory1 = null;
     categoryDropdowns.options.subCategory1 = null;
     onSubCategory1IdChange(null);
+    clearFormErrors();
 }
 
 const onSubCategory1IdChange = (event) => {
@@ -721,8 +740,8 @@ const setSelectedAttractionCategoryId = () => {
         || categoryDropdowns.values.rootCategory;
 }
 
-const onOrderNumChange = () => {
-    formErrors.order_num = "";f
+const onPlaceIdChange = () => {
+    clearFormErrors();
 }
 
 const onFilterPlacesDropdown = (event) => {
@@ -753,22 +772,25 @@ input.p-invalid{
 .file-not-saved {
     color: var(--orange-600)
 }
-.delete-file{
+.files {
     height: 40px;
     display: flex;
     align-items: center;
 }
-.delete-file-btn {
+.action-btn {
     visibility: hidden;
 }
-.delete-file:hover .delete-file-btn{
+.files:hover .action-btn{
     visibility: visible;
 }
-.delete-file span {
+.files span {
     font-size: 13px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.thumbnail {
+    font-weight: 600;
 }
 .gallery-image-wrapper {
     height: 500px;

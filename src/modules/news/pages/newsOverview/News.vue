@@ -76,6 +76,7 @@ import Breadcrumb from 'primevue/breadcrumb';
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import { useI18n } from "vue-i18n";
+import { responsiveOptions } from '@/constants/gallerySettings'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
@@ -89,17 +90,6 @@ const breadcrumbHome = ref({
     route: '/news'
 });
 const breadcrumbItems = ref([]);
-
-const responsiveOptions = ref([
-    {
-        breakpoint: '1300px',
-        numVisible: 4
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1
-    }
-]);
 
 onBeforeMount(() => {
     if (route.params.id) {

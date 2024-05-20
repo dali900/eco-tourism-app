@@ -4,9 +4,9 @@
             <AppCard>
                 <template #image>
                     <img
-                        v-if="props.attraction.thumbnail_image"
+                        v-if="props.attraction.thumbnail"
                         alt="content-img"
-                        :src="apiBaseUrl + props.attraction.thumbnail_image.file_url"
+                        :src="apiBaseUrl + props.attraction.thumbnail.file_url"
                     />
                     <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
                 </template>

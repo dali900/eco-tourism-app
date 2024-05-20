@@ -4,9 +4,9 @@
             <AppCard>
                 <template #image>
                     <img
-                        v-if="props.item.default_image"
+                        v-if="props.item.thumbnail"
                         alt="content-img"
-                        :src="apiBaseUrl + props.item.default_image.file_url"
+                        :src="apiBaseUrl + props.item.thumbnail.file_url"
                     />
                     <img v-else alt="content-img" src="/images/thumbnails/news-thumb.png" />
                 </template>
@@ -21,7 +21,7 @@
                                 {{ item.publish_date_formated }}
                             </span>
                         </div>
-                        <div>
+                        <div class="content">
                             {{ props.item.summary }}
                         </div>
                     </div>
@@ -60,8 +60,14 @@ const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
         font-size: 14px;
         margin-bottom: 8px;
     }
-    .text {
-        max-width: 370px;
+    .content {
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;  
+        /* overflow: hidden;
+        white-space: wrap; 
+        text-overflow: ellipsis; */
+        overflow: hidden;
     }
     margin-bottom: 16px;
 }

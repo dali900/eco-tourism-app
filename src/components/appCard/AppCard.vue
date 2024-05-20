@@ -26,7 +26,7 @@
     display: flex;
     flex-direction: column;
     padding-bottom: 8px;
-    height: 400px;
+    height: 440px;
     width: 360px;
     -webkit-box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
     -moz-box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
@@ -40,8 +40,9 @@
     }
     .card-header {
         .img-wrapper {
-            height: 200px;
+            max-height: 270px;
             overflow: hidden;
+            text-align: center;
             :deep(img) {
                 max-width: 360px;
                 height: auto;

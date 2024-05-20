@@ -13,9 +13,9 @@
                             <AppCard>
                                 <template #image>
                                     <img
-                                        v-if="item.default_image"
+                                        v-if="item.thumbnail"
                                         alt="content-img"
-                                        :src="apiBaseUrl + item.default_image.file_url"
+                                        :src="apiBaseUrl + item.thumbnail.file_url"
                                     />
                                     <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
                                 </template>

@@ -9,6 +9,21 @@ export const useFileStore = defineStore('file', {
         loading: false
     }),
     actions: {
+        //create thumbnail image
+        async setThumbnail(fileId){
+            this.loading = true;
+            try {            
+                const response = await http.post('/api/files/thumbnail/'+fileId);
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
         //delete file
         async delete(filePath){
             this.loading = true;

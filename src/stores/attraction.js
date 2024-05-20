@@ -16,6 +16,7 @@ export const useAttractionStore = defineStore('attraction', {
         rootCategories: null,
         rootCategoriesTotal: null,
         subcategories: null,
+        trips: null,
         tree: null,
         treeCount: null
     }),
@@ -60,6 +61,23 @@ export const useAttractionStore = defineStore('attraction', {
                 throw error;
             }
         },
+        async getPageData(params){
+            this.loading = true;
+            try {
+                const urlParams = parseFilterParams(params);
+                const response = await http.get('/api/attraction-categories/page-data', urlParams);
+                this.rootCategories = response.data.categories;
+                this.trips = response.data.trips;
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
         async getAttractionCategoryTree(params){
             this.loading = true;
             try {
@@ -90,17 +108,20 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         async getCatagoryAttractions(params, id){
+            this.loading = true;
             try {
                 const urlParams = parseFilterParams(params);
                 const response = await http.get('/api/attraction-categories/category/'+id, urlParams);
                 this.category = response.data.category;
                 this.attractions = response.data.attractions.results;
                 this.attractionsTotal = response.data.attractions.pagination.total;
+                this.loading = false;
                 return response.data;
             } catch (error) {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);
                 }
+                this.loading = false;
                 throw error;
             }
         },

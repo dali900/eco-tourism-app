@@ -1,5 +1,5 @@
 <template>
-    <div class="admin-news">
+    <div class="admin-trips">
         <!-- list -->
         <Card class="resource-list">
             <template #title>
@@ -181,7 +181,7 @@ const confirmDeleteResource = (id) => {
 const deleteResource = (id) => {
     tripStore.delete(id)
         .then(() => {
-            toast.add({severity:'success', summary: 'Vest obrisana.', life: 3000});
+            toast.add({severity:'success', summary: 'Turistička tura obrisana.', life: 3000});
         })
         .catch(() => {
             toast.add({severity:'error', summary: 'Greška tokom brisanja.', life: 3000});
@@ -191,6 +191,10 @@ const deleteResource = (id) => {
 </script>
 
 <style scoped>
+.admin-trips {
+    max-width: 1200px;
+    margin: auto;
+}
 .add-card {
     width: fit-content !important;
 }

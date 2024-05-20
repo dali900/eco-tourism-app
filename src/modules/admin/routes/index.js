@@ -74,12 +74,12 @@ export default [
     },
     {
         path: "news/",
-        name: "AdminNews",
+        name: "admin-news",
         component: () => import("../pages/news/News.vue"),
     },
     {
-        path: "news/:id?",
-        name: "AdminNewsForm",
+        path: "news-form/:id?",
+        name: "admin-news-form",
         component: () => import("../pages/news/NewsForm.vue"),
     },
     {

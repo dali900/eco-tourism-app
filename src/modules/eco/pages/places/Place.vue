@@ -45,7 +45,7 @@
                 <div class="grid">
                     <div class="col-12 md:col-6 lg:col-4" v-for="attraction in place.attractions">
                         <div class="item">
-                            <CategoryItem :attraction="attraction" />
+                            <AttractionCard :attraction="attraction" />
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,8 @@ import { usePlaceStore } from "@/stores/place";
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import { useI18n } from "vue-i18n";
-import CategoryItem from '../ecoCategories/CategoryItem.vue'
+import AttractionCard from '../ecoCategories/AttractionCard.vue'
+import { responsiveOptions } from '@/constants/gallerySettings'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
@@ -77,17 +78,6 @@ const { t } = useI18n();
 const placeStore = usePlaceStore();
 const { place, loading } =
     storeToRefs(placeStore);
-
-const responsiveOptions = ref([
-    {
-        breakpoint: '1300px',
-        numVisible: 4
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1
-    }
-]);
 
 onBeforeMount(() => {
     if (route.params.id) {
@@ -161,7 +151,8 @@ const placeContent = computed( () => {
 }
 :deep(.gallery-image) {
     width: 100%;
-    height: auto;
+    max-height: 500px;
+    /* height: auto; */
     display: block;
 }
 .gallery-thumbnail-wrapper {

@@ -6,7 +6,7 @@
                 <div class="flex justify-content-between">
                     <div>
                         <span>Vesti</span>&nbsp;
-                        <router-link :to="{ name: 'AdminNewsForm'}" class="btn-link">
+                        <router-link :to="{ name: 'admin-news-form'}" class="btn-link">
                             <Button icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu vest'"/>
                         </router-link>
                         <!-- <small>Forma:</small><Button @click="openForm" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novi propis'"></Button> -->
@@ -72,7 +72,7 @@
                     </Column>
                     <Column :exportable="false" style="min-width:10%">
                         <template #body="slotProps">
-                            <router-link :to="{ name: 'AdminNewsForm', params: { id: slotProps.data.id }}" class="btn-link">
+                            <router-link :to="{ name: 'admin-news-form', params: { id: slotProps.data.id }}" class="btn-link">
                                 <Button icon="pi pi-pencil" class="p-button-rounded p-button-outlined p-button-sm action-table-btn"/>
                             </router-link>
                             <Button icon="pi pi-trash" class="p-button-rounded p-button-outlined p-button-sm p-button-warning action-table-btn delete-btn" @click="confirmDeleteResource(slotProps.data.id)" />
@@ -193,6 +193,10 @@ const deleteResource = (id) => {
 </script>
 
 <style scoped>
+.admin-news {
+    max-width: 1200px;
+    margin: auto;
+}
 .add-card {
     width: fit-content !important;
 }

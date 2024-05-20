@@ -167,6 +167,7 @@ export const useNewsStore = defineStore('news', {
             try {            
                 const response = await http.post('/api/news', data);
                 const news = response.data;
+                this.one_news = news;
                 //adds the object data to the beginning of the array
                 this.news.unshift(news);
                 this.loading = false;

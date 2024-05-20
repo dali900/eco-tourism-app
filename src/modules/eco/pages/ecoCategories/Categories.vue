@@ -21,22 +21,66 @@
                             <!-- Naprviti posebno 3 kolone, staviti sadrzaj kolone u flex, 1. flex poravnjati u levo, 2. centar i 3. desno -->
                             <div class="col-12 md:col-6 lg:col-4" v-if="category.attractions[0]">
                                 <div class="item">
-                                    <CategoryItem :attraction="category.attractions[0]" />
+                                    <AttractionCard :attraction="category.attractions[0]" />
                                 </div>
                             </div>
                             <div class="col-12 md:col-6 lg:col-4" v-if="category.attractions[1]">
                                 <div class="item">
-                                    <CategoryItem :attraction="category.attractions[1]" />
+                                    <AttractionCard :attraction="category.attractions[1]" />
                                 </div>
                             </div>
                             <div class="col-12 md:col-6 lg:col-4" v-if="category.attractions[2]">
                                 <div class="item">
-                                    <CategoryItem :attraction="category.attractions[2]" />
+                                    <AttractionCard :attraction="category.attractions[2]" />
                                 </div>
                             </div>
                         </div>
                         <div class="btn-see-more" v-if="category.attractions.length >= 3">
                             <router-link :to="{ name: 'eco-category', params: {id: category.id} }">
+                                <Button class="btn-d">Vise</Button>
+                            </router-link>
+                        </div>
+                    </div>
+                </div>
+                <!-- Trips -->
+                <div class="item-row" v-if="trips">
+                    <div class="category">
+                        <router-link :to="{ name: 'trips' }" class="text-link">
+                            <div class="">
+                                <Divider align="left" type="solid">
+                                    <b class="category-title">Turisticke ponude</b>
+                                </Divider> 
+                            </div>
+                        </router-link>
+                        <div class="grid">
+                            <!-- Naprviti posebno 3 kolone, staviti sadrzaj kolone u flex, 1. flex poravnjati u levo, 2. centar i 3. desno -->
+                            <div class="col-12 md:col-6 lg:col-4" v-for="(trip, key) in trips">
+                                <div class="item">
+                                    <router-link :to="{ name: 'trip', params: { id: trip.id } }" class="text-link">
+                                        <AppCard>
+                                            <template #image>
+                                                <img
+                                                    v-if="trip.thumbnail"
+                                                    alt="content-img"
+                                                    :src="apiBaseUrl + trip.thumbnail.file_url"
+                                                />
+                                                <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                                            </template>
+                                            <template #title>
+                                                {{ trip.title }}
+                                            </template>
+                                            <template #content>
+                                                <div>
+                                                    {{ trip.summary }}
+                                                </div>
+                                            </template>
+                                        </AppCard>
+                                    </router-link>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-see-more" >
+                            <router-link :to="{ name: 'trips' }">
                                 <Button class="btn-d">Vise</Button>
                             </router-link>
                         </div>
@@ -54,15 +98,17 @@ import { useRouter, useRoute } from 'vue-router';
 import { useAttractionStore } from '@/stores/attraction';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
-import CategoryItem from './CategoryItem.vue'
+import AttractionCard from './AttractionCard.vue'
 import Divider from 'primevue/divider';
+import AppCard from '@/components/appCard/AppCard.vue';
+const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
 
 const attractionStore = useAttractionStore();
-const { loading, rootCategories, attra } = storeToRefs(attractionStore);
+const { loading, rootCategories, trips } = storeToRefs(attractionStore);
 
 const perPage = ref(10);
 const sort = ref({
@@ -82,7 +128,7 @@ const filters = ref({
 });
 
 onBeforeMount(() => {
-    attractionStore.getRootCategories({
+    attractionStore.getPageData({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,

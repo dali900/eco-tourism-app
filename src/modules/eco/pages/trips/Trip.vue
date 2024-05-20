@@ -28,9 +28,9 @@
                         <AppCard>
                             <template #image>
                                 <img
-                                    v-if="attraction.thumbnail_image"
+                                    v-if="attraction.thumbnail"
                                     alt="content-img"
-                                    :src="apiBaseUrl + attraction.thumbnail_image.file_url"
+                                    :src="apiBaseUrl + attraction.thumbnail.file_url"
                                 />
                                 <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
                             </template>
@@ -46,7 +46,7 @@
                 <Galleria
                     :value="trip.images"
                     :responsiveOptions="responsiveOptions"
-                    :numVisible="5"
+                    :numVisible="8"
                 >
                     <template #item="slotProps">
                         <div class="gallery-image-wrapper">
@@ -87,6 +87,7 @@ import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import { useI18n } from "vue-i18n";
 import AppCard from '@/components/appCard/AppCard.vue';
+import { responsiveOptions } from '@/constants/gallerySettings'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
@@ -94,17 +95,6 @@ const { t } = useI18n();
 
 const tripStore = useTripStore();
 const { trip, loading } = storeToRefs(tripStore);
-
-const responsiveOptions = ref([
-    {
-        breakpoint: '1300px',
-        numVisible: 4
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1
-    }
-]);
 
 onBeforeMount(() => {
     if (route.params.id) {
@@ -169,6 +159,13 @@ onBeforeMount(() => {
         margin-bottom: 64px;
     }
 }
+/* :deep(.p-galleria-thumbnail-items) {
+    justify-content: center;
+    gap: 4px;
+}
+:deep(.p-galleria-thumbnail-item) {
+    flex: 0 0 auto !important;
+} */
 .gallery-image-wrapper {
     height: 500px;
     overflow: hidden;

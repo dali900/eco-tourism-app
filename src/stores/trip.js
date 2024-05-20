@@ -57,7 +57,7 @@ export const useTripStore = defineStore('trip', {
             try {            
                 const response = await http.post('/api/trips', data);
                 const trip = response.data;
-                //adds the object data to the beginning of the array
+                this.trip = trip;
                 this.trips.unshift(trip);
                 this.loading = false;
                 return response.data;

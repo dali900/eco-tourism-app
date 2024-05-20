@@ -7,19 +7,26 @@
         </div>
 
         <div class="page-body">
-            <div class="items grid" v-if="attractions">
+            <div v-if="loading" class="mb-3">
+                {{ t('Loading') }}...
+            </div>
+            <div class="items grid" v-else-if="attractions">
                 <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in attractions">
                     <div class="item">
                         <router-link :to="{ name: 'attraction', params: { id: item.id } }" class="text-link">
-                            <div class="img-wrapper" :key="key">
-                                <img
-                                    v-if="item.default_image"
-                                    alt="content-img"
-                                    :src="apiBaseUrl + item.default_image.file_url"
-                                />
-                                <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
-                            </div>
-                            <div class="summary text">{{ item.summary }}</div>
+                            <AppCard>
+                                <template #image>
+                                    <img
+                                        v-if="item.thumbnail"
+                                        alt="content-img"
+                                        :src="apiBaseUrl + item.thumbnail.file_url"
+                                    />
+                                    <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                                </template>
+                                <template #content>
+                                    {{ item.summary }}
+                                </template>
+                            </AppCard>
                         </router-link>
                     </div>
                 </div>
@@ -38,6 +45,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useAttractionStore } from '@/stores/attraction';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
+import AppCard from '@/components/appCard/AppCard.vue';
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
@@ -145,7 +153,7 @@ const onPage = (event) => {
                 color: inherit;
             }
             .img-wrapper {
-                height: 200px;
+                max-height: 270px;
                 overflow: hidden;
                 margin-bottom: 16px;
                 img {

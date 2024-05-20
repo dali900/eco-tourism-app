@@ -3,7 +3,7 @@
         <h2>Admin dashboard</h2>
         <div class="list grid" v-if="rowCounts">
             <div class="col-12 md:col-6 lg:col-4 p-2">
-                <router-link :to="{ name: 'AdminNews'}" class="btn-link">
+                <router-link :to="{ name: 'admin-news'}" class="btn-link">
                     <div class="stat-card p-2 p-card">
                         <div>Vesti: {{ rowCounts.news_row_count }}</div>
                     </div>

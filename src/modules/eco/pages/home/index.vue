@@ -41,7 +41,7 @@
                             <router-link :to="{name:'attraction', params:{id:item.id}}" class="text-link">
                                 <AppCard>
                                     <template #image>
-                                        <img v-if="item.thumbnail_image" alt="content-img" :src="apiBaseUrl+item.thumbnail_image.file_url">
+                                        <img v-if="item.thumbnail" alt="content-img" :src="apiBaseUrl+item.thumbnail.file_url">
                                         <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
                                     </template>
                                     <template #title>
@@ -59,7 +59,7 @@
                             <router-link :to="{name:'news-overview', params:{id:item.id}}" class="text-link">
                                 <AppCard>
                                     <template #image>
-                                        <img v-if="item.thumbnail_image" alt="content-img" :src="apiBaseUrl+item.thumbnail_image.file_url">
+                                        <img v-if="item.thumbnail" alt="content-img" :src="apiBaseUrl+item.thumbnail.file_url">
                                         <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
                                     </template>
                                     <template #title>
