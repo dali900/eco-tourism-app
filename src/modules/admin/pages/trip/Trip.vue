@@ -82,7 +82,7 @@
                                 <MultiSelect v-model="selectedAttractions" :options="attractions" filter optionLabel="name" placeholder="Izaberi"
                                     class="w-full md:w-20rem" 
                                     autoFilterFocus
-                                    :filterFields="['name', 'content', 'title', 'subtitle', 'summary']"
+                                    :filterFields="['id', 'name', 'content', 'title', 'subtitle', 'summary']"
                                     @filter="onFilterAttractions"
                                 />
                             </div>

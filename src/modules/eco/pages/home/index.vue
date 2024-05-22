@@ -123,28 +123,27 @@
             <div class="separator" style="margin-bottom: 32px"></div>
     
             <!-- Suggestions -->
-            <div class="suggestions">
+            <div class="suggestions" v-if="suggestedAttractions && suggestedAttractions.length">
                 <div class="title flex-justify-center">
                     <div>
                         {{ t('home.suggestionTitle') }}
                     </div>
                 </div>
                 <div class="list">
-                    <div class="grid">
+                    <div class="grid" v-if="suggestedAttractions[0]">
                         <div class="col-12 md:col-6 lg:col-6 left-column">
                             <div class="suggestion-img-wrapper">
-                                <img alt="header-img" src="/images/thumbnails/new11.png">
+                                <img alt="header-img" v-if="suggestedAttractions[0].thumbnail" :src="apiBaseUrl+suggestedAttractions[0].thumbnail.file_url">
+                                <img alt="header-img" v-else src="/images/thumbnails/new11.png">
                             </div>
                         </div>
                         <div class="col-12 md:col-6 lg:col-6 right-column right-content">
                             <div class="suggestion-content">
                                 <div class="suggestion-title">
-                                    Priroda kao iz bajke
+                                    {{ suggestedAttractions[0].name }}
                                 </div>
                                 <div class="suggestion-text">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since theorem. 
-    
-                                    LIpsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+                                    {{ suggestedAttractions[0].summary }}
                                 </div>
                                 <div class="btn right">
                                     <Button class="btn-d">Vise</Button>
@@ -152,7 +151,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="grid">
+                    <div class="grid" v-if="suggestedAttractions[1]">
                         <div class="col-12 md:col-6 lg:col-6 left-column move-right left-content">
                             <div class="suggestion-content">
                                 <div class="suggestion-title">
@@ -174,7 +173,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="grid">
+                    <div class="grid" v-if="suggestedAttractions[2]">
                         <div class="col-12 md:col-6 lg:col-6 left-column">
                             <div class="suggestion-img-wrapper">
                                 <img alt="header-img" src="/images/thumbnails/new11.png">
@@ -631,13 +630,15 @@ const observeVisibility = () => {
             .suggestion-img-wrapper {
                 width: 440px;
                 height: 330px;
+                width: 330px;
+                height: 270px;
                 border-radius: 31px;
                 overflow: hidden;
                 -webkit-box-shadow: 1px 8px 19px -2px rgba(0,0,0,0.75);
                 -moz-box-shadow: 1px 8px 19px -2px rgba(0,0,0,0.75);
                 box-shadow: 1px 8px 19px -2px rgba(0,0,0,0.75);
                 img {
-                    margin: -60px 0 0px -5px;
+                   /*  margin: -60px 0 0px -5px; */
                 }
             }
             .left-column {
