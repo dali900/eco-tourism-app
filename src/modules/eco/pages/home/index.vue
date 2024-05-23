@@ -60,7 +60,7 @@
                                 <AppCard>
                                     <template #image>
                                         <img v-if="item.thumbnail" alt="content-img" :src="apiBaseUrl+item.thumbnail.file_url">
-                                        <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
+                                        <img v-else alt="content-img" src="/images/thumbnails/news-thumb.png" >
                                     </template>
                                     <template #title>
                                         {{ item.title }}
@@ -146,7 +146,9 @@
                                     {{ suggestedAttractions[0].summary }}
                                 </div>
                                 <div class="btn right">
-                                    <Button class="btn-d">Vise</Button>
+                                    <router-link :to="{ name: 'attraction', params: {id: suggestedAttractions[0].id} }">
+                                        <Button class="btn-d">Vise</Button>
+                                    </router-link>
                                 </div>
                             </div>
                         </div>
@@ -155,42 +157,44 @@
                         <div class="col-12 md:col-6 lg:col-6 left-column move-right left-content">
                             <div class="suggestion-content">
                                 <div class="suggestion-title">
-                                    Priroda kao iz bajke
+                                    {{ suggestedAttractions[1].name }}
                                 </div>
                                 <div class="suggestion-text">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since theorem. 
-    
-                                    LIpsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+                                    {{ suggestedAttractions[1].summary }}
                                 </div>
                                 <div class="btn">
-                                    <Button class="btn-d">Vise</Button>
+                                    <router-link :to="{ name: 'attraction', params: {id: suggestedAttractions[1].id} }">
+                                        <Button class="btn-d">Vise</Button>
+                                    </router-link>
                                 </div>
                             </div>
                         </div>
                         <div class="col-12 md:col-6 lg:col-6 right-column">
                             <div class="suggestion-img-wrapper">
-                                <img alt="header-img" src="/images/thumbnails/new11.png">
+                                <img alt="header-img" v-if="suggestedAttractions[1].thumbnail" :src="apiBaseUrl+suggestedAttractions[1].thumbnail.file_url">
+                                <img alt="header-img" v-else src="/images/thumbnails/new11.png">
                             </div>
                         </div>
                     </div>
                     <div class="grid" v-if="suggestedAttractions[2]">
                         <div class="col-12 md:col-6 lg:col-6 left-column">
                             <div class="suggestion-img-wrapper">
-                                <img alt="header-img" src="/images/thumbnails/new11.png">
+                                <img alt="header-img" v-if="suggestedAttractions[2].thumbnail" :src="apiBaseUrl+suggestedAttractions[2].thumbnail.file_url">
+                                <img alt="header-img" v-else src="/images/thumbnails/new11.png">
                             </div>
                         </div>
                         <div class="col-12 md:col-6 lg:col-6 right-column right-content">
                             <div class="suggestion-content">
                                 <div class="suggestion-title">
-                                    Priroda kao iz bajke
+                                    {{ suggestedAttractions[2].name }}
                                 </div>
                                 <div class="suggestion-text">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since theorem. 
-    
-                                    LIpsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+                                    {{ suggestedAttractions[2].summary }}
                                 </div>
                                 <div class="btn right">
-                                    <Button class="btn-d">Vise</Button>
+                                    <router-link :to="{ name: 'attraction', params: {id: suggestedAttractions[2].id} }">
+                                        <Button class="btn-d">Vise</Button>
+                                    </router-link>
                                 </div>
                             </div>
                         </div>
@@ -628,10 +632,11 @@ const observeVisibility = () => {
                margin-bottom: 64px; 
             }
             .suggestion-img-wrapper {
-                width: 440px;
+                text-align: center;
+                max-width: 440px;
                 height: 330px;
-                width: 330px;
-                height: 270px;
+                /* width: 360px;
+                height: 270px; */
                 border-radius: 31px;
                 overflow: hidden;
                 -webkit-box-shadow: 1px 8px 19px -2px rgba(0,0,0,0.75);

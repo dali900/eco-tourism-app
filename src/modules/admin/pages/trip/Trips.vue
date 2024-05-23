@@ -111,7 +111,7 @@ const timer = ref(null);
 const windowWidth = ref("");
 const perPage = ref(20);
 const sort = ref({
-    sortField: "sortField" in route.query ? route.query.sortField : "created_at",
+    sortField: "sortField" in route.query ? route.query.sortField : "id",
     sortOrder: "sortOrder" in route.query ? route.query.sortOrder : -1,
 });
 const pagination = ref({
