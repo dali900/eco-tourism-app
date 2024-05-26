@@ -42,13 +42,15 @@
                                 <AppCard>
                                     <template #image>
                                         <img v-if="item.thumbnail" alt="content-img" :src="apiBaseUrl+item.thumbnail.file_url">
-                                        <img v-else alt="content-img" src="/images/thumbnails/t1.png" >
+                                        <img v-else alt="content-img" src="/images/thumbnails/attraction.jpg" >
                                     </template>
                                     <template #title>
                                         {{ item.name }}
                                     </template>
                                     <template #content>
-                                        {{ item.summary }}
+                                        <div class="latest-content-card-content-attraction">
+                                            {{ item.summary }}
+                                        </div>
                                     </template>
                                 </AppCard>
                             </router-link>
@@ -66,14 +68,16 @@
                                         {{ item.title }}
                                     </template>
                                     <template #content>
-                                        <div class="small-section">
-                                            <span v-if="item.publish_date_formated">
-                                                <i class="pi pi-clock"></i> 
-                                                {{ item.publish_date_formated }}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            {{ item.summary }}
+                                        <div class="latest-content-card-content-news">
+                                            <div class="small-section">
+                                                <span v-if="item.publish_date_formated">
+                                                    <i class="pi pi-clock"></i> 
+                                                    {{ item.publish_date_formated }}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                {{ item.summary }}
+                                            </div>
                                         </div>
                                     </template>
                                 </AppCard>
@@ -132,9 +136,13 @@
                 <div class="list">
                     <div class="grid" v-if="suggestedAttractions[0]">
                         <div class="col-12 md:col-6 lg:col-6 left-column">
-                            <div class="suggestion-img-wrapper">
-                                <img alt="header-img" v-if="suggestedAttractions[0].thumbnail" :src="apiBaseUrl+suggestedAttractions[0].thumbnail.file_url">
-                                <img alt="header-img" v-else src="/images/thumbnails/new11.png">
+                            <div class="suggestion-img-wrapper" v-if="suggestedAttractions[0].thumbnail">
+                                <img class="header-img" :src="apiBaseUrl+suggestedAttractions[0].thumbnail.file_url">
+                                <img class="header-img-shadow" :src="apiBaseUrl+suggestedAttractions[0].thumbnail.file_url">
+                            </div>
+                            <div class="suggestion-img-wrapper" v-else>
+                                <img class="header-img" src="/images/thumbnails/new11.png">
+                                <img class="header-img-shadow" src="/images/thumbnails/new11.png">
                             </div>
                         </div>
                         <div class="col-12 md:col-6 lg:col-6 right-column right-content">
@@ -170,17 +178,25 @@
                             </div>
                         </div>
                         <div class="col-12 md:col-6 lg:col-6 right-column">
-                            <div class="suggestion-img-wrapper">
-                                <img alt="header-img" v-if="suggestedAttractions[1].thumbnail" :src="apiBaseUrl+suggestedAttractions[1].thumbnail.file_url">
-                                <img alt="header-img" v-else src="/images/thumbnails/new11.png">
+                            <div class="suggestion-img-wrapper" v-if="suggestedAttractions[1].thumbnail">
+                                <img class="header-img" :src="apiBaseUrl+suggestedAttractions[1].thumbnail.file_url">
+                                <img class="header-img-shadow" :src="apiBaseUrl+suggestedAttractions[1].thumbnail.file_url">
+                            </div>
+                            <div class="suggestion-img-wrapper" v-else>
+                                <img class="header-img" src="/images/thumbnails/new11.png">
+                                <img class="header-img-shadow" src="/images/thumbnails/new11.png">
                             </div>
                         </div>
                     </div>
                     <div class="grid" v-if="suggestedAttractions[2]">
                         <div class="col-12 md:col-6 lg:col-6 left-column">
-                            <div class="suggestion-img-wrapper">
-                                <img alt="header-img" v-if="suggestedAttractions[2].thumbnail" :src="apiBaseUrl+suggestedAttractions[2].thumbnail.file_url">
-                                <img alt="header-img" v-else src="/images/thumbnails/new11.png">
+                            <div class="suggestion-img-wrapper" v-if="suggestedAttractions[2].thumbnail">
+                                <img class="header-img" :src="apiBaseUrl+suggestedAttractions[2].thumbnail.file_url">
+                                <img class="header-img-shadow" :src="apiBaseUrl+suggestedAttractions[2].thumbnail.file_url">
+                            </div>
+                            <div class="suggestion-img-wrapper" v-else>
+                                <img class="header-img" src="/images/thumbnails/new11.png">
+                                <img class="header-img-shadow" src="/images/thumbnails/new11.png">
                             </div>
                         </div>
                         <div class="col-12 md:col-6 lg:col-6 right-column right-content">
@@ -534,6 +550,18 @@ const observeVisibility = () => {
         }
         .items {
             .item {
+                .latest-content-card-content-news {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 5;
+                    -webkit-box-orient: vertical;  
+                    overflow: hidden;
+                }
+                .latest-content-card-content-attraction {
+                    display: -webkit-box;
+                    -webkit-line-clamp: 6;
+                    -webkit-box-orient: vertical;  
+                    overflow: hidden;
+                }
                 .small-section {
                     color: var(--text-light-color) !important;
                     font-size: 14px;
@@ -633,17 +661,31 @@ const observeVisibility = () => {
             }
             .suggestion-img-wrapper {
                 text-align: center;
-                max-width: 440px;
+                width: 440px;
                 height: 330px;
                 /* width: 360px;
                 height: 270px; */
-                border-radius: 31px;
-                overflow: hidden;
-                -webkit-box-shadow: 1px 8px 19px -2px rgba(0,0,0,0.75);
-                -moz-box-shadow: 1px 8px 19px -2px rgba(0,0,0,0.75);
-                box-shadow: 1px 8px 19px -2px rgba(0,0,0,0.75);
+                /* border-radius: 31px;
+                overflow: hidden; */
+                position: relative;
+                
                 img {
                    /*  margin: -60px 0 0px -5px; */
+                   border-radius: 31px;
+                   max-height: 330px;
+                }
+                .header-img {
+                    position: absolute;
+                    right: 0px;
+                    bottom: 0px;
+                    z-index: 1;
+                }
+                .header-img-shadow {
+                    position: absolute;
+                    right: -9px;
+                    bottom: -9px;
+                    filter: blur(11px);
+                    border-radius: 31px;
                 }
             }
             .left-column {

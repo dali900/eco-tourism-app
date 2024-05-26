@@ -17,7 +17,7 @@
                                     alt="content-img"
                                     :src="apiBaseUrl + item.thumbnail.file_url"
                                 />
-                                <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                                <img v-else alt="content-img" src="/images/thumbnails/place.jpg" />
                             </div>
                         </router-link>
                     </div>

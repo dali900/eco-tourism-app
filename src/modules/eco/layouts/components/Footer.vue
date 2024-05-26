@@ -31,16 +31,16 @@ const currentYear = computed(() => new Date().getFullYear());
                     </a>
                 </div>
                 <div class="socials">
-                    <div>{{ t('footer.contact') }} 123123123</div>
+                    <div>{{ t('footer.contact') }} 062289514</div>
                     <div>E-mail selona3klika@gmail.com</div>
                     <div class="social-links">
                         <a href="//twitter.com" target="_blank">
-                            <img alt="Logo" src="/images/twitter.svg" to="/">
+                            <img alt="Logo" src="/images/x.svg" to="/">
                         </a>
                         <a href="//facebook.com" target="_blank">
                             <img alt="Logo" src="/images/facebook.svg" to="/">
                         </a>
-                        <a href="//instagram.com" target="_blank">
+                        <a href="https://www.instagram.com/selonatriklika/" target="_blank">
                             <img alt="Logo" src="/images/instagram.svg" to="/">
                         </a>
                     </div>

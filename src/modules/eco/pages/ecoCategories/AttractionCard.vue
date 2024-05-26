@@ -8,7 +8,7 @@
                         alt="content-img"
                         :src="apiBaseUrl + props.attraction.thumbnail.file_url"
                     />
-                    <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                    <img v-else alt="content-img" src="/images/thumbnails/attraction.jpg" />
                 </template>
                 <template #content>
                     {{ props.attraction.summary }}

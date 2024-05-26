@@ -64,10 +64,9 @@ const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
         display: -webkit-box;
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;  
-        /* overflow: hidden;
-        white-space: wrap; 
-        text-overflow: ellipsis; */
         overflow: hidden;
+        /* white-space: wrap; 
+        text-overflow: ellipsis; */
     }
     margin-bottom: 16px;
 }
