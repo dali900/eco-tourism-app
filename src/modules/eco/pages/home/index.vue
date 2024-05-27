@@ -37,7 +37,7 @@
                 </div>
                 <div class="items grid">
                     <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in attractions">
-                        <div class="item">
+                        <div class="item first-row">
                             <router-link :to="{name:'attraction', params:{id:item.id}}" class="text-link">
                                 <AppCard>
                                     <template #image>
@@ -86,8 +86,6 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="separator" style="margin-bottom: 32px"></div>
 
             <!-- Statistics -->
             <div class="statistics" :class="{hidden: loading}">
@@ -123,8 +121,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="separator" style="margin-bottom: 32px"></div>
     
             <!-- Suggestions -->
             <div class="suggestions" v-if="suggestedAttractions && suggestedAttractions.length">
@@ -549,6 +545,9 @@ const observeVisibility = () => {
             margin-bottom: 64px;
         }
         .items {
+            .first-row {
+                margin-bottom: 32px;
+            }
             .item {
                 .latest-content-card-content-news {
                     display: -webkit-box;
@@ -611,7 +610,6 @@ const observeVisibility = () => {
                         overflow: hidden;
                     }
                 }*/
-                margin-bottom: 16px; 
             }
         }
         margin-bottom: 64px;
