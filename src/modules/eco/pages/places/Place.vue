@@ -40,7 +40,7 @@
             </div>
             <div class="attractions" v-if="place.attractions">
                 <div class="section-subtitle">
-                    {{ t('places.attractions') }}
+                    {{ t('places.attractions') }}:
                 </div>
                 <div class="grid">
                     <div class="col-12 md:col-6 lg:col-4" v-for="attraction in place.attractions">
