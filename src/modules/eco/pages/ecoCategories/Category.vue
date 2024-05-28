@@ -14,19 +14,7 @@
                 <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in attractions">
                     <div class="item">
                         <router-link :to="{ name: 'attraction', params: { id: item.id } }" class="text-link">
-                            <AppCard>
-                                <template #image>
-                                    <img
-                                        v-if="item.thumbnail"
-                                        alt="content-img"
-                                        :src="apiBaseUrl + item.thumbnail.file_url"
-                                    />
-                                    <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
-                                </template>
-                                <template #content>
-                                    {{ item.summary }}
-                                </template>
-                            </AppCard>
+                            <AttractionCard :attraction="item" />
                         </router-link>
                     </div>
                 </div>
@@ -46,6 +34,7 @@ import { useAttractionStore } from '@/stores/attraction';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
 import AppCard from '@/components/appCard/AppCard.vue';
+import AttractionCard from './AttractionCard.vue'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
