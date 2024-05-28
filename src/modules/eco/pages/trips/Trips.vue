@@ -123,7 +123,12 @@ const onPage = (event) => {
         margin-bottom: 64px;
     }
     .page-body {
-        padding: 0 64px;
+        padding: 0 16px;
+    }
+    @media screen and (min-width: 992px) {
+        .page-body {
+            padding: 0 64px;
+        }
     }
     .title {
         font-size: 40px;

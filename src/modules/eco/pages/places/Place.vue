@@ -116,7 +116,7 @@ const placeContent = computed( () => {
         margin-bottom: 64px;
     }
     .page-body {
-        padding: 16px 64px;
+        padding: 16px 16px;
         .title {
             display: flex;
             justify-content: center;
@@ -130,6 +130,11 @@ const placeContent = computed( () => {
         }
         .resource-content {
             margin-bottom: 64px;
+        }
+    }
+    @media screen and (min-width: 992px) {
+        .page-body {
+            padding: 0 64px;
         }
     }
     .galleria {

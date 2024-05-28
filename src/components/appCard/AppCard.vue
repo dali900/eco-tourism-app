@@ -27,7 +27,7 @@
     flex-direction: column;
     padding-bottom: 8px;
     height: 440px;
-    width: 360px;
+    max-width: 360px;
     -webkit-box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
     -moz-box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
     box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
