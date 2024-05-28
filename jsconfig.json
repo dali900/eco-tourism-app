@@ -5,6 +5,7 @@
             "@admin/*": ["./src/modules/admin/*"],
             "@eco/*": ["./src/modules/eco/*"],
             "@news/*": ["./src/modules/news/*"],
+            "@market/*": ["./src/modules/market/*"],
         }
     },
     "exclude": ["node_modules", "dist"]

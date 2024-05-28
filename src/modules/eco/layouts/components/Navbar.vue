@@ -148,7 +148,7 @@
     .logo-link {
         width: auto;
         color: white;
-        padding-right: 30px;
+        margin-right: 50px;
         text-decoration: none;
         .app-logo-wrapper {
             background-color: white;

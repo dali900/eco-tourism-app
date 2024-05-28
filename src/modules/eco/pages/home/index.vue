@@ -16,7 +16,7 @@
                         <div class="msg">{{ t('home.tourism') }}</div>
                     </div>
                 </router-link>
-                <router-link to="/" class="col-12 md:col-6 lg:col-4 banner-link">
+                <router-link to="/market" class="col-12 md:col-6 lg:col-4 banner-link">
                     <div class="banner market">
                         <div class="msg">{{ t('home.market') }}</div>
                     </div>
