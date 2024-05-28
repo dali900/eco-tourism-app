@@ -43,7 +43,8 @@
         "headerMsg": "O nama"
     },
     "ecoCategories": {
-        "headerMsg": "Ekoturizam"
+        "headerMsg": "Ekoturizam",
+        "tours": "Tursitičke ture"
     },
     "ecoNews": {
         "headerMsg": "E novine"
@@ -64,5 +65,8 @@
         "bottomPart1": "Selo na 3 klika",
         "bottomPart2": "Sva prava zadržana",
         "bottomPart3": "ažuriranje portala na dnevnom nivou"
+    },
+    "common": {
+        "more": "Više"
     }
 }

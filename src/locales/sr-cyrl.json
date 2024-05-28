@@ -36,7 +36,8 @@
         "place": "Место"
     },
     "ecoCategories": {
-        "headerMsg": "Екотуризам"
+        "headerMsg": "Екотуризам",
+        "tours": "Туристичке туре"
     },
     "ecoNews": {
         "headerMsg": "Е новине"
@@ -64,5 +65,8 @@
         "bottomPart1": "Село на 3 клика",
         "bottomPart2": "Сва права задржана",
         "bottomPart3": "ажурирање портала на дневном нивоу"
+    },
+    "common": {
+        "more": "Више"
     }
 }

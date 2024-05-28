@@ -37,7 +37,7 @@
                         </div>
                         <div class="btn-see-more" v-if="category.attractions.length >= 3">
                             <router-link :to="{ name: 'eco-category', params: {id: category.id} }">
-                                <Button class="btn-d">Vise</Button>
+                                <Button class="btn-d">{{ t('common.more') }}</Button>
                             </router-link>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                         <router-link :to="{ name: 'trips' }" class="text-link">
                             <div class="">
                                 <Divider align="left" type="solid">
-                                    <b class="category-title">Turisticke ponude</b>
+                                    <b class="category-title">{{ t('ecoCategories.tours') }}</b>
                                 </Divider> 
                             </div>
                         </router-link>
@@ -64,7 +64,7 @@
                                                     alt="content-img"
                                                     :src="apiBaseUrl + trip.thumbnail.file_url"
                                                 />
-                                                <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                                                <img v-else alt="content-img" src="/images/thumbnails/tours.jpg" />
                                             </template>
                                             <template #title>
                                                 {{ trip.title }}
@@ -81,7 +81,7 @@
                         </div>
                         <div class="btn-see-more" >
                             <router-link :to="{ name: 'trips' }">
-                                <Button class="btn-d">Vise</Button>
+                                <Button class="btn-d">{{ t('common.more') }}</Button>
                             </router-link>
                         </div>
                     </div>
