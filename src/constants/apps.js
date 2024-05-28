@@ -7,7 +7,7 @@ export default {
         appName: "ekoturizam",
         title: "Ekoturizam",
         alias: ['et', 'eko', 'ekoturizam', 'localhost'],
-        tabIcon: '/images/app-logo.svg'
+        tabIcon: '/images/app-logo3.png'
     },
     /**
      * ekoturizam.net

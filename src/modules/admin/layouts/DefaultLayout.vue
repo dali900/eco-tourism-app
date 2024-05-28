@@ -120,7 +120,7 @@ const onAppChange = (event) => {
         <Menubar :model="items">
             <template #start>
                 <a class="logo">
-                    <img alt="Logo" src="/images/app-logo.svg" to="/">
+                    <img alt="Logo" src="/images/app-logo3.png" to="/">
                     <span>Selo na 3 klika</span>
                 </a>
             </template>

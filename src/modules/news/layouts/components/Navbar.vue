@@ -101,7 +101,7 @@
     <Menubar :model="menuItems">
         <template #start>
             <a href="/" class="logo">
-                <img alt="Logo" src="/images/app-logo.svg" to="/">
+                <img alt="Logo" src="/images/app-logo3.png" to="/">
             </a>
         </template>
         <template #item="{ item, props, hasSubmenu }">

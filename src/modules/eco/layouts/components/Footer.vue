@@ -27,7 +27,7 @@ const currentYear = computed(() => new Date().getFullYear());
                 </div>
                 <div class="logo-wrapper">
                     <a href="/" class="logo">
-                        <img alt="Logo" src="/images/app-logo.svg" to="/">
+                        <img alt="Logo" src="/images/app-logo3.png" to="/">
                     </a>
                 </div>
                 <div class="socials">

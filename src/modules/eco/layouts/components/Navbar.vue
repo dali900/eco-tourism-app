@@ -102,7 +102,7 @@
         <template #start>
             <a href="/" class="logo-link">
                 <div class="app-logo-wrapper">
-                    <img alt="Logo" src="/images/app-logo1.svg" to="/">
+                    <img alt="Logo" src="/images/app-logo3.png" to="/">
                 </div>
             </a>
         </template>

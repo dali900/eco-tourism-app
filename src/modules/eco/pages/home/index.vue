@@ -3,7 +3,7 @@
 
         <!-- Header imag -->
         <div class="header">
-            <img src="/images/app-logo1.svg">
+            <img src="/images/app-logo3.png">
             <div class="msg">{{ t('home.headerMsg') }}</div>
             <div class="small-msg">{{ t('home.headerSmallMsg') }}</div>
         </div>
@@ -464,7 +464,9 @@ const observeVisibility = () => {
         flex-direction: column;
         justify-content: center;
         img {
-            max-height: 150px;
+            height: 150px;
+            width: 150px;
+            align-self: center;
         }
         .msg {
             font-size: 40px;
