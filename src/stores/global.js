@@ -13,6 +13,7 @@ export const useGlobalStore = defineStore('global', {
         news: null,
         counts: null,
         suggestedAttractions: null,
+        languages: null
     }),
     getters: {
         appName(){
@@ -47,6 +48,24 @@ export const useGlobalStore = defineStore('global', {
                 this.loading = false;
                 console.log(error);
                 const response = error.response;
+                throw error;
+            }
+        },
+        async getLanguages(){
+            if (this.languages) {
+                return this.languages;
+            }
+            this.loading = true;
+            try {
+                const response = await http.get('/api/languages/');
+                this.languages = response.data;
+                this.loading = false;
+                return this.languages; 
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
                 throw error;
             }
         },

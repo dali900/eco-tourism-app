@@ -145,10 +145,10 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         //fetch resource. Different resource form attractions. Needs to be fetched again if not selected
-        async getAttraction(id){
+        async getAttraction(id, langId = ''){
             this.loading = true;
             try {
-                const response = await http.get('/api/attractions/'+id);
+                const response = await http.get('/api/attractions/'+id+'/'+langId);
                 this.attraction = response.data;
                 this.loading = false;
                 return this.attraction; 
@@ -165,7 +165,7 @@ export const useAttractionStore = defineStore('attraction', {
             this.loading = true;
             try {            
                 const response = await http.post('/api/attractions', data);
-                const attraction = response.data;
+                const attraction = response;
                 //attractions are not loaded when attraction form is opened directly
                 if(this.attractions && this.attractions.length){
                     //adds the object data to the beginning of the array
@@ -231,9 +231,6 @@ export const useAttractionStore = defineStore('attraction', {
             this.loading = true;
             try {            
                 const response = await http.post('/api/attraction-categories', data);
-                const category = response.data;
-                //adds the object data to the beginning of the array
-                this.categories.unshift(category);
                 this.loading = false;
                 return response.data;
             } catch (error) {
@@ -250,10 +247,6 @@ export const useAttractionStore = defineStore('attraction', {
             this.loading = true;
             try {            
                 const response = await http.put('/api/attraction-categories/'+data.id, data);
-                const category = response.data;
-                //replace the existing resource
-                const index = this.categories.findIndex( el => el.id == data.id);
-                this.categories[index] = category;
                 this.loading = false;
                 return response.data;
             } catch (error) {
@@ -306,6 +299,22 @@ export const useAttractionStore = defineStore('attraction', {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);
                 }
+                this.loading = false;
+                throw error;
+            }
+        },
+        //create new category
+        async createTranslation(data, langCode, errorFields){
+            this.loading = true;
+            try {            
+                const response = await http.post('/api/attraction/'+data.id+'/translations/'+langCode, data);
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                fillFormErrors(errorFields, error);
                 this.loading = false;
                 throw error;
             }

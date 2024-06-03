@@ -5,8 +5,38 @@
             <div v-else-if="route.params.attractionId">Nema podataka.</div>
         </div>
         <div class="attraction-content">
-            <h2 v-if="route.params.attractionId">Znamenitost</h2>
-            <h2 v-else>Nova znamenitost</h2>
+            <div class="header">
+                <div class="title">
+                    <h2 v-if="route.params.attractionId">Znamenitost</h2>
+                    <h2 v-else>Nova znamenitost</h2>
+                </div>
+                <div class="options">
+                    <Dropdown v-model="selectedLang" 
+                        class="w-full md:w-14rem"
+                        optionLabel="name" 
+                        placeholder="Izaberi jezik" 
+                        :options="languages" 
+                        @change="onLangChange"
+                    >
+                        <template #value="slotProps">
+                            <div v-if="slotProps.value" class="flex align-items-center">
+                                <img :alt="slotProps.value.label" :src="'/images/langs/'+slotProps.value.lang_code+'.png'" :class="`mr-2 flag flag-${slotProps.value.lang_code.toLowerCase()}`" style="width: 18px" />
+                                <div>{{ slotProps.value.name }}</div>
+                            </div>
+                            <span v-else>
+                                {{ slotProps.placeholder }}
+                            </span>
+                        </template>
+                        <template #option="slotProps">
+                            <div class="flex align-items-center">
+                                <img :alt="slotProps.option.label" :src="'/images/langs/'+slotProps.option.lang_code+'.png'" :class="`mr-2 flag`" style="width: 18px" />
+                                <div>{{ slotProps.option.name }}</div>&nbsp;
+                                <div v-if="slotProps.option.note"> ({{ slotProps.option.note }})</div>
+                            </div>
+                        </template>
+                    </Dropdown>
+                </div>
+            </div>
             <div class="grid" v-if="authStore.hasAuthorAccess()">
                 <div class="field col-12 align-self-start">
                     <div class="grid">
@@ -29,7 +59,7 @@
                             </div>
                         </div>
                         <div class="field col-12">
-                            <label for="content" :class="{'p-error': formErrors.content}">Sadržaj</label>
+                            <label for="content" :class="{'p-error': formErrors.content}">Sadržaj *</label>
                             <div>
                                 <Textarea id="content" type="text" v-model="form.content" :class="{'p-invalid': formErrors.content}" rows="10"/>
                             </div>
@@ -356,6 +386,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
+import { useGlobalStore } from '@/stores/global'
 import { useAttractionStore } from '@/stores/attraction'
 import { usePlaceStore } from '@/stores/place'
 import { useAuthStore } from '@/stores/auth'
@@ -377,19 +408,19 @@ const uploadMultipleUrl = apiBaseUrl + '/api/files/upload-multiple';
 const maxFileSize = 1000000 * 30; //30MB
 
 const attractionStore = useAttractionStore();
+const globalStore = useGlobalStore();
 const placeStore = usePlaceStore();
 const authStore = useAuthStore();
 const fileStore = useFileStore();
 const { user } = storeToRefs(authStore)
+const { languages } = storeToRefs(globalStore);
 const { attraction, loading, rootCategories } = storeToRefs(attractionStore);
 const { places } = storeToRefs(placeStore);
 const { token, authToken } = storeToRefs(authStore)
 const disabledSaveBtn = ref(false);
-const fileFrame = ref(null);
 const timer = ref(null);
 const uploadingImages = ref(false);
-const pdfLoading = ref(false);
-const htmlLoading = ref(false);
+const selectedLang = ref(false);
 //Order has to mutch with html order
 const categoryDropdowns = reactive({
     values: {//ids
@@ -452,6 +483,7 @@ const responsiveOptions = ref([
     }
 ]);
 
+globalStore.getLanguages();
 placeStore.getAll();
 attractionStore.getRootCategories();
 //data and props ready, dom still not
@@ -748,12 +780,27 @@ const onFilterPlacesDropdown = (event) => {
     placeStore.getAll({filters: {'name': {value: event.value, matchMode: FilterMatchMode.STARTS_WITH}}})
 }
 
+const onLangChange = (event) => {
+    console.log(event.value);
+    if (event.value) {
+        attractionStore.getAttraction(route.params.attractionId, event.value.id);
+    }
+}
+
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .admin-attraction { 
     max-width: 1200px;
     margin: auto;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 0;
+    .title h2 {
+        margin: 0
+    }
 }
 .field {
     padding-right: 10px;
