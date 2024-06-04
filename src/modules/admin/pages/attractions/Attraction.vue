@@ -11,7 +11,8 @@
                     <h2 v-else>Nova znamenitost</h2>
                 </div>
                 <div class="options">
-                    <Dropdown v-model="selectedLang" 
+                    <Dropdown v-if="attraction"
+                        v-model="selectedLang" 
                         class="w-full md:w-14rem"
                         optionLabel="name" 
                         placeholder="Izaberi jezik" 
@@ -31,7 +32,8 @@
                             <div class="flex align-items-center">
                                 <img :alt="slotProps.option.label" :src="'/images/langs/'+slotProps.option.lang_code+'.png'" :class="`mr-2 flag`" style="width: 18px" />
                                 <div>{{ slotProps.option.name }}</div>&nbsp;
-                                <div v-if="slotProps.option.note"> ({{ slotProps.option.note }})</div>
+                                <div v-if="slotProps.option.note"> ({{ slotProps.option.note }})</div> &nbsp;
+                                <i v-if="attraction.translations && attraction.translations.find(t => t.language_id == slotProps.option.id)" class="pi pi-check" style="color: green"></i>
                             </div>
                         </template>
                     </Dropdown>
@@ -386,9 +388,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
 import { FilterMatchMode } from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
-import { useGlobalStore } from '@/stores/global'
 import { useAttractionStore } from '@/stores/attraction'
-import { usePlaceStore } from '@/stores/place'
 import { useAuthStore } from '@/stores/auth'
 import { useFileStore } from '@admin/stores/file'
 import { getSelectedApp } from '../../util/general'
@@ -408,14 +408,10 @@ const uploadMultipleUrl = apiBaseUrl + '/api/files/upload-multiple';
 const maxFileSize = 1000000 * 30; //30MB
 
 const attractionStore = useAttractionStore();
-const globalStore = useGlobalStore();
-const placeStore = usePlaceStore();
 const authStore = useAuthStore();
 const fileStore = useFileStore();
 const { user } = storeToRefs(authStore)
-const { languages } = storeToRefs(globalStore);
-const { attraction, loading, rootCategories } = storeToRefs(attractionStore);
-const { places } = storeToRefs(placeStore);
+const { attraction, languages, places, loading, rootCategories } = storeToRefs(attractionStore);
 const { token, authToken } = storeToRefs(authStore)
 const disabledSaveBtn = ref(false);
 const timer = ref(null);
@@ -483,13 +479,11 @@ const responsiveOptions = ref([
     }
 ]);
 
-globalStore.getLanguages();
-placeStore.getAll();
 attractionStore.getRootCategories();
 //data and props ready, dom still not
 onBeforeMount( () => {
     if(route.params.attractionId){
-        attractionStore.getAttraction(route.params.attractionId);
+        attractionStore.adminGetAttraction(route.params.attractionId);
     }
 });
 
@@ -513,6 +507,13 @@ watch( attraction, (newVal, oldVal) => {
     if(newVal)
     {
         setFormData(newVal);
+    }
+});
+
+watch( languages, (newVal, oldVal) => {
+    if(newVal && !selectedLang.value && languages.value && languages.value.length)
+    {
+        selectedLang.value = languages.value.find(l => l.lang_code == 'sr');
     }
 });
 
@@ -582,22 +583,37 @@ const save = async () => {
     clearFormErrors();
     formateDateFields();
     setSelectedAttractionCategoryId();
+    const selectedLangId = selectedLang.value ? selectedLang.value.id : null;
     //Update
     if(route.params.attractionId)
     {
         form.id = route.params.attractionId;
         disabledSaveBtn.value = true;
-        attractionStore.update(form, formErrors)
-            .then(() => {
-                setFormData(attraction.value);
-                toast.add({severity:'success', summary: 'Ažuriranje uspešno!', detail: form.name, life: 3000});
-                disabledSaveBtn.value = false;
-                form.tmp_files = [];
-            })
-            .catch(() => {
-                toast.add({severity:'error', summary: 'Greška tokom ažuriranja.', detail: form.name, life: 3000});
-                disabledSaveBtn.value = false;
-            })
+        if (selectedLang.value && selectedLang.value.lang_code !== 'sr') {
+            attractionStore.updateOrCreateTranslation(form, formErrors, selectedLangId)
+                .then(() => {
+                    setFormData(attraction.value);
+                    toast.add({severity:'success', summary: "Ažuriranje na jeziku '"+selectedLang.value.name+"' uspešno!", detail: form.name, life: 3000});
+                    disabledSaveBtn.value = false;
+                    form.tmp_files = [];
+                })
+                .catch(() => {
+                    toast.add({severity:'error', summary: 'Greška tokom ažuriranja jezika.', detail: form.name, life: 3000});
+                    disabledSaveBtn.value = false;
+                })
+        } else {
+            attractionStore.update(form, formErrors, selectedLangId)
+                .then(() => {
+                    setFormData(attraction.value);
+                    toast.add({severity:'success', summary: 'Ažuriranje uspešno!', detail: form.name, life: 3000});
+                    disabledSaveBtn.value = false;
+                    form.tmp_files = [];
+                })
+                .catch(() => {
+                    toast.add({severity:'error', summary: 'Greška tokom ažuriranja.', detail: form.name, life: 3000});
+                    disabledSaveBtn.value = false;
+                })
+        }
     } 
     //Create
     else 
@@ -783,7 +799,7 @@ const onFilterPlacesDropdown = (event) => {
 const onLangChange = (event) => {
     console.log(event.value);
     if (event.value) {
-        attractionStore.getAttraction(route.params.attractionId, event.value.id);
+        attractionStore.adminGetAttraction(route.params.attractionId, event.value.id);
     }
 }
 

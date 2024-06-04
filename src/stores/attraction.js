@@ -18,7 +18,9 @@ export const useAttractionStore = defineStore('attraction', {
         subcategories: null,
         trips: null,
         tree: null,
-        treeCount: null
+        treeCount: null,
+        languages: null,
+        places: null,
     }),
     getters: {
         /* loading(state){
@@ -160,6 +162,23 @@ export const useAttractionStore = defineStore('attraction', {
                 throw error;
             }
         },
+        async adminGetAttraction(id, langId = ''){
+            this.loading = true;
+            try {
+                const response = await http.get('/api/attractions/admin/'+id+'/'+langId);
+                this.attraction = response.data.attraction;
+                this.languages = response.data.languages;
+                this.places = response.data.places;
+                this.loading = false;
+                return this.attraction; 
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
         //create new resource
         async create(data, errorFields){
             this.loading = true;
@@ -185,10 +204,35 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         //update response
-        async update(data, errorFields){
+        async update(data, errorFields, selectedLangId){
             this.loading = true;
             try {            
                 const response = await http.put('/api/attractions/'+data.id, data);
+                const attraction = response.data;
+                if(this.attractions && this.attractions.length){
+                    //replace the existing resource
+                    const index = this.attractions.findIndex( el => el.id == data.id);
+                    this.attractions[index] = attraction;
+                }
+                //if selected attraction in form, update it
+                if(this.attraction){
+                    this.attraction = attraction;
+                }
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                fillFormErrors(errorFields, error);
+                this.loading = false;
+                throw error;
+            }
+        },
+        async updateOrCreateTranslation(data, errorFields, selectedLangId){
+            this.loading = true;
+            try {            
+                const response = await http.put('/api/attractions/'+data.id+'/languages/'+selectedLangId, data);
                 const attraction = response.data;
                 if(this.attractions && this.attractions.length){
                     //replace the existing resource
