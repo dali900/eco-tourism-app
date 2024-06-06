@@ -109,6 +109,8 @@ const onPage = (event) => {
             align-self: center;
             font-size: 40px;
             height: auto;
+            border-bottom: 1px solid var(--text-secondary-color);
+            padding: 16px;
         }
         padding-top: 16px;
         margin-bottom: 64px;
@@ -117,7 +119,7 @@ const onPage = (event) => {
         display: flex;
         justify-content: center;
         div {
-            border-bottom: 2px solid var(--color-black);
+            border-bottom: 1px solid var(--text-secondary-color);
             padding: 16px;
         }
         margin-bottom: 64px;

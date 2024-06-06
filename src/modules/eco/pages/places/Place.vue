@@ -8,7 +8,10 @@
 
         <div class="page-body" v-if="place">
             <div class="title">
-                {{ place.name }}
+                <div>
+                    {{ place.name }}
+                    
+                </div>
             </div>
             <div class="resource-content" v-html="placeContent"></div>           
             <div class="galleria">
@@ -126,7 +129,7 @@ const placeContent = computed( () => {
             font-size: 40px;
             font-weight: 600;
             div {
-                border-bottom: 2px solid var(--color-black);
+                border-bottom: 1px solid var(--text-secondary-color);
                 padding: 16px;
             }
             margin-bottom: 64px;

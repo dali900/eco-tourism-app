@@ -117,7 +117,7 @@ const attractionContent = computed( () => {
         display: flex;
         justify-content: center;
         div {
-            border-bottom: 2px solid var(--color-black);
+            border-bottom: 1px solid var(--text-secondary-color);
             padding: 16px;
         }
         margin-bottom: 64px;

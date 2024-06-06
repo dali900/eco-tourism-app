@@ -131,7 +131,7 @@ const onPage = (event) => {
         display: flex;
         justify-content: center;
         div {
-            border-bottom: 2px solid var(--color-black);
+            border-bottom: 1px solid var(--text-secondary-color);
             padding: 16px;
         }
         margin-bottom: 64px;
@@ -139,6 +139,8 @@ const onPage = (event) => {
     .category-title {
         font-size: 30px;
         margin-bottom: 16px;
+        border-bottom: 1px solid var(--text-secondary-color);
+        padding: 16px;
     }
     .separator {
         background-color: var(--color-white);

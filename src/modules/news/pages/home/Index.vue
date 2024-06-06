@@ -116,14 +116,14 @@ const onPage = (event) => {
             font-size: 40px;
             height: auto;
         }
-        padding-top: 16px;
+        padding-top: 32px;
         margin-bottom: 64px;
     }
     .title {
         display: flex;
         justify-content: center;
         div {
-            border-bottom: 2px solid var(--color-black);
+            border-bottom: 1px solid var(--text-secondary-color);
             padding: 16px;
         }
         margin-bottom: 64px;
