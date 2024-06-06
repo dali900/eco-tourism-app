@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="items grid">
-                    <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in attractions">
+                    <div class="col-12 md:col-6 lg:col-4 flex-justify-center" v-for="(item, key) in attractions">
                         <div class="item first-row">
                             <router-link :to="{name:'attraction', params:{id:item.id}}" class="text-link">
                                 <AppCard>
@@ -56,7 +56,7 @@
                             </router-link>
                         </div>
                     </div>
-                    <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in news">
+                    <div class="col-12 md:col-6 lg:col-4 flex-justify-center" v-for="(item, key) in news">
                         <div class="item">
                             <router-link :to="{name:'news-overview', params:{id:item.id}}" class="text-link">
                                 <AppCard>
@@ -479,6 +479,7 @@ const observeVisibility = () => {
             text-align: center;
             text-transform: uppercase;
         }
+        padding-top: 16px;
         margin-bottom: 64px;
     }
     .separator {
@@ -546,7 +547,7 @@ const observeVisibility = () => {
             display: flex;
             justify-content: center;
             div {
-                border-bottom: 2px solid var(--color-black);
+                border-bottom: 1px solid var(--text-secondary-color);
                 padding: 16px;
             }
             margin-bottom: 64px;
@@ -554,6 +555,9 @@ const observeVisibility = () => {
         .items {
             .first-row {
                 margin-bottom: 32px;
+            }
+            .flex-item {
+
             }
             .item {
                 .latest-content-card-content-news {
@@ -626,7 +630,7 @@ const observeVisibility = () => {
             display: flex;
             justify-content: center;
             div {
-                border-bottom: 2px solid var(--color-black);
+                border-bottom: 1px solid var(--text-secondary-color);
                 padding: 16px;
             }
             margin-bottom: 64px;
@@ -655,7 +659,7 @@ const observeVisibility = () => {
             display: flex;
             justify-content: center;
             div {
-                border-bottom: 2px solid var(--color-black);
+                border-bottom: 1px solid var(--text-secondary-color);
                 padding: 16px;
             }
             margin-bottom: 64px;
@@ -743,7 +747,7 @@ const observeVisibility = () => {
             display: flex;
             justify-content: center;
             div {
-                border-bottom: 2px solid var(--color-black);
+                border-bottom: 1px solid var(--text-secondary-color);
                 padding: 16px;
             }
             margin-bottom: 64px;

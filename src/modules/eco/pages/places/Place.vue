@@ -12,38 +12,40 @@
             </div>
             <div class="resource-content" v-html="placeContent"></div>           
             <div class="galleria">
-                <Galleria
-                    :value="place.images"
-                    :responsiveOptions="responsiveOptions"
-                    :numVisible="5"
-                >
-                    <template #item="slotProps">
-                        <div class="gallery-image-wrapper">
-                            <Image
-                                :src="apiBaseUrl + slotProps.item.file_url"
-                                :alt="slotProps.item.original_name"
-                                imageClass="gallery-image"
-                                preview
-                            />
-                        </div>
-                    </template>
-                    <template #thumbnail="slotProps">
-                        <div class="gallery-thumbnail-wrapper">
-                            <img
-                                :src="apiBaseUrl + slotProps.item.file_url"
-                                :alt="slotProps.item.original_name"
-                                class="thumbnail-image"
-                            />
-                        </div>
-                    </template>
-                </Galleria>
+                <div class="flex-centered-item">
+                    <Galleria
+                        :value="place.images"
+                        :responsiveOptions="responsiveOptions"
+                        :numVisible="5"
+                    >
+                        <template #item="slotProps">
+                            <div class="gallery-image-wrapper">
+                                <Image
+                                    :src="apiBaseUrl + slotProps.item.file_url"
+                                    :alt="slotProps.item.original_name"
+                                    imageClass="gallery-image"
+                                    preview
+                                />
+                            </div>
+                        </template>
+                        <template #thumbnail="slotProps">
+                            <div class="gallery-thumbnail-wrapper">
+                                <img
+                                    :src="apiBaseUrl + slotProps.item.file_url"
+                                    :alt="slotProps.item.original_name"
+                                    class="thumbnail-image"
+                                />
+                            </div>
+                        </template>
+                    </Galleria>
+                </div>
             </div>
             <div class="attractions" v-if="place.attractions">
                 <div class="section-subtitle">
                     {{ t('places.attractions') }}:
                 </div>
                 <div class="grid">
-                    <div class="col-12 md:col-6 lg:col-4" v-for="attraction in place.attractions">
+                    <div class="col-12 md:col-6 lg:col-4 flex-justify-center" v-for="attraction in place.attractions">
                         <div class="item">
                             <AttractionCard :attraction="attraction" />
                         </div>
@@ -118,6 +120,7 @@ const placeContent = computed( () => {
     .page-body {
         padding: 16px 16px;
         .title {
+            padding-top: 32px;
             display: flex;
             justify-content: center;
             font-size: 40px;

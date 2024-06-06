@@ -1,7 +1,11 @@
 export const responsiveOptions = [
     {
-        breakpoint: '1200px',
+        breakpoint: '1920px',
         numVisible: 5
+    },
+    {
+        breakpoint: '1200px',
+        numVisible: 4
     },
     {
         breakpoint: '1000px',
@@ -13,6 +17,10 @@ export const responsiveOptions = [
     },
     {
         breakpoint: '575px',
+        numVisible: 1
+    },
+    {
+        breakpoint: '400px',
         numVisible: 1
     }
 ];

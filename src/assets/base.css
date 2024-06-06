@@ -26,7 +26,8 @@
     --color-background-soft: var(--vt-c-white-soft);
     --color-background-mute: var(--vt-c-white-mute);
 
-    --text-primary-color: #2e2e2e;
+    --text-primary-color: var(--gray-800);
+    /* --text-primary-color: #2e2e2e; */
     --text-light-color: #616161;
     --text-secondary-color: #9E9E9E;
 
@@ -198,6 +199,30 @@ z-index: 2;
 .p-galleria-thumbnail-item {
     flex: 0 1 auto !important;
 } */
+
+.galleria {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .flex-centered-item {
+        width: 650px; 
+    }
+    @media screen and (min-width: 350px) {
+        .flex-centered-item {
+            width: 360px; 
+        }
+    }
+    @media screen and (min-width: 450px) {
+        .flex-centered-item {
+            width: 450px; 
+        }
+    }
+    @media screen and (min-width: 650px) {
+        .flex-centered-item {
+            width: 650px; 
+        }
+    }
+}
 
 @media print {
     body *:not(.print-container):not(.print-container *) {

@@ -154,7 +154,7 @@
             background-color: white;
             border-radius: 50%;
             display: flex;
-            margin-top: 15px;
+            margin-top: 22px;
             height: 40px;
             width: 39px;
             position: relative;

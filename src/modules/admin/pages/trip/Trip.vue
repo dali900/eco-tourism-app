@@ -201,6 +201,7 @@ import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import 'jodit/build/jodit.min.css'
 import { JoditEditor } from 'jodit-vue'
+import { responsiveOptions } from '@/constants/gallerySettings'
 
 const router = useRouter();
 const route = useRoute();
@@ -261,17 +262,6 @@ const clearFormErrors = () => {
     formErrors.images = "";
     formErrors.tmp_files = "";
 }
-
-const responsiveOptions = ref([
-    {
-        breakpoint: '1300px',
-        numVisible: 4
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1
-    }
-]);
 
 //data and props ready, dom still not
 onBeforeMount( () => {

@@ -7,7 +7,7 @@
 
         <div class="page-body">
             <div class="items grid" v-if="news">
-                <div class="col-12 md:col-6 lg:col-4" v-for="(item, key) in news">
+                <div class="col-12 md:col-6 lg:col-4 flex-justify-center" v-for="(item, key) in news">
                     <div class="item">
                         <CategoryItem :item="item" />
                     </div>

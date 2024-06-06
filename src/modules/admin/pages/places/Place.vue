@@ -130,6 +130,7 @@ import { useFileStore } from '@admin/stores/file'
 import NoAccess from '../noAccess/NoAccess.vue'
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
+import { responsiveOptions } from '@/constants/gallerySettings'
 
 const router = useRouter();
 const route = useRoute();
@@ -183,17 +184,6 @@ const clearFormErrors = () => {
     formErrors.description = "";
     formErrors.tmp_files = "";
 }
-
-const responsiveOptions = ref([
-    {
-        breakpoint: '1300px',
-        numVisible: 4
-    },
-    {
-        breakpoint: '575px',
-        numVisible: 1
-    }
-]);
 
 placeStore.getAll({sort: sort.value, pagination: pagination.value, filters: filters.value});
 

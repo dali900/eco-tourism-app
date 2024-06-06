@@ -23,7 +23,7 @@
             
             <div class="section attractions grid" v-if="trip.attractions && trip.attractions.length">
                 <div class="col-12 subtitle">{{ t('trip.attractions') }}:</div>
-                <div class="col-12 md:col-6 lg:col-4" v-for="attraction in trip.attractions">
+                <div class="col-12 md:col-6 lg:col-4 flex-justify-center" v-for="attraction in trip.attractions">
                     <router-link :to="{ name: 'attraction', params: { id: attraction.id } }" class="text-link">
                         <AppCard>
                             <template #image>
@@ -32,7 +32,7 @@
                                     alt="content-img"
                                     :src="apiBaseUrl + attraction.thumbnail.file_url"
                                 />
-                                <img v-else alt="content-img" src="/images/thumbnails/t1.png" />
+                                <img v-else alt="content-img" src="/images/thumbnails/attraction.jpg" />
                             </template>
                             <template #content>
                                 {{ attraction.summary }}
@@ -43,31 +43,33 @@
             </div>
 
             <div class="galleria">
-                <Galleria
-                    :value="trip.images"
-                    :responsiveOptions="responsiveOptions"
-                    :numVisible="8"
-                >
-                    <template #item="slotProps">
-                        <div class="gallery-image-wrapper">
-                            <Image
-                                :src="apiBaseUrl + slotProps.item.file_url"
-                                :alt="slotProps.item.original_name"
-                                imageClass="gallery-image"
-                                preview
-                            />
-                        </div>
-                    </template>
-                    <template #thumbnail="slotProps">
-                        <div class="gallery-thumbnail-wrapper">
-                            <img
-                                :src="apiBaseUrl + slotProps.item.file_url"
-                                :alt="slotProps.item.original_name"
-                                class="thumbnail-image"
-                            />
-                        </div>
-                    </template>
-                </Galleria>
+                <div class="flex-centered-item">
+                    <Galleria
+                        :value="trip.images"
+                        :responsiveOptions="responsiveOptions"
+                        :numVisible="8"
+                    >
+                        <template #item="slotProps">
+                            <div class="gallery-image-wrapper">
+                                <Image
+                                    :src="apiBaseUrl + slotProps.item.file_url"
+                                    :alt="slotProps.item.original_name"
+                                    imageClass="gallery-image"
+                                    preview
+                                />
+                            </div>
+                        </template>
+                        <template #thumbnail="slotProps">
+                            <div class="gallery-thumbnail-wrapper">
+                                <img
+                                    :src="apiBaseUrl + slotProps.item.file_url"
+                                    :alt="slotProps.item.original_name"
+                                    class="thumbnail-image"
+                                />
+                            </div>
+                        </template>
+                    </Galleria>
+                </div>
             </div>
         </div>
 
@@ -127,7 +129,7 @@ onBeforeMount(() => {
             right: -100px;
             position: absolute;
         }
-        margin-bottom: 64px;
+        margin-bottom: 32px;
     }
     .title {
         display: flex;

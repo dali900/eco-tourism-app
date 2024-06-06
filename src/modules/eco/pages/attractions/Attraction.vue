@@ -20,33 +20,35 @@
                     {{ attraction.place.name }}
                 </RouterLink>
             </div>
-
+            
             <div class="galleria">
-                <Galleria
-                    :value="attraction.images"
-                    :responsiveOptions="responsiveOptions"
-                    :numVisible="5"
-                >
-                    <template #item="slotProps">
-                        <div class="gallery-image-wrapper">
-                            <Image
-                                :src="apiBaseUrl + slotProps.item.file_url"
-                                :alt="slotProps.item.original_name"
-                                imageClass="gallery-image"
-                                preview
-                            />
-                        </div>
-                    </template>
-                    <template #thumbnail="slotProps">
-                        <div class="gallery-thumbnail-wrapper">
-                            <img
-                                :src="apiBaseUrl + slotProps.item.file_url"
-                                :alt="slotProps.item.original_name"
-                                class="thumbnail-image"
-                            />
-                        </div>
-                    </template>
-                </Galleria>
+                <div class="flex-centered-item">
+                    <Galleria
+                        :value="attraction.images"
+                        :responsiveOptions="responsiveOptions"
+                        :numVisible="5"
+                    >
+                        <template #item="slotProps">
+                            <div class="gallery-image-wrapper">
+                                <Image
+                                    :src="apiBaseUrl + slotProps.item.file_url"
+                                    :alt="slotProps.item.original_name"
+                                    imageClass="gallery-image"
+                                    preview
+                                />
+                            </div>
+                        </template>
+                        <template #thumbnail="slotProps">
+                            <div class="gallery-thumbnail-wrapper">
+                                <img
+                                    :src="apiBaseUrl + slotProps.item.file_url"
+                                    :alt="slotProps.item.original_name"
+                                    class="thumbnail-image"
+                                />
+                            </div>
+                        </template>
+                    </Galleria>
+                </div>
             </div>
         </div>
 
@@ -109,7 +111,7 @@ const attractionContent = computed( () => {
             right: -100px;
             position: absolute;
         }
-        margin-bottom: 64px;
+        margin-bottom: 32px;
     }
     .title {
         display: flex;
@@ -145,7 +147,8 @@ const attractionContent = computed( () => {
     }
 }
 .gallery-image-wrapper {
-    height: 500px;
+    height: 480px;
+    max-width: 640px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -164,4 +167,6 @@ const attractionContent = computed( () => {
     max-height: 100px;
     width: auto;
 }
+
+
 </style>

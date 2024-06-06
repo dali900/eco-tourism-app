@@ -30,32 +30,34 @@
                     {{ one_news.publish_date_formated }}
                 </small>
             </div>
-            <div>
-                <Galleria
-                    :value="one_news.images"
-                    :responsiveOptions="responsiveOptions"
-                    :numVisible="5"
-                >
-                    <template #item="slotProps">
-                        <div class="gallery-image-wrapper">
-                            <Image
-                                :src="apiBaseUrl + slotProps.item.file_url"
-                                :alt="slotProps.item.original_name"
-                                imageClass="gallery-image"
-                                preview
-                            />
-                        </div>
-                    </template>
-                    <template #thumbnail="slotProps">
-                        <div class="gallery-thumbnail-wrapper">
-                            <img
-                                :src="apiBaseUrl + slotProps.item.file_url"
-                                :alt="slotProps.item.original_name"
-                                class="thumbnail-image"
-                            />
-                        </div>
-                    </template>
-                </Galleria>
+            <div class="galleria">
+                <div class="flex-centered-item">
+                    <Galleria
+                        :value="one_news.images"
+                        :responsiveOptions="responsiveOptions"
+                        :numVisible="5"
+                    >
+                        <template #item="slotProps">
+                            <div class="gallery-image-wrapper">
+                                <Image
+                                    :src="apiBaseUrl + slotProps.item.file_url"
+                                    :alt="slotProps.item.original_name"
+                                    imageClass="gallery-image"
+                                    preview
+                                />
+                            </div>
+                        </template>
+                        <template #thumbnail="slotProps">
+                            <div class="gallery-thumbnail-wrapper">
+                                <img
+                                    :src="apiBaseUrl + slotProps.item.file_url"
+                                    :alt="slotProps.item.original_name"
+                                    class="thumbnail-image"
+                                />
+                            </div>
+                        </template>
+                    </Galleria>
+                </div>
             </div>
         </div>
 
