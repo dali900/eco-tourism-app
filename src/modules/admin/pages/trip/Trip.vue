@@ -362,7 +362,7 @@ const save = async () => {
                 //redirect user from create to update page
                 disabledSaveBtn.value = false;
                 form.tmp_files = [];
-                router.push({name: 'admin-trip', params: { id: responseData.id }})
+                router.push({name: 'admin-trips'})
 
             })
             .catch((error) => {

@@ -259,7 +259,7 @@ const save = async () => {
             .then((responseData) => {
                 toast.add({severity:'success', description: 'Uspešno kreirano!', detail: form.name, life: 2000});
                 //redirect user from create to update page
-                router.push({name: 'AdminPlace', params: { id: place.value.id }})
+                router.push({name: 'AdminPlaces'})
                 disabledSaveBtn.value = false;
                 form.tmp_files = [];
 

@@ -180,10 +180,10 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         //create new resource
-        async create(data, errorFields){
+        async create(data, errorFields, selectedLangId){
             this.loading = true;
             try {            
-                const response = await http.post('/api/attractions', data);
+                const response = await http.post('/api/attractions/'+selectedLangId, data);
                 const attraction = response;
                 //attractions are not loaded when attraction form is opened directly
                 if(this.attractions && this.attractions.length){
@@ -207,7 +207,7 @@ export const useAttractionStore = defineStore('attraction', {
         async update(data, errorFields, selectedLangId){
             this.loading = true;
             try {            
-                const response = await http.put('/api/attractions/'+data.id, data);
+                const response = await http.put('/api/attractions/'+data.id+'/'+selectedLangId, data);
                 const attraction = response.data;
                 if(this.attractions && this.attractions.length){
                     //replace the existing resource

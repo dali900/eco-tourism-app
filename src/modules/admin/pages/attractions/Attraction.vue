@@ -11,7 +11,7 @@
                     <h2 v-else>Nova znamenitost</h2>
                 </div>
                 <div class="options">
-                    <Dropdown v-if="attraction"
+                    <Dropdown
                         v-model="selectedLang" 
                         class="w-full md:w-14rem"
                         optionLabel="name" 
@@ -22,7 +22,8 @@
                         <template #value="slotProps">
                             <div v-if="slotProps.value" class="flex align-items-center">
                                 <img :alt="slotProps.value.label" :src="'/images/langs/'+slotProps.value.lang_code+'.png'" :class="`mr-2 flag flag-${slotProps.value.lang_code.toLowerCase()}`" style="width: 18px" />
-                                <div>{{ slotProps.value.name }}</div>
+                                <div>{{ slotProps.value.name }}</div>&nbsp;
+                                <div v-if="slotProps.value.note"> ({{ slotProps.value.note }})</div> &nbsp;
                             </div>
                             <span v-else>
                                 {{ slotProps.placeholder }}
@@ -33,7 +34,15 @@
                                 <img :alt="slotProps.option.label" :src="'/images/langs/'+slotProps.option.lang_code+'.png'" :class="`mr-2 flag`" style="width: 18px" />
                                 <div>{{ slotProps.option.name }}</div>&nbsp;
                                 <div v-if="slotProps.option.note"> ({{ slotProps.option.note }})</div> &nbsp;
-                                <i v-if="attraction.translations && attraction.translations.find(t => t.language_id == slotProps.option.id)" class="pi pi-check" style="color: green"></i>
+                                <i v-if="
+                                        (
+                                            attraction &&
+                                            attraction.translations && 
+                                            attraction.translations.find(t => t.language_id == slotProps.option.id)
+                                        ) 
+                                        //slotProps.option.lang_code == 'sr'
+                                    " 
+                                    class="pi pi-check" style="color: green"></i>
                             </div>
                         </template>
                     </Dropdown>
@@ -390,6 +399,7 @@ import { FilterMatchMode } from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
 import { useAttractionStore } from '@/stores/attraction'
 import { useAuthStore } from '@/stores/auth'
+import { useGlobalStore } from '@/stores/global'
 import { useFileStore } from '@admin/stores/file'
 import { getSelectedApp } from '../../util/general'
 import dateTool from '@/util/dateTool'
@@ -411,12 +421,14 @@ const maxFileSize = 1000000 * 30; //30MB
 const attractionStore = useAttractionStore();
 const authStore = useAuthStore();
 const fileStore = useFileStore();
+const globalStore = useGlobalStore();
 const { user } = storeToRefs(authStore)
-const { attraction, languages, places, loading, rootCategories } = storeToRefs(attractionStore);
+const { attraction, places, loading, rootCategories } = storeToRefs(attractionStore);
 const { token, authToken } = storeToRefs(authStore)
 const disabledSaveBtn = ref(false);
 const timer = ref(null);
 const uploadingImages = ref(false);
+const languages = ref([]);
 const selectedLang = ref(false);
 //Order has to mutch with html order
 const categoryDropdowns = reactive({
@@ -469,6 +481,14 @@ const clearFormErrors = () => {
     formErrors.tmp_files = "";
 }
 
+globalStore.getLanguages().then(responseData => {
+    if(route.params.attractionId){
+        languages.value = responseData;
+    } else {
+        //Za sada defualt jezik je sr latinica, za drugi jezik potrebno je u lokal storage sacuvati lang code
+        languages.value = responseData.filter( l => l.lang_code == 'sr')
+    }
+})
 attractionStore.getRootCategories();
 //data and props ready, dom still not
 onBeforeMount( () => {
@@ -579,7 +599,8 @@ const save = async () => {
     {
         form.id = route.params.attractionId;
         disabledSaveBtn.value = true;
-        if (selectedLang.value && selectedLang.value.lang_code !== 'sr') {
+        //translation API
+        /* if (selectedLang.value && selectedLang.value.lang_code !== 'sr') {
             attractionStore.updateOrCreateTranslation(form, formErrors, selectedLangId)
                 .then(() => {
                     setFormData(attraction.value);
@@ -591,7 +612,8 @@ const save = async () => {
                     toast.add({severity:'error', summary: 'Greška tokom ažuriranja jezika.', detail: form.name, life: 3000});
                     disabledSaveBtn.value = false;
                 })
-        } else {
+        } else { */
+        //Default API
             attractionStore.update(form, formErrors, selectedLangId)
                 .then(() => {
                     setFormData(attraction.value);
@@ -603,22 +625,23 @@ const save = async () => {
                     toast.add({severity:'error', summary: 'Greška tokom ažuriranja.', detail: form.name, life: 3000});
                     disabledSaveBtn.value = false;
                 })
-        }
+        //}
     } 
     //Create
     else 
     {
         disabledSaveBtn.value = true;
-        attractionStore.create(form, formErrors)
+        attractionStore.create(form, formErrors, selectedLangId)
             .then((responseData) => {
                 toast.add({severity:'success', summary: 'Znamenitost kreirana!', detail: form.name, life: 2000});
                 //redirect user from create to update page
-                router.push({name: 'AdminAttraction', params: { attractionId: attraction.value.id }})
+                router.push({name: 'AdminAttractions'})
                 disabledSaveBtn.value = false;
                 form.tmp_files = [];
 
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err);
                 disabledSaveBtn.value = false;
                 toast.add({severity:'error', summary: 'Greška tokom kreiranja.', detail: form.name, life: 3000});
             })
@@ -787,7 +810,6 @@ const onFilterPlacesDropdown = (event) => {
 }
 
 const onLangChange = (event) => {
-    console.log(event.value);
     if (event.value) {
         attractionStore.adminGetAttraction(route.params.attractionId, event.value.id);
     }
