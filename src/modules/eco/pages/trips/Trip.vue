@@ -25,19 +25,7 @@
                 <div class="col-12 subtitle">{{ t('trip.attractions') }}:</div>
                 <div class="col-12 md:col-6 lg:col-4 flex-justify-center" v-for="attraction in trip.attractions">
                     <router-link :to="{ name: 'attraction', params: { id: attraction.id } }" class="text-link">
-                        <AppCard>
-                            <template #image>
-                                <img
-                                    v-if="attraction.thumbnail"
-                                    alt="content-img"
-                                    :src="apiBaseUrl + attraction.thumbnail.file_url"
-                                />
-                                <img v-else alt="content-img" src="/images/thumbnails/attraction.jpg" />
-                            </template>
-                            <template #content>
-                                {{ attraction.summary }}
-                            </template>
-                        </AppCard>
+                        <AttractionCard :attraction="attraction" />
                     </router-link>
                 </div>
             </div>
@@ -89,6 +77,7 @@ import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import { useI18n } from "vue-i18n";
 import AppCard from '@/components/appCard/AppCard.vue';
+import AttractionCard from '@eco/pages/ecoCategories/AttractionCard.vue'
 import { responsiveOptions } from '@/constants/gallerySettings'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;

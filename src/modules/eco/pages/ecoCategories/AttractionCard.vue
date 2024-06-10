@@ -10,6 +10,9 @@
                     />
                     <img v-else alt="content-img" src="/images/thumbnails/attraction.jpg" />
                 </template>
+                <template #title>
+                    {{ props.attraction.name }}
+                </template>
                 <template #content>
                     {{ props.attraction.summary }}
                 </template>
