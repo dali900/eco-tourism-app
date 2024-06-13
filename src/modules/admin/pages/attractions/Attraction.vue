@@ -400,6 +400,7 @@ import { useConfirm } from "primevue/useconfirm";
 import { useAttractionStore } from '@/stores/attraction'
 import { useAuthStore } from '@/stores/auth'
 import { useGlobalStore } from '@/stores/global'
+import { usePlaceStore } from '@/stores/place'
 import { useFileStore } from '@admin/stores/file'
 import { getSelectedApp } from '../../util/general'
 import dateTool from '@/util/dateTool'
@@ -422,8 +423,10 @@ const attractionStore = useAttractionStore();
 const authStore = useAuthStore();
 const fileStore = useFileStore();
 const globalStore = useGlobalStore();
+const placeStore = usePlaceStore();
 const { user } = storeToRefs(authStore)
-const { attraction, places, loading, rootCategories } = storeToRefs(attractionStore);
+const { attraction, loading, rootCategories } = storeToRefs(attractionStore);
+const { places } = storeToRefs(placeStore);
 const { token, authToken } = storeToRefs(authStore)
 const disabledSaveBtn = ref(false);
 const timer = ref(null);
@@ -489,6 +492,7 @@ globalStore.getLanguages().then(responseData => {
         languages.value = responseData.filter( l => l.lang_code == 'sr')
     }
 })
+placeStore.getAll();
 attractionStore.getRootCategories();
 //data and props ready, dom still not
 onBeforeMount( () => {

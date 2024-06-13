@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { http } from '@/util/apiClient';
+import { http, parseFilterParams } from '@/util/apiClient';
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { getAppNameFromUrl } from '@/util/general'
@@ -34,10 +34,11 @@ export const useGlobalStore = defineStore('global', {
                 throw error;
             }
         },
-        async getHomePageData(){
+        async getHomePageData(params){
             this.loading = true;
             try {
-                const response = await http.get('/api/home-page-data');
+                const urlParams = parseFilterParams(params);  
+                const response = await http.get('/api/home-page-data', urlParams);
                 this.attractions = response.data.attractions;
                 this.news = response.data.news;
                 this.counts = response.data.counts;

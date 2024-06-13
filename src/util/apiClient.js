@@ -69,7 +69,7 @@ export const parseFilterParams = (params = {}) => {
 
     for (const key in filters) {
         const filter = filters[key];
-        if(filter && filter.value !== "") {
+        if(filter && filter.value !== "" && filter.value !== null) {
             data.params[key] = filter.value;
             data.params[key+"_MatchMode"] = filter.matchMode;
         }

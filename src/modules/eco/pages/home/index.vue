@@ -45,11 +45,11 @@
                                         <img v-else alt="content-img" src="/images/thumbnails/attraction.jpg" >
                                     </template>
                                     <template #title>
-                                        {{ item.name }}
+                                        {{ item.t.name }}
                                     </template>
                                     <template #content>
                                         <div class="latest-content-card-content-attraction">
-                                            {{ item.summary }}
+                                            {{ item.t.summary }}
                                         </div>
                                     </template>
                                 </AppCard>
@@ -355,7 +355,8 @@ const filters = ref({
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'name': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'content': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'approved': {value: null, matchMode: FilterMatchMode.EQUALS}
+    'approved': {value: null, matchMode: FilterMatchMode.EQUALS},
+    'langId': {value: 3, matchMode: FilterMatchMode.EQUALS}
 });
 
 const attractionStore = useAttractionStore();
@@ -363,7 +364,7 @@ const attractionStore = useAttractionStore();
 const { attractions, attractionsTotal, loading } = storeToRefs(attractionStore); */
 
 const globalStore = useGlobalStore();
-globalStore.getHomePageData()
+globalStore.getHomePageData({filters: filters.value})
     .then(responseData => {
         if (responseData.counts) {
             targetCountA.value = responseData.counts.attractions;
