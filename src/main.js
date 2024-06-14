@@ -48,6 +48,7 @@ import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import Galleria from 'primevue/galleria';
 import { http } from './util/apiClient'
+import Popper from "vue3-popper";
 
 import App from './App.vue'
 import router from './router/index'
@@ -124,6 +125,7 @@ app.component('ConfirmDialog', ConfirmDialog);
 app.component('Accordion', Accordion);
 app.component('AccordionTab', AccordionTab);
 app.component('Galleria', Galleria);
+app.component("Popper", Popper);
 
 
 app.directive('tooltip', Tooltip);

@@ -41,3 +41,25 @@ export const getUserAppsArray = () => {
     };
     return appsArray;
 }
+
+/**
+ * Store selected language
+ * @param {*} lang 
+ */
+export const storeLang = (lang) => {
+    const langString = JSON.stringify(lang);
+    localStorage.setItem('lang', langString);
+}
+
+
+/**
+ * Get selected language
+ * @returns string
+ */
+export const getLang = () => {
+    let lang = localStorage.getItem('lang');
+    if (lang) {
+        return JSON.parse(lang);
+    }
+    return null;
+}

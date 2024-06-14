@@ -331,7 +331,7 @@
 </template>
 
 <script setup>
-import { ref, unref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, unref, reactive, computed, watch, onMounted, onBeforeMount, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useToast } from "primevue/usetoast";
 import { useI18n } from "vue-i18n";
@@ -340,6 +340,7 @@ import { useAttractionStore } from '@/stores/attraction'
 import { useGlobalStore } from '@/stores/global'
 import { FilterMatchMode } from 'primevue/api';
 import AppCard from '@/components/appCard/AppCard.vue';
+import { getLang, storeLang } from '@/util/general';
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const perPage = ref(20);
@@ -351,12 +352,13 @@ const pagination = ref({
     page: 1,
     perPage: perPage.value,
 });
+
 const filters = ref({
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'name': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'content': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'approved': {value: null, matchMode: FilterMatchMode.EQUALS},
-    'langId': {value: 3, matchMode: FilterMatchMode.EQUALS}
+    'langId': {value: null, matchMode: FilterMatchMode.EQUALS}
 });
 
 const attractionStore = useAttractionStore();
@@ -364,14 +366,7 @@ const attractionStore = useAttractionStore();
 const { attractions, attractionsTotal, loading } = storeToRefs(attractionStore); */
 
 const globalStore = useGlobalStore();
-globalStore.getHomePageData({filters: filters.value})
-    .then(responseData => {
-        if (responseData.counts) {
-            targetCountA.value = responseData.counts.attractions;
-            targetCountB.value = responseData.counts.news;
-            targetCountC.value = responseData.counts.places;
-        }
-    })
+
 const { attractions, news, counts, suggestedAttractions, loading } = storeToRefs(globalStore);
 
 const { t } = useI18n();
@@ -386,6 +381,20 @@ const currentCountA = ref(0);
 const currentCountB = ref(0);
 const currentCountC = ref(0);
 
+onBeforeMount(() => {
+    let lang = getLang();
+    if (lang) {
+        filters.value.langId.value = lang.id;
+    }
+    globalStore.getHomePageData({filters: filters.value})
+        .then(responseData => {
+            if (responseData.counts) {
+                targetCountA.value = responseData.counts.attractions;
+                targetCountB.value = responseData.counts.news;
+                targetCountC.value = responseData.counts.places;
+            }
+        })
+});
 onMounted(() => {
   observeVisibility();
 });

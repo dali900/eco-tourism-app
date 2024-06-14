@@ -1,16 +1,26 @@
 <script setup>
-    import { ref, computed } from 'vue'
+    import { ref, computed, onBeforeMount } from 'vue'
     import { storeToRefs } from 'pinia'
     import { useAuthStore } from '@/stores/auth'
     import { useGlobalStore } from '@/stores/global'
     import { useBuildMenuRecursively } from '@/composables/useBuildMenuRecursively'
     import { useI18n } from "vue-i18n";
+    import Listbox from 'primevue/listbox';
+    import { getLang, storeLang } from '@/util/general';
 
     const { t, locale } = useI18n();
     const authStore = useAuthStore();
     const globalStore = useGlobalStore();
-    const { user, hasUserAdminAccess} = storeToRefs(authStore);
+    const { user, hasUserAdminAccess } = storeToRefs(authStore);
+    const { languages } = storeToRefs(globalStore);
     const { insertMenuItems } = useBuildMenuRecursively();
+    const selectedLang = ref(false);
+
+    globalStore.getLanguages();
+
+    onBeforeMount( () => {
+        selectedLang.value = getLang();
+    })
 
     const menuItems = ref([
         /* {
@@ -95,6 +105,14 @@
     
     const userMenuItems = ref(userMenuItemsComputed);
 
+    const onLangChange = (event, popoverSlotProps) => {
+        if (event.value) {
+            storeLang(event.value);
+            popoverSlotProps.close();
+            location.reload();
+        }
+    }
+
 </script>
 
 <template>
@@ -119,8 +137,38 @@
                 <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down ml-2" />
             </a>
         </template>
-        <!-- <template #end>
-            <Button
+        <template #end>
+            <div class="language">
+                <Popper>
+                    <Button severity="secondary" text>
+                        <img v-if="selectedLang"
+                            :alt="selectedLang.translated_name" 
+                            :src="'/images/langs/'+selectedLang.lang_code+'.png'" 
+                            style="width: 18px"/>
+                        <i v-else class="pi pi-globe" />
+                    </Button>
+                    <template #content="popoverSlotProps">
+                        <Listbox v-model="selectedLang" 
+                            optionLabel="translated_name" 
+                            class="w-full md:w-14rem" 
+                            listStyle="max-height:250px"
+                            :options="languages" 
+                            @change="onLangChange($event, popoverSlotProps)"
+                            >
+                            <template #option="slotProps">
+                                <div class="flex align-items-center">
+                                    <img :alt="slotProps.option.translated_name" 
+                                        :src="'/images/langs/'+slotProps.option.lang_code+'.png'" 
+                                        class="mr-2"
+                                        style="width: 18px"/>
+                                    <div>{{ slotProps.option.translated_name }}</div>
+                                </div>
+                            </template>
+                        </Listbox>
+                    </template>
+                </Popper>
+            </div>
+            <!-- <Button
                 type="button"
                 @click="toggleUserMenu"
                 aria-haspopup="true"
@@ -139,8 +187,8 @@
                 :model="userMenuItems"
                 :popup="true"
                 to="/login"
-            />
-        </template> -->
+            /> -->
+        </template>
     </Menubar>
 </template>
 

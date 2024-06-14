@@ -37,7 +37,7 @@ export const useGlobalStore = defineStore('global', {
         async getHomePageData(params){
             this.loading = true;
             try {
-                const urlParams = parseFilterParams(params);  
+                const urlParams = parseFilterParams(params);
                 const response = await http.get('/api/home-page-data', urlParams);
                 this.attractions = response.data.attractions;
                 this.news = response.data.news;
