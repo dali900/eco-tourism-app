@@ -22,36 +22,39 @@
         selectedLang.value = getLang();
     })
 
-    const menuItems = ref([
-        /* {
-            label: 'Vesti',
-            to: '/news'
-        },
-        {
-            label: 'Propisi',
-            items: [{
-                label: 'Prikaži sve',
-                to: '/regulations',
-            }]
-        }, */
-        {
-            label: t('nav.home'),
-            route: '/',
-        },
-        {
-            label: t('nav.about'),
-            route: '/about',
-        },
-        {
-            label: t('nav.municipality'),
-            route: '/videos'
-        },
-        {
-            label: t('nav.places'),
-            route: '/places',
-        },
-    ]);
-    
+    //Needs to be computed when language changes
+    const menuItems = computed(() => {
+        return [
+            /* {
+                label: 'Vesti',
+                to: '/news'
+            },
+            {
+                label: 'Propisi',
+                items: [{
+                    label: 'Prikaži sve',
+                    to: '/regulations',
+                }]
+            }, */
+            {
+                label: t('nav.home'),
+                route: '/',
+            },
+            {
+                label: t('nav.about'),
+                route: '/about',
+            },
+            {
+                label: t('nav.municipality'),
+                route: '/videos'
+            },
+            {
+                label: t('nav.places'),
+                route: '/places',
+            },
+        ]
+    });
+
     //Fetch and insert menu items
     /* globalStore.getMenuItems()
         .then(responseData => {
@@ -109,7 +112,8 @@
         if (event.value) {
             storeLang(event.value);
             popoverSlotProps.close();
-            location.reload();
+            locale.value = event.value.lang_code;
+            //location.reload();
         }
     }
 

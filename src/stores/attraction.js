@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import { http, parseFilterParams, fillFormErrors, downloadFile } from '@/util/apiClient';
+import { getLangId } from '@/util/general';
 import { defineStore } from 'pinia'
 const env = import.meta.env.VITE_APP_ENV;
 
@@ -147,8 +148,9 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         //fetch resource. Different resource form attractions. Needs to be fetched again if not selected
-        async getAttraction(id, langId = ''){
+        async getAttraction(id){
             this.loading = true;
+            const langId = getLangId();
             try {
                 const response = await http.get('/api/attractions/'+id+'/'+langId);
                 this.attraction = response.data;

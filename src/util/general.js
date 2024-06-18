@@ -63,3 +63,27 @@ export const getLang = () => {
     }
     return null;
 }
+
+/**
+ * Get selected language id
+ * @returns string
+ */
+export const getLangId = () => {
+    let lang = localStorage.getItem('lang');
+    if (lang) {
+        return JSON.parse(lang).id;
+    }
+    return null;
+}
+
+/**
+ * Get selected language code
+ * @returns string
+ */
+export const getLangCode = () => {
+    let lang = localStorage.getItem('lang');
+    if (lang) {
+        return JSON.parse(lang).lang_code;
+    }
+    return null;
+}

@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, watch, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
 import { useAttractionStore } from '@/stores/attraction';
@@ -105,7 +105,7 @@ const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 
 const router = useRouter();
 const route = useRoute();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const attractionStore = useAttractionStore();
 const { loading, rootCategories, trips } = storeToRefs(attractionStore);
@@ -127,13 +127,13 @@ const filters = ref({
     approved: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 
-onBeforeMount(() => {
+watch(locale, (newVal) => {
     attractionStore.getPageData({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
     });
-});
+}, {immediate: true})
 
 const onPage = (event) => {
     pagination.value.page = event.page + 1;

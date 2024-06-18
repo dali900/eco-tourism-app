@@ -5,7 +5,6 @@ import { useAuthStore } from './stores/auth'
 import { useGlobalStore } from './stores/global'
 import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
-import {useI18n} from 'vue-i18n'
 
 //import { useAppUpdateManager } from '@/util/appUpdateManager'
 const env = import.meta.env.VITE_APP_ENV;
@@ -15,8 +14,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const globalStore = useGlobalStore();
 const { user, loading } = storeToRefs(authStore);
-const {locale} = useI18n();
-//locale.value = "srCyrl";
+
 //const { appIsOpen } = storeToRefs(indexStore);
 
 //useAppUpdateManager();

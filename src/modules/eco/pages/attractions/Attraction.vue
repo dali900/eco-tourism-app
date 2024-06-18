@@ -9,7 +9,7 @@
         <div class="page-body" v-if="attraction">
             <div class="title">
                 <div>
-                    {{ attraction.name }}
+                    {{ attraction.t.name }}
                 </div>
             </div>
             <div class="attraction-content" v-html="attractionContent"></div>
@@ -58,6 +58,7 @@
 <script setup>
 import {
     ref,
+    watch,
     computed,
     onBeforeMount,
 } from "vue";
@@ -71,7 +72,7 @@ import { responsiveOptions } from '@/constants/gallerySettings'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const attractionStore = useAttractionStore();
 const { attraction, loading } =
@@ -83,9 +84,13 @@ onBeforeMount(() => {
     }
 });
 
+watch(locale, (newVal) => {
+    attractionStore.getAttraction(route.params.id);
+})
+
 const attractionContent = computed( () => {
-    if (!attraction.value || !attraction.value.content) return null;
-    return attraction.value.content.replace(/\n/g, "<br />");
+    if (!attraction.value || !attraction.value.t.content) return null;
+    return attraction.value.t.content.replace(/\n/g, "<br />");
 })
 </script>
 

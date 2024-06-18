@@ -40,7 +40,7 @@
                                             attraction.translations && 
                                             attraction.translations.find(t => t.language_id == slotProps.option.id)
                                         ) 
-                                        //slotProps.option.lang_code == 'sr'
+                                        //slotProps.option.lang_code == 'sr-latin'
                                     " 
                                     class="pi pi-check" style="color: green"></i>
                             </div>
@@ -489,7 +489,7 @@ globalStore.getLanguages().then(responseData => {
         languages.value = responseData;
     } else {
         //Za sada defualt jezik je sr latinica, za drugi jezik potrebno je u lokal storage sacuvati lang code
-        languages.value = responseData.filter( l => l.lang_code == 'sr')
+        languages.value = responseData.filter( l => l.lang_code == 'sr-latin')
     }
 })
 placeStore.getAll();
@@ -527,7 +527,7 @@ watch( attraction, (newVal, oldVal) => {
 watch( languages, (newVal, oldVal) => {
     if(newVal && !selectedLang.value && languages.value && languages.value.length)
     {
-        selectedLang.value = languages.value.find(l => l.lang_code == 'sr');
+        selectedLang.value = languages.value.find(l => l.lang_code == 'sr-latin');
     }
 });
 
@@ -604,7 +604,7 @@ const save = async () => {
         form.id = route.params.attractionId;
         disabledSaveBtn.value = true;
         //translation API
-        /* if (selectedLang.value && selectedLang.value.lang_code !== 'sr') {
+        /* if (selectedLang.value && selectedLang.value.lang_code !== 'sr-latin') {
             attractionStore.updateOrCreateTranslation(form, formErrors, selectedLangId)
                 .then(() => {
                     setFormData(attraction.value);

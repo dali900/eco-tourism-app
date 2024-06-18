@@ -144,14 +144,14 @@
                         <div class="col-12 md:col-6 lg:col-6 right-column right-content">
                             <div class="suggestion-content">
                                 <div class="suggestion-title">
-                                    {{ suggestedAttractions[0].name }}
+                                    {{ suggestedAttractions[0].t.name }}
                                 </div>
                                 <div class="suggestion-text">
-                                    {{ suggestedAttractions[0].summary }}
+                                    {{ suggestedAttractions[0].t.summary }}
                                 </div>
                                 <div class="btn right">
                                     <router-link :to="{ name: 'attraction', params: {id: suggestedAttractions[0].id} }">
-                                        <Button class="btn-d">Vise</Button>
+                                        <Button class="btn-d">{{t('common.more')}}</Button>
                                     </router-link>
                                 </div>
                             </div>
@@ -161,14 +161,14 @@
                         <div class="col-12 md:col-6 lg:col-6 left-column move-right left-content">
                             <div class="suggestion-content">
                                 <div class="suggestion-title">
-                                    {{ suggestedAttractions[1].name }}
+                                    {{ suggestedAttractions[1].t.name }}
                                 </div>
                                 <div class="suggestion-text">
-                                    {{ suggestedAttractions[1].summary }}
+                                    {{ suggestedAttractions[1].t.summary }}
                                 </div>
                                 <div class="btn">
                                     <router-link :to="{ name: 'attraction', params: {id: suggestedAttractions[1].id} }">
-                                        <Button class="btn-d">Vise</Button>
+                                        <Button class="btn-d">{{t('common.more')}}</Button>
                                     </router-link>
                                 </div>
                             </div>
@@ -198,14 +198,14 @@
                         <div class="col-12 md:col-6 lg:col-6 right-column right-content">
                             <div class="suggestion-content">
                                 <div class="suggestion-title">
-                                    {{ suggestedAttractions[2].name }}
+                                    {{ suggestedAttractions[2].t.name }}
                                 </div>
                                 <div class="suggestion-text">
-                                    {{ suggestedAttractions[2].summary }}
+                                    {{ suggestedAttractions[2].t.summary }}
                                 </div>
                                 <div class="btn right">
                                     <router-link :to="{ name: 'attraction', params: {id: suggestedAttractions[2].id} }">
-                                        <Button class="btn-d">Vise</Button>
+                                        <Button class="btn-d">{{t('common.more')}}</Button>
                                     </router-link>
                                 </div>
                             </div>
@@ -340,7 +340,6 @@ import { useAttractionStore } from '@/stores/attraction'
 import { useGlobalStore } from '@/stores/global'
 import { FilterMatchMode } from 'primevue/api';
 import AppCard from '@/components/appCard/AppCard.vue';
-import { getLang, storeLang } from '@/util/general';
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const perPage = ref(20);
@@ -357,8 +356,7 @@ const filters = ref({
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'name': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'content': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'approved': {value: null, matchMode: FilterMatchMode.EQUALS},
-    'langId': {value: null, matchMode: FilterMatchMode.EQUALS}
+    'approved': {value: null, matchMode: FilterMatchMode.EQUALS}
 });
 
 const attractionStore = useAttractionStore();
@@ -369,7 +367,7 @@ const globalStore = useGlobalStore();
 
 const { attractions, news, counts, suggestedAttractions, loading } = storeToRefs(globalStore);
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const countingA = ref(false);
 const countingB = ref(false);
@@ -382,11 +380,7 @@ const currentCountB = ref(0);
 const currentCountC = ref(0);
 
 onBeforeMount(() => {
-    let lang = getLang();
-    if (lang) {
-        filters.value.langId.value = lang.id;
-    }
-    globalStore.getHomePageData({filters: filters.value})
+    globalStore.getHomePageData()
         .then(responseData => {
             if (responseData.counts) {
                 targetCountA.value = responseData.counts.attractions;
@@ -398,6 +392,10 @@ onBeforeMount(() => {
 onMounted(() => {
   observeVisibility();
 });
+
+watch(locale, (newVal) => {
+    globalStore.getHomePageData();
+})
 
 const startCounting = () => {
     countingA.value = true;

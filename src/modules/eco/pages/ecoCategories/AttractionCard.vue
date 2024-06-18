@@ -11,10 +11,10 @@
                     <img v-else alt="content-img" src="/images/thumbnails/attraction.jpg" />
                 </template>
                 <template #title>
-                    {{ props.attraction.name }}
+                    {{ props.attraction.t.name }}
                 </template>
                 <template #content>
-                    {{ props.attraction.summary }}
+                    {{ props.attraction.t.summary }}
                 </template>
             </AppCard>
         </router-link>

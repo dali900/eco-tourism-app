@@ -1,4 +1,6 @@
 import axios from "axios";
+import { getLang } from '@/util/general';
+import { FilterMatchMode } from 'primevue/api';
 
 const baseUrl = import.meta.env.VITE_BASE_API_URL;
 
@@ -53,12 +55,20 @@ export const removeAuthToken = () => {
 }
 
 export const parseFilterParams = (params = {}) => {
-    if (!params) return null;
-    const {
+    let defaultFilters = {};
+    const lang = getLang();
+    if (lang) {
+        defaultFilters = {
+            langId: {value: lang.id, matchMode: FilterMatchMode.EQUALS} 
+        }
+    }
+    let {
         sort = null, 
         pagination = null, 
         filters = []
     } = params;
+    filters = {...filters, ...defaultFilters};
+    if (!Object.keys(filters).length) return null;
     const data = {
         params: {}//url query values
     };
@@ -76,6 +86,15 @@ export const parseFilterParams = (params = {}) => {
     }
     return data;
 }
+
+export const gerLangUrlParam = () => {
+    let langParam = 'langId=';
+    const langId = getLangId();
+    if (langId) {
+        langParam += langId; 
+    }
+    return langParam;
+};
 
 export const fillFormErrors = (errorFields, error) => {
     const defaultMessage = error.response.data.message;

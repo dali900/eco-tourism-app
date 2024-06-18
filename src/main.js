@@ -8,8 +8,8 @@ import Toast from 'primevue/toast';
 import ConfirmationService from 'primevue/confirmationservice';
 import { createI18n } from 'vue-i18n'
 import en from './locales/en.json'
-import srCyrl from './locales/sr-cyrl.json'
-import srLatn from './locales/sr-latn.json'
+import srCyrillic from './locales/sr-cyrillic.json'
+import srLatin from './locales/sr-latin.json'
 import VueMixpanel from 'vue-mixpanel'
 
 import 'primevue/resources/themes/saga-blue/theme.css';
@@ -57,9 +57,9 @@ import router from './router/index'
 import './bootstrap'
 
 const i18n = createI18n({
-    locale: "srLatn",
-    fallback: "srLatn",
-    messages: { en, srLatn, srCyrl },
+    locale: "sr-latin",
+    fallback: "sr-latin",
+    messages: { en, "sr-latin":srLatin, "sr-cyrillic":srCyrillic },
     legacy: false
 })
 
