@@ -59,7 +59,7 @@ import './bootstrap'
 const i18n = createI18n({
     locale: "sr-latin",
     fallback: "sr-latin",
-    messages: { en, "sr-latin":srLatin, "sr-cyrillic":srCyrillic },
+    messages: { en, "sr-latin": srLatin, "sr-cyrillic": srCyrillic },
     legacy: false
 })
 

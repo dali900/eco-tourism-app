@@ -128,6 +128,22 @@ export const useAttractionStore = defineStore('attraction', {
                 throw error;
             }
         },
+        async getCatagory(id, langId = ''){
+            this.loading = true;
+            const appLangId = langId || getLangId();
+            try {
+                const response = await http.get('/api/attraction-categories/admin/'+id+'/'+appLangId);
+                this.category = response.data;
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
         //get filtered and paginated resources
         async getAttractions(params){
             this.loading = true;
@@ -182,10 +198,10 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         //create new resource
-        async create(data, errorFields, selectedLangId){
+        async create(data, errorFields){
             this.loading = true;
             try {            
-                const response = await http.post('/api/attractions/'+selectedLangId, data);
+                const response = await http.post('/api/attractions', data);
                 const attraction = response;
                 //attractions are not loaded when attraction form is opened directly
                 if(this.attractions && this.attractions.length){
@@ -206,10 +222,10 @@ export const useAttractionStore = defineStore('attraction', {
             }
         },
         //update response
-        async update(data, errorFields, selectedLangId){
+        async update(data, errorFields){
             this.loading = true;
             try {            
-                const response = await http.put('/api/attractions/'+data.id+'/'+selectedLangId, data);
+                const response = await http.put('/api/attractions/'+data.id, data);
                 const attraction = response.data;
                 if(this.attractions && this.attractions.length){
                     //replace the existing resource

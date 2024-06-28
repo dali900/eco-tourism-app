@@ -434,6 +434,7 @@ const uploadingImages = ref(false);
 const languages = ref([]);
 const selectedLang = ref(false);
 //Order has to mutch with html order
+//!TODO: replace with TreeSelect component
 const categoryDropdowns = reactive({
     values: {//ids
         rootCategory: null,
@@ -460,6 +461,7 @@ const form = reactive({
     content: "",
     images: [],//file to display information on frontend
     tmp_files: [],//files inforamtion for backend
+    selected_language_id: null
 });
 const formErrors = reactive({
     category_id: "",
@@ -471,6 +473,7 @@ const formErrors = reactive({
     summary: "",
     content: "",
     tmp_files: "", //shows form errors for all files
+    selected_language_id: "",
 });
 const clearFormErrors = () => {
     formErrors.category_id = "";
@@ -482,6 +485,7 @@ const clearFormErrors = () => {
     formErrors.summary = "";
     formErrors.content = "";
     formErrors.tmp_files = "";
+    formErrors.selected_language_id = "";
 }
 
 globalStore.getLanguages().then(responseData => {
@@ -528,8 +532,10 @@ watch( languages, (newVal, oldVal) => {
     if(newVal && !selectedLang.value && languages.value && languages.value.length)
     {
         selectedLang.value = languages.value.find(l => l.lang_code == 'sr-latin');
+        form.selected_language_id = selectedLang.value.id;
     }
 });
+
 
  //load and filter dropdown options - subtypes based on root type id
 watch( () => categoryDropdowns.values.rootCategory, (newVal, oldVal) => {
@@ -597,7 +603,6 @@ const save = async () => {
     clearFormErrors();
     formateDateFields();
     setSelectedAttractionCategoryId();
-    const selectedLangId = selectedLang.value ? selectedLang.value.id : null;
     //Update
     if(route.params.attractionId)
     {
@@ -618,7 +623,7 @@ const save = async () => {
                 })
         } else { */
         //Default API
-            attractionStore.update(form, formErrors, selectedLangId)
+            attractionStore.update(form, formErrors)
                 .then(() => {
                     setFormData(attraction.value);
                     toast.add({severity:'success', summary: 'Ažuriranje uspešno!', detail: form.name, life: 3000});
@@ -635,7 +640,7 @@ const save = async () => {
     else 
     {
         disabledSaveBtn.value = true;
-        attractionStore.create(form, formErrors, selectedLangId)
+        attractionStore.create(form, formErrors)
             .then((responseData) => {
                 toast.add({severity:'success', summary: 'Znamenitost kreirana!', detail: form.name, life: 2000});
                 //redirect user from create to update page
@@ -814,6 +819,8 @@ const onFilterPlacesDropdown = (event) => {
 }
 
 const onLangChange = (event) => {
+    //save selected language id
+    form.selected_language_id = event.value.id;
     if (event.value) {
         attractionStore.adminGetAttraction(route.params.attractionId, event.value.id);
     }

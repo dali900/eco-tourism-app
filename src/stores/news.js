@@ -73,10 +73,10 @@ export const useNewsStore = defineStore('news', {
                 throw error;
             }
         },
-        async getNewsCategoryTree(params = null){
+        async getNewsCategoryTree(){
             this.loading = true;
             try {
-                const urlParams = parseFilterParams(params);
+                const urlParams = parseFilterParams();
                 const response = await http.get('/api/news-categories/tree', urlParams);
                 this.tree = response.data.tree;
                 this.treeCount = response.data.count;

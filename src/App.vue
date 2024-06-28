@@ -5,6 +5,8 @@ import { useAuthStore } from './stores/auth'
 import { useGlobalStore } from './stores/global'
 import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from "vue-i18n";
+import { getLangCode } from './util/general'
 
 //import { useAppUpdateManager } from '@/util/appUpdateManager'
 const env = import.meta.env.VITE_APP_ENV;
@@ -14,6 +16,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const globalStore = useGlobalStore();
 const { user, loading } = storeToRefs(authStore);
+const { locale } = useI18n();
 
 //const { appIsOpen } = storeToRefs(indexStore);
 
@@ -22,6 +25,14 @@ const { user, loading } = storeToRefs(authStore);
 if(!user.value){
     authStore.getAuthUser();
 }
+
+onBeforeMount( () => {
+    const langCode = getLangCode();
+    if (langCode) {
+        locale.value = langCode;
+    }
+});
+
 /* watch( user, (newVal, oldVal) => {
     //click on update form 
     if(user.value)

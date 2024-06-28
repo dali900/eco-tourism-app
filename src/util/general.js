@@ -73,7 +73,7 @@ export const getLangId = () => {
     if (lang) {
         return JSON.parse(lang).id;
     }
-    return null;
+    return '';
 }
 
 /**

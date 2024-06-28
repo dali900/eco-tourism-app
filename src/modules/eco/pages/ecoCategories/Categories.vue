@@ -13,7 +13,7 @@
                         <router-link :to="{ name: 'eco-category', params: {id: category.id} }" class="text-link">
                             <div class="">
                                 <Divider align="left" type="solid">
-                                    <b class="category-title">{{ category.name }}</b>
+                                    <b class="category-title">{{ category.t.name }}</b>
                                 </Divider> 
                             </div>
                         </router-link>

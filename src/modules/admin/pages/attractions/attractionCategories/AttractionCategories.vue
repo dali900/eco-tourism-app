@@ -7,7 +7,6 @@
             </div>
         </div>
         <CategoryForm v-model="showCategoryForm" 
-            :categoryStore="attractionStore"
             :formData="formData" 
             @created="insertNode" 
             @updated="updateNode"
@@ -55,6 +54,7 @@ import { useAttractionStore } from '@/stores/attraction'
 import CategoryForm from './components/CategoryForm.vue'
 import dateTool from '@/util/dateTool'
 import { useAuthStore } from '@/stores/auth'
+import { useGlobalStore } from '@/stores/global'
 
 
 const router = useRouter();
@@ -63,6 +63,7 @@ const toast = useToast();
 const confirm = useConfirm();
 
 const attractionStore = useAttractionStore();
+const globalStore = useGlobalStore();
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore)
 const { tree, treeCount, loading } = storeToRefs(attractionStore);
@@ -89,6 +90,7 @@ const filters = ref({
 });
 const formData = ref(null);
 
+globalStore.getLanguages();
 attractionStore.getAttractionCategoryTree();
 
 //dom ready
@@ -210,7 +212,9 @@ const findObjectById = (nodes, targetId) => {
 
 //Update tree node
 const updateNode = (event) => {
-    formData.value.name = event.name;
+    if (event) {
+        formData.value.name = event.name;
+    }
 }
 
 //create new resource

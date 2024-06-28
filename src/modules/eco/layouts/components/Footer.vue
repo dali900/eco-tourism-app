@@ -49,7 +49,7 @@ const currentYear = computed(() => new Date().getFullYear());
             <div class="footer-bottom">
                 <div>Copyright © {{ currentYear }} - <span>{{ t('footer.bottomPart1') }}</span></div>
                 <div>{{ t('footer.bottomPart2') }}</div>
-                <div>{{ t('footer.bottomPart3') }}</div>
+               <!--  <div>{{ t('footer.bottomPart3') }}</div> -->
             </div>
         </div>
     </footer>
@@ -114,7 +114,7 @@ const currentYear = computed(() => new Date().getFullYear());
                 margin: 0 8px;
                 padding: 0 8px;
                 border-left: 1px solid var(--color-white-soft);
-                border-right: 1px solid var(--color-white-soft);
+                /*border-right: 1px solid var(--color-white-soft);*/
             }
             span {
                 font-weight: 600;
