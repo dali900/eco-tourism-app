@@ -33,9 +33,9 @@ export const useUserStore = defineStore('user', {
             try {
                 const urlParams = parseFilterParams(params);             
                 const response = await http.get('/api/users', urlParams);
-                this.users = response.data.data.users.results;
-                this.usersTotal = response.data.data.users.pagination.total;
-                this.roles = response.data.data.roles;
+                this.users = response.data.users.results;
+                this.usersTotal = response.data.users.pagination.total;
+                this.roles = response.data.roles;
                 indexStore.setLoading(false);
                 return response.data.data;
             } catch (error) {
@@ -88,8 +88,8 @@ export const useUserStore = defineStore('user', {
             indexStore.setLoading();
             try {
                 const response = await http.get('/api/users/'+id+'/profile');
-                this.user = response.data.data.user;
-                this.roles = response.data.data.roles;
+                this.user = response.data.user;
+                this.roles = response.data.roles;
                 indexStore.setLoading(false);
                 return this.user;
             } catch (error) {
@@ -106,19 +106,19 @@ export const useUserStore = defineStore('user', {
             indexStore.setLoading();
             try {            
                 const response = await http.post('/api/users/admin-create', data);
-                const user = response.data.data.user;
+                const user = response.data;
                 //users are not loaded when user form is opened directly
                 if(this.users && this.users.length){
                     //adds the object data to the beginning of the array
                     this.users.unshift(user);
                 }
-                if(this.profiles && this.profiles.length){
+                /* if(this.profiles && this.profiles.length){
                     this.profiles.unshift(response.data.data.user_profile);
-                }
+                } */
                 //set selected resource
                 this.user = user;
                 indexStore.setLoading(false);
-                return response.data.data;
+                return response.data;
             } catch (error) {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);
@@ -134,7 +134,7 @@ export const useUserStore = defineStore('user', {
             indexStore.setLoading();
             try {            
                 const response = await http.put('/api/users/'+id, data);
-                const user = response.data.data.user;
+                const user = response.data;
                 if(this.users && this.users.length){
                     //replace the existing resource
                     const userIndex = this.users.findIndex( el => el.id == data.id);
@@ -145,7 +145,7 @@ export const useUserStore = defineStore('user', {
                     this.user = user;
                 }
                 indexStore.setLoading(false);
-                return response.data.data;
+                return response.data;
             } catch (error) {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);

@@ -1,6 +1,7 @@
 
 import { http, parseFilterParams, fillFormErrors, downloadFile } from '@/util/apiClient';
 import { defineStore } from 'pinia'
+import { getLangId } from '@/util/general';
 const env = import.meta.env.VITE_APP_ENV;
 
 export const usePlaceStore = defineStore('place', {
@@ -34,11 +35,27 @@ export const usePlaceStore = defineStore('place', {
         },
         async get(id){
             this.loading = true;
+            const langId = getLangId();
             try {
-                const response = await http.get('/api/places/'+id);
+                const response = await http.get('/api/places/'+id+'/'+langId);
                 this.place = response.data;
                 this.loading = false;
                 return this.attraction; 
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
+        async adminGet(id, langId = ''){
+            this.loading = true;
+            try {
+                const response = await http.get('/api/places/admin/'+id+'/'+langId);
+                this.place = response.data;
+                this.loading = false;
+                return response.data;
             } catch (error) {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);

@@ -26,13 +26,13 @@
                     <small id="email-help" class="p-error">{{formErrors.email}}</small>
                 </div>
             </div>
-            <div class="flex flex-column">
+            <!-- <div class="flex flex-column">
                 <div class="field flex flex-column">
                     <label for="phone_number">Broj telefona *</label>
                     <InputText id="phone_number" type="text" v-model="form.phone_number" :class="{'p-invalid': formErrors.phone_number}" @keyup.enter="save"/>
                     <small id="phone_number-help" class="p-error">{{formErrors.phone_number}}</small>
                 </div>
-            </div>
+            </div> -->
             <div class="flex flex-column">
                 <div class="field flex flex-column">
                     <label for="role" :class="{'p-error': formErrors.role}">Rola</label>
@@ -257,7 +257,7 @@ const save = async () => {
                 closeForm();
             })
             .catch((e) => {
-                const message = e.response.data.message;
+                const message = e.response?.data.message;
                 toast.add({
                     severity:'error', 
                     summary: (message === 'Korisnik već postoji') ? message : 'Greška tokom kreiranja.', 

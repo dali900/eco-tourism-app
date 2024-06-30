@@ -67,11 +67,11 @@
                                                 <img v-else alt="content-img" src="/images/thumbnails/tours.jpg" />
                                             </template>
                                             <template #title>
-                                                {{ trip.title }}
+                                                {{ trip.t.title }}
                                             </template>
                                             <template #content>
                                                 <div>
-                                                    {{ trip.summary }}
+                                                    {{ trip.t.summary }}
                                                 </div>
                                             </template>
                                         </AppCard>

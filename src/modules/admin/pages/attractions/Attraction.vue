@@ -537,7 +537,7 @@ watch( languages, (newVal, oldVal) => {
 });
 
 
- //load and filter dropdown options - subtypes based on root type id
+//load and filter dropdown options - subtypes based on root type id
 watch( () => categoryDropdowns.values.rootCategory, (newVal, oldVal) => {
     if(newVal)
     {

@@ -3,7 +3,7 @@
         <!-- Header imag -->
         <div class="header-img">
             <img alt="header-img" src="/images/attraction-page-header.jpeg" />
-            <div class="msg" v-if="category">{{ category.name }}</div>
+            <div class="msg" v-if="category">{{ category.t.name }}</div>
         </div>
 
         <div class="page-body">
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, watch, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
 import { useAttractionStore } from '@/stores/attraction';
@@ -39,7 +39,7 @@ import AttractionCard from './AttractionCard.vue'
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
 const route = useRoute();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 
 const attractionStore = useAttractionStore();
 const { attractions, category, loading, attractionsTotal } = storeToRefs(attractionStore);
@@ -61,7 +61,7 @@ const filters = ref({
     approved: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 
-onBeforeMount(() => {
+watch(locale, (newVal) => {
     if (route.params.id) {
         attractionStore.getCatagoryAttractions({
             sort: sort.value,
@@ -69,7 +69,7 @@ onBeforeMount(() => {
             filters: filters.value,
         }, route.params.id);
     }
-});
+}, {immediate: true})
 
 const onPage = (event) => {
     pagination.value.page = event.page + 1;

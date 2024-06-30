@@ -20,7 +20,7 @@ const items = ref([
                 route: '/admin/users/',
                 visible: authStore.hasAdminAccess()
             },
-            {
+            /* {
                 label: 'Korisnički profili',
                 route: '/user-profiles',
                 visible: authStore.hasAdminAccess()
@@ -28,7 +28,7 @@ const items = ref([
             {
                 label: 'Vrste planova',
                 route: '/plans'
-            },
+            }, */
         ]
     },
     {

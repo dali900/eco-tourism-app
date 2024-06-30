@@ -24,8 +24,8 @@
                     <div class="col-12 md:col-6 lg:col-6">
                         <div class="">
                             <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
-                                <div class="name">{{ item.name }}</div>
-                                <div class="text">{{ item.description }}</div>
+                                <div class="name">{{ item.t.name }}</div>
+                                <div class="text">{{ item.t.description }}</div>
                             </router-link>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, watch, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
 import { usePlaceStore } from '@/stores/place';
@@ -49,7 +49,7 @@ import { useI18n } from 'vue-i18n';
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
 const route = useRoute();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 
 const placeStore = usePlaceStore();
 const { places, loading, placesTotal } = storeToRefs(placeStore);
@@ -72,13 +72,14 @@ const filters = ref({
     category_id: {value: null, matchMode: FilterMatchMode.EQUALS},
 });
 
-onBeforeMount(() => {
+//onBeforeMount
+watch(locale, (newVal) => {
     placeStore.getAll({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
     });
-});
+}, {immediate: true})
 
 const onPage = (event) => {
     pagination.value.page = event.page + 1;

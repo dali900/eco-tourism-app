@@ -9,8 +9,7 @@
         <div class="page-body" v-if="place">
             <div class="title">
                 <div>
-                    {{ place.name }}
-                    
+                    {{ place.t.name }}
                 </div>
             </div>
             <div class="resource-content" v-html="placeContent"></div>           
@@ -63,6 +62,7 @@
 <script setup>
 import {
     ref,
+    watch,
     computed,
     onBeforeMount,
 } from "vue";
@@ -78,21 +78,20 @@ import { responsiveOptions } from '@/constants/gallerySettings'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 
 const placeStore = usePlaceStore();
 const { place, loading } =
     storeToRefs(placeStore);
 
-onBeforeMount(() => {
-    if (route.params.id) {
-        placeStore.get(route.params.id);
-    }
-});
+//onBeforeMount
+watch(locale, (newVal) => {
+    placeStore.get(route.params.id);
+}, {immediate: true})
 
 const placeContent = computed( () => {
-    if (!place.value || !place.value.description) return null;
-    return place.value.description.replace(/\n/g, "<br />");
+    if (!place.value || !place.value.t || !place.value.t.description) return null;
+    return place.value.t.description.replace(/\n/g, "<br />");
 })
 </script>
 

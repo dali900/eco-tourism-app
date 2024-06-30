@@ -20,11 +20,11 @@
                                     <img v-else alt="content-img" src="/images/thumbnails/tours.jpg" />
                                 </template>
                                 <template #title>
-                                    {{ item.title }}
+                                    {{ item.t.title }}
                                 </template>
                                 <template #content>
                                     <div>
-                                        {{ item.summary }}
+                                        {{ item.t.summary }}
                                     </div>
                                 </template>
                             </AppCard>
@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, watch, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
 import { useTripStore } from '@/stores/trip';
@@ -51,7 +51,7 @@ import AppCard from '@/components/appCard/AppCard.vue';
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
 const route = useRoute();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 
 const tripStore = useTripStore();
 const { trips, loading, tripsTotal } = storeToRefs(tripStore);
@@ -74,13 +74,13 @@ const filters = ref({
     //attraction_id: {value: null, matchMode: FilterMatchMode.EQUALS},
 });
 
-onBeforeMount(() => {
+watch(locale, (newVal) => {
     tripStore.getAll({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
     });
-});
+}, {immediate: true})
 
 const onPage = (event) => {
     pagination.value.page = event.page + 1;

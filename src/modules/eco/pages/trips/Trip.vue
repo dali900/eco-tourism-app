@@ -9,10 +9,10 @@
         <div class="page-body" v-if="trip">
             <div class="title">
                 <div>
-                    {{ trip.title }}
+                    {{ trip.t.title }}
                 </div>
             </div>
-            <div class="content" v-html="trip.text"></div>
+            <div class="content" v-html="trip.t.text"></div>
             
             <div class="section" v-if="trip.place">
                 {{ t('trip.place') }}: 
@@ -68,6 +68,7 @@
 import {
     ref,
     computed,
+    watch,
     onBeforeMount,
 } from "vue";
 import { storeToRefs } from "pinia";
@@ -82,17 +83,15 @@ import { responsiveOptions } from '@/constants/gallerySettings'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
-const { t } = useI18n();
+const { locale, t } = useI18n();
 
 const tripStore = useTripStore();
 const { trip, loading } = storeToRefs(tripStore);
 
-onBeforeMount(() => {
-    if (route.params.id) {
-        tripStore.get(route.params.id);
-    }
-});
-
+//onBeforeMount
+watch(locale, (newVal) => {
+    tripStore.get(route.params.id);
+}, {immediate: true})
 
 </script>
 

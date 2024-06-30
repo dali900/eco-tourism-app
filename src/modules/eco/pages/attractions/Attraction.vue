@@ -17,7 +17,7 @@
             <div class="place" v-if="attraction.place">
                 {{ t('attraction.place') }}: 
                 <RouterLink :to="{name: 'place', params: {id: attraction.place.id}}" class="app-link">
-                    {{ attraction.place.name }}
+                    {{ attraction.place.t.name }}
                 </RouterLink>
             </div>
             

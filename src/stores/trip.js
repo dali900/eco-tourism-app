@@ -1,6 +1,7 @@
 
 import { http, parseFilterParams, fillFormErrors } from '@/util/apiClient';
 import { defineStore, storeToRefs } from 'pinia'
+import { getLangId } from '@/util/general';
 const env = import.meta.env.VITE_APP_ENV;
 
 export const useTripStore = defineStore('trip', {
@@ -37,8 +38,25 @@ export const useTripStore = defineStore('trip', {
         },
         async get(id){
             this.loading = true;
+            const langId = getLangId();
             try {
-                const response = await http.get('/api/trips/'+id);
+                const response = await http.get('/api/trips/'+id+'/'+langId);
+                this.trip = response.data;
+                this.selectedAttractions = response.data.selected_attractions;
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
+        async adminGet(id, langId = ''){
+            this.loading = true;
+            try {
+                const response = await http.get('/api/trips/admin/'+id+'/'+langId);
                 this.trip = response.data;
                 this.selectedAttractions = response.data.selected_attractions;
                 this.loading = false;
