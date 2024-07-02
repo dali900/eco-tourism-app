@@ -52,16 +52,35 @@ export const useGlobalStore = defineStore('global', {
                 throw error;
             }
         },
-        async getLanguages(){
+        async getLanguages(params = {}){
             if (this.languages) {
                 return this.languages;
             }
             this.loading = true;
             try {
-                const response = await http.get('/api/languages/');
+                const urlParams = parseFilterParams(params);
+                const response = await http.get('/api/languages/', urlParams);
                 this.languages = response.data;
                 this.loading = false;
                 return this.languages; 
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
+        async updateLanguage(langId, data){
+            this.loading = true;
+            try {
+                const response = await http.put('/api/languages/'+langId, data);
+                const language = response.data;
+                //replace the existing resource
+                const languageIndex = this.languages.findIndex( el => el.id == langId);
+                this.languages[languageIndex] = language;
+                this.loading = false;
+                return language; 
             } catch (error) {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);

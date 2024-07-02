@@ -98,6 +98,11 @@ export default [
         component: () => import("../pages/trip/Trip.vue"),
     },
     {
+        path: "other/languages/",
+        name: "languages",
+        component: () => import("../pages/languages/Languages.vue"),
+    },
+    {
         path: "articles/",
         name: "AdminArticles",
         component: () => import("../pages/articles/Articles.vue"),

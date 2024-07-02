@@ -66,6 +66,15 @@ const items = ref([
         label: 'Ture',
         route: '/admin/trips/',
     },
+    {
+        label: 'Ostalo',
+        items: [
+            {
+                label: 'Jezici',
+                route: '/admin/other/languages/'
+            },
+        ]
+    },
     /* {
         label: 'Članci',
         items: [

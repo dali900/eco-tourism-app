@@ -3,7 +3,7 @@
         <!-- Header imag -->
         <div class="header-img">
             <img alt="header-img" src="/images/attraction-page-header.jpeg">
-            <div class="msg">{{ t('attraction.headerMsg') }}</div>
+            <div class="msg" v-if="attraction">{{ attraction.category.t.name }}</div>
         </div>
 
         <div class="page-body" v-if="attraction">
