@@ -21,10 +21,11 @@ export const useGlobalStore = defineStore('global', {
         }
     },
     actions: {
-        async getMenuItems(data, formErrors){
+        async getMenuItems(params = {}){
             this.loading = true;
             try {
-                const response = await http.get('/api/menu');
+                const urlParams = parseFilterParams(params);
+                const response = await http.get('/api/menu', urlParams);
                 this.loading = false;
                 return response.data;
             } catch (error) {

@@ -12,7 +12,7 @@
                         <router-link :to="{ name: 'news-category', params: {id: category.id} }" class="text-link">
                             <div class="">
                                 <Divider align="left" type="solid">
-                                    <b class="category-title">{{ category.name }}</b>
+                                    <b class="category-title">{{ category.t.name }}</b>
                                 </Divider> 
                             </div>
                         </router-link>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="btn-see-more" v-if="category.news.length >= 3">
                             <router-link :to="{ name: 'news-category', params: {id: category.id} }">
-                                <Button class="btn-d">Vise</Button>
+                                <Button class="btn-d">{{ t('common.more') }}</Button>
                             </router-link>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, watch, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
 import { useNewsStore } from '@/stores/news';
@@ -58,7 +58,7 @@ import Divider from 'primevue/divider';
 
 const router = useRouter();
 const route = useRoute();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const newsStore = useNewsStore();
 const { loading, rootCategories, news} = storeToRefs(newsStore);
@@ -80,13 +80,13 @@ const filters = ref({
     text: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
-onBeforeMount(() => {
+watch(locale, (newVal) => {
     newsStore.getRootCategories({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
     });
-});
+}, {immediate: true})
 
 const onPage = (event) => {
     pagination.value.page = event.page + 1;

@@ -51,9 +51,9 @@
                 </span>
                 <small id="name-help" class="p-error">{{formErrors.name}}</small>
             </div>
-            <div>
+            <!-- <div>
                 <small class="p-error">{{formErrors.default}}</small>
-            </div>
+            </div> -->
         </div>
 
         <template #footer>
@@ -95,7 +95,7 @@ const selectedLang = ref(false);
 const form = reactive({
     name: "",
     parent_id: null,
-    selected_language_id: "",
+    selected_language_id: null,
 });
 const formErrors = reactive({
     name: "",
@@ -128,10 +128,10 @@ watch( () => props.formData, (newVal, oldVal) => {
     }
 });
 
-//TODO: logika nejasna, refaktorisati
 //handle showForm changes
 watch( openDialog, (newVal, oldVal) => {
     emit('update:modelValue', newVal);
+    //TODO: logika nejasna, refaktorisati
     if (newVal) {
         globalStore.getLanguages().then(responseData => {
             if(props.formData && props.formData.id){
@@ -241,7 +241,6 @@ const onLangChange = (event) => {
         //fetch translations
         attractionStore.getCatagory(props.formData.id, event.value.id)
             .then((responseData) => {
-                console.log(responseData);
                 form.name = responseData.name;
             })
             .catch((err) => {

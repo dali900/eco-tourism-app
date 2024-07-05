@@ -2,7 +2,7 @@
     <div class="category">
         <!-- Header imag -->
         <div class="header">
-            <div class="msg" v-if="category">{{ category.name }}</div>
+            <div class="msg" v-if="category">{{ category.t.name }}</div>
         </div>
 
         <div class="page-body">
@@ -33,7 +33,7 @@ import CategoryItem from './CategoryItem.vue'
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
 const route = useRoute();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const newsStore = useNewsStore();
 const { news, category, loading, newsTotal } = storeToRefs(newsStore);
@@ -55,7 +55,7 @@ const filters = ref({
     approved: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 
-onBeforeMount(() => {
+watch(locale, (newVal) => {
     if (route.params.id) {
         newsStore.getCategoryNews({
             sort: sort.value,
@@ -63,7 +63,7 @@ onBeforeMount(() => {
             filters: filters.value,
         }, route.params.id);
     }
-});
+}, {immediate: true})
 
 watch(
     () => route.params.id,

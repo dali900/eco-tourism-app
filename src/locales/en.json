@@ -1,9 +1,72 @@
 {
     "Home": "Home",
+    "Loading": "Loading",
+    "nav": {
+        "home": "Home",
+        "about": "About us",
+        "municipality": "About municipalities",
+        "places": "About villages"
+    },
+    "home": {
+        "headerMsg": "Selo na 3 klika",
+        "headerSmallMsg": "Petrovac - Despotovac - Žagubica",
+        "tourism": "Ecotourism",
+        "market": "E market",
+        "news": "News",
+        "latestContentTitle": "Latest Content",
+        "statisticsTitle": "Content",
+        "attractions": "Sights",
+        "newsStatistics": "News",
+        "places": "Places",
+        "tours": "Tours",
+        "suggestionTitle": "Our recommendation",
+        "partnersTitle": "Founders and friends of the site",
+        "partnersList": {
+            "p1": "Bojan Milovanović Lipovica",
+            "p2": "Bane Jovanović Sige",
+            "p3": "Covdin Women's Association",
+            "p4": "Farm Cvjetinović Zlatovo"
+        }
+    },
+    "attractions": {
+        "headerMsg": "All Landmarks"
+    },
+    "attraction": {
+        "headerMsg": "Nature",
+        "place": "Place"
+    },
+    "places": {
+        "headerMsg": "Places",
+        "attractions": "Sights"
+    },
+    "aboutUs": {
+        "headerMsg": "About Us"
+    },
+    "ecoCategories": {
+        "headerMsg": "Ecotourism",
+        "tours": "Tours"
+    },
+    "ecoNews": {
+        "headerMsg": "E-news"
+    },
+    "trips": {
+        "headerMsg": "Tourist Tours"
+    },
+    "trip": {
+        "headerMsg": "Tourist Tour",
+        "attractions": "Sights"
+    },
     "footer": {
-        "link1": "",
-        "bottomPart1": "Selo na 3 klika",
+        "link1": "Radio stations of our municipalities",
+        "link2": "Official websites of municipalities",
+        "link3": "Important phone numbers of institutions",
+        "link4": "Terms of Use",
+        "contact": "Contact phone",
+        "bottomPart1": "Village in 3 clicks",
         "bottomPart2": "All rights reserved",
-        "bottomPart3": "updating the portal on a daily basis"
+        "bottomPart3": "portal update daily"
+    },
+    "common": {
+        "more": "More"
     }
 }

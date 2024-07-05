@@ -20,26 +20,31 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia'
 import { useGlobalStore } from '@/stores/global';
 import { useBuildMenuRecursively } from '@/composables/useBuildMenuRecursively'
 
+const { t, locale } = useI18n();
 const globalStore = useGlobalStore();
 const { loading } = storeToRefs(globalStore);
 const { insertMenuItems } = useBuildMenuRecursively(); 
-const menuItems = ref([
-    {
-        label: '',
-        route: '/news/',
-        icon: 'pi pi-home',
-    }
-]);
+const menuItems = ref(null);
 
-//Fetch and insert menu items
-globalStore.getMenuItems()
-    .then(responseData => {
-        console.log(responseData);
-        insertMenuItems(menuItems.value, responseData.news_menu, 'news-category');
-    })
+watch(locale, (newVal) => {
+    //Fetch and insert menu items
+    menuItems.value = [
+        {
+            label: '',
+            route: '/news/',
+            icon: 'pi pi-home',
+        }
+    ]
+    globalStore.getMenuItems()
+        .then(responseData => {
+            insertMenuItems(menuItems.value, responseData, 'news-category');
+        })
+}, {immediate: true})
+
 </script>

@@ -5,8 +5,49 @@
             <div v-else-if="route.params.id">Nema podataka.</div>
         </div>
         <div class="news-text">
-            <h2 v-if="route.params.id">Vest</h2>
-            <h2 v-else>Nova vest</h2>
+            <div class="header">
+                <div class="title">
+                    <h2 v-if="route.params.id">Vest</h2>
+                    <h2 v-else>Nova vest</h2>
+                </div>
+                <div class="options">
+                    <Dropdown
+                        v-model="selectedLang" 
+                        class="w-full md:w-14rem"
+                        optionLabel="name" 
+                        placeholder="Izaberi jezik" 
+                        :options="languages" 
+                        @change="onLangChange"
+                    >
+                        <template #value="slotProps">
+                            <div v-if="slotProps.value" class="flex align-items-center">
+                                <img :alt="slotProps.value.label" :src="'/images/langs/'+slotProps.value.lang_code+'.png'" :class="`mr-2 flag flag-${slotProps.value.lang_code.toLowerCase()}`" style="width: 18px" />
+                                <div>{{ slotProps.value.name }}</div>&nbsp;
+                                <div v-if="slotProps.value.note"> ({{ slotProps.value.note }})</div> &nbsp;
+                            </div>
+                            <span v-else>
+                                {{ slotProps.placeholder }}
+                            </span>
+                        </template>
+                        <template #option="slotProps">
+                            <div class="flex align-items-center">
+                                <img :alt="slotProps.option.label" :src="'/images/langs/'+slotProps.option.lang_code+'.png'" :class="`mr-2 flag`" style="width: 18px" />
+                                <div>{{ slotProps.option.name }}</div>&nbsp;
+                                <div v-if="slotProps.option.note"> ({{ slotProps.option.note }})</div> &nbsp;
+                                <i v-if="
+                                        (
+                                            one_news &&
+                                            one_news.translations && 
+                                            one_news.translations.find(t => t.language_id == slotProps.option.id)
+                                        ) 
+                                        //slotProps.option.lang_code == 'sr-latin'
+                                    " 
+                                    class="pi pi-check" style="color: green"></i>
+                            </div>
+                        </template>
+                    </Dropdown>
+                </div>
+            </div>
             <div class="grid" v-if="authStore.hasAuthorAccess()">
                 <div class="field col-12 align-self-start">
                     <div class="grid">
@@ -157,6 +198,7 @@ import { useConfirm } from "primevue/useconfirm";
 import { useNewsStore } from '@/stores/news'
 import { useAuthStore } from '@/stores/auth'
 import { useFileStore } from '@admin/stores/file'
+import { useGlobalStore } from '@/stores/global'
 import TreeSelect from 'primevue/treeselect';
 import dateTool from '@/util/dateTool'
 import NoAccess from '../noAccess/NoAccess.vue'
@@ -177,6 +219,7 @@ const maxFileSize = 1000000 * 30; //30MB
 const newsStore = useNewsStore();
 const authStore = useAuthStore();
 const fileStore = useFileStore();
+const globalStore = useGlobalStore();
 const { user } = storeToRefs(authStore)
 const { one_news, loading, tree, selectedCategories } = storeToRefs(newsStore);
 const { token, authToken } = storeToRefs(authStore)
@@ -185,6 +228,8 @@ const fileFrame = ref(null);
 const timer = ref(null);
 const uploadingImages = ref(false);
 const selectedCategoryValues = ref(null);
+const languages = ref([]);
+const selectedLang = ref(false);
 //Order has to mutch with html order
 const categoryDropdowns = reactive({
     values: {//ids
@@ -208,6 +253,7 @@ const form = reactive({
     text: "",
     category_ids: null,
     approved: true,
+    selected_language_id: null,
     images: [],//file to display information on frontend
     tmp_files: [],//files inforamtion for backend
 });
@@ -218,6 +264,7 @@ const formErrors = reactive({
     text: "",
     approved: "",
     category_ids: "",
+    selected_language_id: "",
     images: "",
     tmp_files: "", //shows form errors for all files
 });
@@ -228,15 +275,24 @@ const clearFormErrors = () => {
     formErrors.text = "";
     formErrors.approved = "";
     formErrors.category_ids = "";
+    formErrors.selected_language_id = "";
     formErrors.images = "";
     formErrors.tmp_files = "";
 }
 
 newsStore.getNewsCategoryTree();
+globalStore.getLanguages().then(responseData => {
+    if(route.params.id){
+        languages.value = responseData;
+    } else {
+        //Za sada defualt jezik je sr latinica, za drugi jezik potrebno je u lokal storage sacuvati lang code
+        languages.value = responseData.filter( l => l.lang_code == 'sr-latin')
+    }
+})
 //data and props ready, dom still not
 onBeforeMount( () => {
     if(route.params.id){
-        newsStore.getOneNews(route.params.id);
+        newsStore.adminGetOneNews(route.params.id);
     }
 });
 
@@ -266,6 +322,14 @@ watch( selectedCategories, (newVal, oldVal) => {
     if(newVal)
     {
         selectedCategoryValues.value = {...newVal};
+    }
+});
+
+watch( languages, (newVal, oldVal) => {
+    if(newVal && !selectedLang.value && languages.value && languages.value.length)
+    {
+        selectedLang.value = languages.value.find(l => l.lang_code == 'sr-latin');
+        form.selected_language_id = selectedLang.value.id;
     }
 });
 
@@ -423,12 +487,30 @@ const setThumbnail = (file) => {
         })
 }
 
+const onLangChange = (event) => {
+    //save selected language id
+    form.selected_language_id = event.value.id;
+    if (event.value) {
+        if(route.params.id){
+            newsStore.adminGetOneNews(route.params.id, event.value.id);
+        }
+    }
+}
+
 </script>
 
 <style scoped>
 .admin-news-form { 
     max-width: 1200px;
     margin: auto;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px 0;
+    .title h2 {
+        margin: 0
+    }
 }
 .field {
     padding-right: 10px;

@@ -20,7 +20,7 @@
         <div class="page-body" v-if="one_news">
             <div class="title">
                 <div>
-                    {{ one_news.title }}
+                    {{ one_news.t.title }}
                 </div>
             </div>
             <div class="news-content" v-html="newsContent"></div>
@@ -82,7 +82,7 @@ import { responsiveOptions } from '@/constants/gallerySettings'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const route = useRoute();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const newsStore = useNewsStore();
 const { one_news, newsCategories, loading } = storeToRefs(newsStore);
@@ -93,23 +93,22 @@ const breadcrumbHome = ref({
 });
 const breadcrumbItems = ref([]);
 
-onBeforeMount(() => {
+watch(locale, (newVal) => {
     if (route.params.id) {
         newsStore.getOneNews(route.params.id);
     }
-});
+}, {immediate: true})
 
 watch( newsCategories, (newVal, oldVal) => {
     if(newVal && newVal.length)
     {
-        console.log(newVal);
         const bradcrumbArray = newVal[0].map((c) => { return {label: c.name, route: '/news/news-category/'+c.id} });
         breadcrumbItems.value = bradcrumbArray.reverse();
     }
 });
 
 const newsContent = computed( () => {
-    if (!one_news.value || !one_news.value.text) return null;
+    if (!one_news.value || !one_news.value.t || !one_news.value.t.text) return null;
     return one_news.value.text.replace(/\n/g, "<br />");
 })
 </script>

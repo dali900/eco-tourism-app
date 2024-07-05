@@ -11,7 +11,7 @@ export function useBuildMenuRecursively() {
     const insertMenuItems = (menuItems, categories, menuName) => {
         categories.forEach((category) => {
             const menuItem = {
-                label: category.name,
+                label: category.t ? category.t.name : category.name,
                 to: "/" + menuName + "/" + category.id,
                 route: {name: menuName, params: {id: category.id}},
             };

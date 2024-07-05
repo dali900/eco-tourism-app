@@ -11,7 +11,7 @@
                     <img v-else alt="content-img" src="/images/thumbnails/news-thumb.png" />
                 </template>
                 <template #title>
-                    {{ props.item.title }}
+                    {{ props.item.t.title }}
                 </template>
                 <template #content>
                     <div>
@@ -22,7 +22,7 @@
                             </span>
                         </div>
                         <div class="content">
-                            {{ props.item.summary }}
+                            {{ props.item.t.summary }}
                         </div>
                     </div>
                 </template>

@@ -13,7 +13,7 @@
                         <router-link :to="{ name: 'eco-category', params: {id: category.id} }" class="text-link">
                             <div class="category-title">
                                 <Divider align="left" type="solid">
-                                    <b>{{ category.name }}</b>
+                                    <b>{{ category.t.name }}</b>
                                 </Divider>                            
                             </div>
                         </router-link>
@@ -37,7 +37,7 @@
                         </div>
                         <div class="btn-see-more" v-if="category.attractions.length >= 3">
                             <router-link :to="{ name: 'eco-category', params: {id: category.id} }">
-                                <Button class="btn-d">Vise</Button>
+                                <Button class="btn-d">{{ t('common.more') }}</Button>
                             </router-link>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue';
+import { ref, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
 import { useAttractionStore } from '@/stores/attraction';
@@ -59,7 +59,7 @@ import Divider from 'primevue/divider';
 
 const router = useRouter();
 const route = useRoute();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const attractionStore = useAttractionStore();
 const { loading, attractionRootCategories, attra } = storeToRefs(attractionStore);
@@ -81,13 +81,13 @@ const filters = ref({
     approved: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 
-onBeforeMount(() => {
+watch(locale, (newVal) => {
     attractionStore.getCategories({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
     });
-});
+}, {immediate: true})
 
 const onPage = (event) => {
     pagination.value.page = event.page + 1;

@@ -5,6 +5,45 @@
         </template>
 
         <div class="app-form flex flex-column">
+            <div class="field flex flex-column mb-5">
+                <span class="p-float-label"></span>
+                <label for="name-help">Jezik</label>
+                <Dropdown
+                    v-model="selectedLang" 
+                    class="w-full"
+                    optionLabel="name" 
+                    placeholder="Izaberi jezik" 
+                    :options="languages" 
+                    @change="onLangChange"
+                >
+                    <template #value="slotProps">
+                        <div v-if="slotProps.value" class="flex align-items-center">
+                            <img :alt="slotProps.value.label" :src="'/images/langs/'+slotProps.value.lang_code+'.png'" :class="`mr-2 flag flag-${slotProps.value.lang_code.toLowerCase()}`" style="width: 18px" />
+                            <div>{{ slotProps.value.name }}</div>&nbsp;
+                            <div v-if="slotProps.value.note"> ({{ slotProps.value.note }})</div> &nbsp;
+                        </div>
+                        <span v-else>
+                            {{ slotProps.placeholder }}
+                        </span>
+                    </template>
+                    <template #option="slotProps">
+                        <div class="flex align-items-center">
+                            <img :alt="slotProps.option.label" :src="'/images/langs/'+slotProps.option.lang_code+'.png'" :class="`mr-2 flag`" style="width: 18px" />
+                            <div>{{ slotProps.option.name }}</div>&nbsp;
+                            <div v-if="slotProps.option.note"> ({{ slotProps.option.note }})</div> &nbsp;
+                            <i v-if="
+                                    (
+                                        category &&
+                                        category.translations && 
+                                        category.translations.find(t => t.language_id == slotProps.option.id)
+                                    ) 
+                                    //slotProps.option.lang_code == 'sr-latin'
+                                " 
+                                class="pi pi-check" style="color: green"></i>
+                        </div>
+                    </template>
+                </Dropdown>
+            </div>
             <div class="field flex flex-column">
                 <span class="p-float-label">
                     <InputText id="name" type="text" v-model="form.name" :class="{'p-invalid': formErrors.name}" @keyup.enter="save"/>
@@ -12,9 +51,9 @@
                 </span>
                 <small id="name-help" class="p-error">{{formErrors.name}}</small>
             </div>
-            <div>
+            <!-- <div>
                 <small class="p-error">{{formErrors.default}}</small>
-            </div>
+            </div> -->
         </div>
 
         <template #footer>
@@ -29,6 +68,7 @@ import { ref, reactive, watch, onMounted, onBeforeMount } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useToast } from "primevue/usetoast";
 import { useNewsStore } from '@/stores/news'
+import { useGlobalStore } from '@/stores/global'
 
 const props = defineProps({
     modelValue: {
@@ -45,17 +85,22 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'created', 'updated']);
 
 const newsStore = useNewsStore();
-const { loading } = storeToRefs(newsStore)
+const globalStore = useGlobalStore();
+const { category, loading } = storeToRefs(newsStore)
 const openDialog = ref(false);
 const toast = useToast();
+const languages = ref([]);
+const selectedLang = ref(false);
 
 const form = reactive({
     name: "",
-    parent_id: null
+    parent_id: null,
+    selected_language_id: null
 });
 const formErrors = reactive({
     name: "",
-    parent_id: ""
+    parent_id: "",
+    selected_language_id: ""
 });
 
 //modelValue
@@ -64,6 +109,8 @@ watch( () => props.modelValue, (newVal, oldVal) => {
     //reopens empty form again (if prev had errors then clear form)
     if(!props.formData){
         clearForm();
+    } else {
+        setFormData(props.formData);
     }
 });
 
@@ -84,6 +131,28 @@ watch( () => props.formData, (newVal, oldVal) => {
 //handle showForm changes
 watch( openDialog, (newVal, oldVal) => {
     emit('update:modelValue', newVal);
+    //TODO: logika nejasna, refaktorisati
+    if (newVal) {
+        globalStore.getLanguages().then(responseData => {
+            if(props.formData && props.formData.id){
+                languages.value = responseData;
+                selectDefaultLanguage();
+                newsStore.adminGetCategory(props.formData.id, selectedLang.value.id);
+            } else {
+                //TODO: kreirati konstantu za default jezik
+                //Za sada defualt jezik je sr latinica, za drugi jezik potrebno je u lokal storage sacuvati lang code
+                languages.value = responseData.filter( l => l.lang_code == 'sr-latin');
+                selectDefaultLanguage();
+            }
+        })
+    }
+});
+
+watch( languages, (newVal, oldVal) => {
+    if(newVal && !selectedLang.value && languages.value && languages.value.length)
+    {
+        selectDefaultLanguage();
+    }
 });
 
 const setFormData = (formData) => {
@@ -109,10 +178,22 @@ const closeForm = () => {
 const clearForm = () => {
     form.name = "";
     form.parent_id = null;
+    form.selected_language_id = null;
     formErrors.name = "";
     formErrors.parent_id = "";
+    formErrors.selected_language_id = "";
     formErrors.default = "";
 };
+
+const selectDefaultLanguage = () => {
+    let langId = null;
+    if (languages && languages.value.length) {
+        langId = languages.value.find(l => l.lang_code == 'sr-latin');
+        selectedLang.value = langId;
+        form.selected_language_id = selectedLang.value.id;
+    }
+    return langId;
+}
 
 const save = async () => {
     //Update
@@ -122,7 +203,9 @@ const save = async () => {
         props.categoryStore.updateCategory(form, formErrors)
             .then((responseData) => {
                 toast.add({severity:'success', summary: 'Kategorija je ažuriran!', detail: form.name, life: 3000});
-                emit('updated', responseData);
+                if (selectedLang.value && selectedLang.value.lang_code === 'sr-latin') {
+                    emit('updated', responseData);
+                }
                 closeAndClearForm();
             })
             .catch((err) => {
@@ -148,6 +231,21 @@ const save = async () => {
 
 const onHide = () => {
     clearForm();
+}
+
+const onLangChange = (event) => {
+    //save selected language id
+    form.selected_language_id = event.value.id;
+    if (event.value && props.formData?.id) {
+        //fetch translations
+        newsStore.adminGetCategory(props.formData.id, event.value.id)
+            .then((responseData) => {
+                form.name = responseData.name;
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
 }
 
 </script>

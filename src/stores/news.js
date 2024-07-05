@@ -1,6 +1,7 @@
 
 import { http, parseFilterParams, fillFormErrors } from '@/util/apiClient';
 import { defineStore, storeToRefs } from 'pinia'
+import { getLangId } from '@/util/general';
 const env = import.meta.env.VITE_APP_ENV;
 
 export const useNewsStore = defineStore('news', {
@@ -40,10 +41,28 @@ export const useNewsStore = defineStore('news', {
                 throw error;
             }
         },
-        async getOneNews(id){
+        async getOneNews(id, langId = ''){
+            this.loading = true;
+            const appLangId = langId || getLangId();
+            try {
+                const response = await http.get('/api/news/'+id+'/'+appLangId);
+                this.one_news = response.data.news;
+                this.newsCategories = response.data.news_categories;
+                this.selectedCategories = response.data.selected_categories;
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
+        async adminGetOneNews(id, langId = ''){
             this.loading = true;
             try {
-                const response = await http.get('/api/news/'+id);
+                const response = await http.get('/api/news/admin/'+id+'/'+langId);
                 this.one_news = response.data.news;
                 this.newsCategories = response.data.news_categories;
                 this.selectedCategories = response.data.selected_categories;
@@ -63,6 +82,22 @@ export const useNewsStore = defineStore('news', {
                 const urlParams = parseFilterParams(params);
                 const response = await http.get('/api/news-categories/roots', urlParams);
                 this.rootCategories = response.data;
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
+        async adminGetCategory(id, langId = ''){
+            this.loading = true;
+            const appLangId = langId || getLangId();
+            try {
+                const response = await http.get('/api/news-categories/admin/'+id+'/'+appLangId);
+                this.category = response.data;
                 this.loading = false;
                 return response.data;
             } catch (error) {
@@ -131,8 +166,10 @@ export const useNewsStore = defineStore('news', {
                 const response = await http.put('/api/news-categories/'+data.id, data);
                 const category = response.data;
                 //replace the existing resource
-                const index = this.categories.findIndex( el => el.id == data.id);
-                this.categories[index] = category;
+                if (this.newsCategories) {
+                    const index = this.newsCategories.findIndex( el => el.id == data.id);
+                    this.categories[index] = category;
+                }
                 this.loading = false;
                 return response.data;
             } catch (error) {
