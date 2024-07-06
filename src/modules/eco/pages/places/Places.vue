@@ -179,6 +179,11 @@ const onPage = (event) => {
             }
             .text {
                 max-width: 500px;
+                display: -webkit-box;
+                line-clamp: 11;
+                -webkit-line-clamp: 11;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
             }
             margin-bottom: 16px;
         }
