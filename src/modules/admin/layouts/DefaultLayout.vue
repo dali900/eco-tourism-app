@@ -67,6 +67,19 @@ const items = ref([
         route: '/admin/trips/',
     },
     {
+        label: 'Oglasi',
+        items: [
+            {
+                label: 'Pregled',
+                route: '/admin/ads/',
+            },
+            {
+                label: 'Kategorie',
+                route: '/admin/ads-categories'
+            },
+        ]
+    },
+    {
         label: 'Ostalo',
         items: [
             {

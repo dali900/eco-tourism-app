@@ -103,6 +103,16 @@ export default [
         component: () => import("../pages/languages/Languages.vue"),
     },
     {
+        path: "ads",
+        name: "admin-ads",
+        component: () => import("../pages/ads/Ads.vue"),
+    },
+    {
+        path: "ad/:id?",
+        name: "admin-ad",
+        component: () => import("../pages/ads/Ad.vue"),
+    },
+    {
         path: "articles/",
         name: "AdminArticles",
         component: () => import("../pages/articles/Articles.vue"),
