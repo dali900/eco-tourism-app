@@ -16,9 +16,9 @@
                         <div class="msg">{{ t('home.tourism') }}</div>
                     </div>
                 </router-link>
-                <router-link to="/market" class="col-12 md:col-6 lg:col-4 banner-link">
-                    <div class="banner market">
-                        <div class="msg">{{ t('home.market') }}</div>
+                <router-link to="/ads" class="col-12 md:col-6 lg:col-4 banner-link">
+                    <div class="banner ad">
+                        <div class="msg">{{ t('home.ad') }}</div>
                     </div>
                 </router-link>
                 <router-link to="/news" class="col-12 md:col-6 lg:col-4 banner-link">
@@ -542,7 +542,7 @@ const observeVisibility = () => {
         .tourism {
             background-image: url("/images/tourism.png");
         }
-        .market {
+        .ad {
             background-image: url("/images/market.png");
         }
         .news {

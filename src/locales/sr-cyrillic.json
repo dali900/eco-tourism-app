@@ -11,7 +11,7 @@
         "headerMsg": "Село на 3 клика",
         "headerSmallMsg": "Петровац - Деспотовац - Жагубица",
         "tourism": "Екотуризам",
-        "market": "E пијаца",
+        "ad": "E пијаца",
         "news": "E новине",
         "latestContentTitle": "Најновији садржај",
         "statisticsTitle": "Садржај",
@@ -49,6 +49,17 @@
         "headerMsg": "Туристичка тура",
         "attractions": "Знаменитости"
     },
+    "ads": {
+        "title": "E-пијаца",
+        "soon": "Ускоро",
+        "category": "Категорија",
+        "subCategory": "Поткатегорија",
+        "price": "Цена",
+        "place": "Место",
+        "search": "Претрага",
+        "results": "Резултати",
+        "noResults": "Нема резултата, покушајте са другом претрагом"
+    },    
     "places": {
         "headerMsg": "Места",
         "attractions": "Знаменитости"

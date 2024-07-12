@@ -46,11 +46,27 @@ export const useAdStore = defineStore('ad', {
                 throw error;
             }
         },
-        async getRootCategories(params){
+        async getRootCategories(params = {}){
             this.loading = true;
             try {
                 const urlParams = parseFilterParams(params);
                 const response = await http.get('/api/ad-categories/roots', urlParams);
+                this.rootCategories = response.data;
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
+        async getDropdownCategoryOptions(params = {}){
+            this.loading = true;
+            try {
+                const urlParams = parseFilterParams(params);
+                const response = await http.get('/api/ad-categories/dropdown-options', urlParams);
                 this.rootCategories = response.data;
                 this.loading = false;
                 return response.data;

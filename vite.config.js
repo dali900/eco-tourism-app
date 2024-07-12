@@ -22,8 +22,8 @@ export default defineConfig({
             "@news": fileURLToPath(
                 new URL("./src/modules/news", import.meta.url)
             ),
-            "@market": fileURLToPath(
-                new URL("./src/modules/market", import.meta.url)
+            "@ads": fileURLToPath(
+                new URL("./src/modules/ads", import.meta.url)
             ),
         },
     },

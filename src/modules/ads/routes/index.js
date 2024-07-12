@@ -2,6 +2,6 @@ export default [
     {
         path: "/",
         alias: "",
-        component: () => import("@market/pages/home/Index.vue"),
+        component: () => import("@ads/pages/home/Index.vue"),
     },
 ];

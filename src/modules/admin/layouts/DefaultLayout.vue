@@ -75,7 +75,7 @@ const items = ref([
             },
             {
                 label: 'Kategorie',
-                route: '/admin/ads-categories'
+                route: '/admin/ad-categories'
             },
         ]
     },

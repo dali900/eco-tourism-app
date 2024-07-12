@@ -1,7 +1,7 @@
 <template>
     <div class="categories p-3">
         <div class="top-section mb-2">
-            <div class="title">Kategorije znamenitosti</div>
+            <div class="title">Kategorije oglasa</div>
             <div>
                 <Button @click="openAddNewRootCategoryForm()" icon="pi pi-plus" class="p-button-sm" v-tooltip="'Dodaj novu kategoriju'"></Button>
             </div>
@@ -50,7 +50,7 @@ import { useToast } from "primevue/usetoast";
 import Tree from 'primevue/tree';
 import { useConfirm } from "primevue/useconfirm";
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
-import { useAttractionStore } from '@/stores/attraction'
+import { useAdStore } from '@/stores/ad'
 import CategoryForm from './components/CategoryForm.vue'
 import dateTool from '@/util/dateTool'
 import { useAuthStore } from '@/stores/auth'
@@ -62,11 +62,11 @@ const route = useRoute();
 const toast = useToast();
 const confirm = useConfirm();
 
-const attractionStore = useAttractionStore();
+const adStore = useAdStore();
 const globalStore = useGlobalStore();
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore)
-const { tree, treeCount, loading } = storeToRefs(attractionStore);
+const { tree, treeCount, loading } = storeToRefs(adStore);
 
 const timer = ref(null);
 const categoryFilterTimer = ref(null);
@@ -91,7 +91,7 @@ const filters = ref({
 const formData = ref(null);
 
 globalStore.getLanguages();
-attractionStore.getAttractionCategoryTree();
+adStore.getAdCategoryTree();
 
 //dom ready
 onMounted(() => {
@@ -149,7 +149,7 @@ const confirmDeleteNode = (node) => {
 
 const deleteResource = (node) => {
     const deleted = findAndDeleteObjectById(unref(tree), node.id);
-    attractionStore.deleteCategory(node.id)
+    adStore.deleteCategory(node.id)
         .then(() => {
             toast.add({severity:'success', summary: 'Kategorija obrisana.', life: 3000});
         })
@@ -228,27 +228,6 @@ const openUpdateForm = (data, row) => {
     //updatingIndex.value = row.index;
     formData.value = data;
     showForm.value = true;
-}
-
-const onSort = (event) => {
-    sort.value.sortField = event.sortField;
-    sort.value.sortOrder = event.sortOrder;
-    attractionStore.getRegulationTypes({sort: sort.value, pagination: pagination.value, filters: filters.value});
-};
-
-const onPage = (event) => {
-    pagination.value.page = event.page + 1;
-    if(perPage.value != event.rows){
-        pagination.value.perPage = event.rows;
-    }
-    attractionStore.getRegulationTypes({sort: sort.value, pagination: pagination.value, filters: filters.value});
-}
-
-const onFilter = (event, e) => {
-    clearTimeout(timer.value);
-    timer.value = setTimeout(() => {
-        attractionStore.getRegulationTypes({sort: sort.value, pagination: pagination.value, filters: filters.value});
-    },400);
 }
 
 const confirmDeleteResource = (data) => {

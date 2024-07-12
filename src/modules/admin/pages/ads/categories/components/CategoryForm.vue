@@ -67,7 +67,7 @@
 import { ref, reactive, watch, onMounted, onBeforeMount } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useToast } from "primevue/usetoast";
-import { useAttractionStore } from '@/stores/attraction'
+import { useAdStore } from '@/stores/ad'
 import { useGlobalStore } from '@/stores/global'
 
 const props = defineProps({
@@ -85,8 +85,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'created', 'updated']);
 
 const globalStore = useGlobalStore();
-const attractionStore = useAttractionStore();
-const { category, loading } = storeToRefs(attractionStore)
+const adStore = useAdStore();
+const { category, loading } = storeToRefs(adStore)
 const openDialog = ref(false);
 const toast = useToast();
 const languages = ref([]);
@@ -137,7 +137,7 @@ watch( openDialog, (newVal, oldVal) => {
             if(props.formData && props.formData.id){
                 languages.value = responseData;
                 selectDefaultLanguage();
-                attractionStore.getCatagory(props.formData.id, selectedLang.value.id);
+                adStore.getCatagory(props.formData.id, selectedLang.value.id);
             } else {
                 //TODO: kreirati konstantu za default jezik
                 //Za sada defualt jezik je sr latinica, za drugi jezik potrebno je u lokal storage sacuvati lang code
@@ -200,7 +200,7 @@ const save = async () => {
     if(props.formData && props.formData.id)
     {
         form.id = props.formData.id;
-        attractionStore.updateCategory(form, formErrors)
+        adStore.updateCategory(form, formErrors)
             .then((responseData) => {
                 toast.add({severity:'success', summary: 'Kategorija je ažuriran!', detail: form.name, life: 3000});
                 if (selectedLang.value && selectedLang.value.lang_code === 'sr-latin') {
@@ -216,7 +216,7 @@ const save = async () => {
     //Create
     else 
     {
-        attractionStore.createCategory(form, formErrors)
+        adStore.createCategory(form, formErrors)
             .then((responseData) => {
                 toast.add({severity:'success', summary: 'Kreiran nova kategorija!', detail: form.name, life: 3000});
                 console.log(responseData);
@@ -239,7 +239,7 @@ const onLangChange = (event) => {
     form.selected_language_id = event.value.id;
     if (event.value && props.formData?.id) {
         //fetch translations
-        attractionStore.getCatagory(props.formData.id, event.value.id)
+        adStore.getCatagory(props.formData.id, event.value.id)
             .then((responseData) => {
                 form.name = responseData.name;
             })

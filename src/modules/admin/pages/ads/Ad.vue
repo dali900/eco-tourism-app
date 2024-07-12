@@ -68,20 +68,38 @@
                                     selectionMode="single" 
                                     display="chip" 
                                     placeholder="Izaberi kategoriju" 
-                                    class="md:w-20rem w-full" 
+                                    class="w-full" 
                                 />
                             </div>
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.category_id}}</small>
                             </div>
                         </div>
-                        <div class="field col-12 md:col-6 lg:col-4">
+                        <div class="field col-12 md:col-4 lg:col-3">
                             <label for="price" :class="{'p-error': formErrors.price}">Cena *</label>
                             <div>
                                 <InputNumber v-model="form.price" inputId="price" :useGrouping="false" :class="{'p-invalid': formErrors.price}" @keyup.enter="save"/>
                             </div>
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.price}}</small>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-4 ">
+                            <div class="mb-3">
+                                <label for="expires_at_formated" :class="{'p-error': formErrors.currency}">Valuta *</label>
+                            </div>
+                            <div class="flex align-items-center gap-3 align-self-center">
+                                <div class="flex align-items-center">
+                                    <RadioButton v-model="form.currency" inputId="EUR" name="currency" value="EUR" :unstyled="true" inputClass="app-radio-button"/>
+                                    <label for="EUR" class="ml-2">EUR</label>
+                                </div>
+                                <div class="flex align-items-center">
+                                    <RadioButton v-model="form.currency" inputId="RSD" name="currency" value="RSD" :unstyled="true" inputClass="app-radio-button"/>
+                                    <label for="RSD" class="ml-2">RSD</label>
+                                </div>
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.currency}}</small>
                             </div>
                         </div>
                         <div class="field col-12 md:col-6 lg:col-4">
@@ -118,7 +136,7 @@
                             </div>
                         </div> -->
                         <div class="field col-12 md:col-6 lg:col-4">
-                            <label for="place_id" :class="{'p-error': formErrors.place_id}">Mesto</label>
+                            <label for="place_id" :class="{'p-error': formErrors.place_id}">Mesto *</label>
                             <div>
                                 <Dropdown v-model="form.place_id" 
                                     placeholder="" 
@@ -247,6 +265,7 @@
 import { ref, reactive, watch, computed, onMounted, onBeforeMount, onUnmounted } from 'vue'
 import InputNumber from 'primevue/inputnumber';
 import TreeSelect from 'primevue/treeselect';
+import RadioButton from 'primevue/radiobutton';
 import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
@@ -497,7 +516,7 @@ const beforeSend = (event) => {
 
 //Download file - before uploading file send additional data
 const beforeUploadFiles = (event) => {
-    //event.formData.append('file_tag', 'image');
+    event.formData.append('file_tag', 'image');
     uploadingImages.value = true;
 }
 
@@ -619,7 +638,7 @@ const onLangChange = (event) => {
     //save selected language id
     form.selected_language_id = event.value.id;
     if (event.value) {
-        adStore.adminGetAd(route.params.adId, event.value.id);
+        adStore.adminGetAd(route.params.id, event.value.id);
     }
 }
 

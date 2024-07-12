@@ -11,7 +11,7 @@
         "headerMsg": "Selo na 3 klika",
         "headerSmallMsg": "Petrovac - Despotovac - Žagubica",
         "tourism": "Ekoturizam",
-        "market": "E pijaca",
+        "ad": "E pijaca",
         "news": "E novine",
         "latestContentTitle": "Najnoviji sadržaj",
         "statisticsTitle": "Sadržaj",
@@ -55,6 +55,17 @@
     "trip": {
         "headerMsg": "Turistička tura",
         "attractions": "Znamenitosti"
+    },
+    "ads": {
+        "title": "E-pijaca",
+        "soon": "Uskoro",
+        "category": "Kategorija",
+        "subCategory": "Potkategorija",
+        "price": "Cena",
+        "place": "Mesto",
+        "search": "Pretraga",
+        "results": "Rezultati",
+        "noResults": "Nema rezultata, pokušajte sa drugom pretragom."
     },
     "footer": {
         "link1": "Radio stanice nasih opština",

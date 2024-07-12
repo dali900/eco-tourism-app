@@ -178,6 +178,10 @@ z-index: 2;
         color: var(--color-turquoise2);
     }
 }
+.app-radio-button {
+    height: 15px;
+    width: 15px;
+}
 
 .p-galleria .p-galleria-thumbnail-container {
     background-color: transparent;

@@ -11,7 +11,7 @@
         "headerMsg": "Selo na 3 klika",
         "headerSmallMsg": "Petrovac - Despotovac - Žagubica",
         "tourism": "Ecotourism",
-        "market": "E market",
+        "ad": "E ad",
         "news": "News",
         "latestContentTitle": "Latest Content",
         "statisticsTitle": "Content",
@@ -55,6 +55,17 @@
     "trip": {
         "headerMsg": "Tourist Tour",
         "attractions": "Sights"
+    },
+    "ads": {
+        "title": "E-market",
+        "soon": "Soon",
+        "category": "Category",
+        "subCategory": "Subcategory",
+        "price": "Price",
+        "place": "Place",
+        "search": "Search",
+        "results": "Results",
+        "noResults": "There are no results"
     },
     "footer": {
         "link1": "Radio stations of our municipalities",

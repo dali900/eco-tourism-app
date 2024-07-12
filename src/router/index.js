@@ -4,7 +4,7 @@ import PageNotFound from "../pages/PageNotFound.vue";
 import adminRoutes from "../modules/admin/routes/index"
 import ecoRoutes from "../modules/eco/routes/index"
 import newsRoutes from "../modules/news/routes/index"
-import marketRoutes from "../modules/market/routes/index"
+import adRoutes from "../modules/ads/routes/index"
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -43,11 +43,11 @@ const router = createRouter({
             children: newsRoutes,
         },
         {
-            name: "MarketModule",
-            path: "/market",
+            name: "AdModule",
+            path: "/ads",
             alias: ['/e-novine'],
             component: () => import("@eco/layouts/DefaultLayout.vue"),
-            children: marketRoutes,
+            children: adRoutes,
         },
         {
             path: "/:pathMatch(.*)*",

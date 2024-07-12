@@ -108,6 +108,11 @@ export default [
         component: () => import("../pages/ads/Ads.vue"),
     },
     {
+        path: "ad-categories/",
+        name: "admin-ad-categories",
+        component: () => import("../pages/ads/categories/AdCategories.vue"),
+    },
+    {
         path: "ad/:id?",
         name: "admin-ad",
         component: () => import("../pages/ads/Ad.vue"),
