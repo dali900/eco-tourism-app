@@ -62,6 +62,8 @@
         "category": "Category",
         "subCategory": "Subcategory",
         "price": "Price",
+        "minPrice": "Min price",
+        "maxPrice": "Max price",
         "place": "Place",
         "search": "Search",
         "results": "Results",

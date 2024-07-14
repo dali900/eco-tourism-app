@@ -1,36 +1,54 @@
 <template>
     <div class="app-card">
-        <div class="card-header">
-            <div class="img-wrapper">
-                <slot name="image"></slot>
+        <div class="grid h-full">
+            <div class="col-12 md:col-3 lg:col-4">
+                <div v-if="props.ad.thumbnail" class="img-wrapper h-full">
+                    <img alt="content-img" :src="apiBaseUrl + props.ad.thumbnail.file_url" />
+                </div>
+                <div v-else class="default-img-wrapper">
+                    <img class="default-img" alt="content-img" src="/images/app-logo3-fade.png" />
+                </div>
             </div>
-        </div>
-        <div class="card-body">
-            <h2 class="card-title"><slot name="title"></slot></h2>
-            <div class="card-content">
-                <slot name="content"></slot>
+            <div class="col-12 md:col-9 lg:col-8">
+                <div class="card-content h-full">
+                    <h2 class="title">
+                        {{ props.ad.title }}
+                    </h2>
+                    <div class="description">
+                        {{ props.ad.description }}
+                    </div>
+                    <div class="description">
+                        {{ props.ad.price }}
+                    </div>
+                    <div class="card-footer">
+                        
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <slot name="footer"></slot>
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref, reactive, computed, watch, onMounted } from 'vue'
 
+const props = defineProps({
+    ad: {
+        default: false
+    },
+});
 </script>
 
 <style lang="scss" scoped>
 .app-card {
     display: flex;
     flex-direction: column;
-    padding-bottom: 8px;
-    height: 440px;
-    max-width: 360px;
-    -webkit-box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
-    -moz-box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
-    box-shadow: 1px 8px 19px -12px rgba(0,0,0,0.75);
+    /* padding-bottom: 8px; */
+    height: 300px;
+    width: 100%;
+    -webkit-box-shadow: 1px 8px 19px -12px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 1px 8px 19px -12px rgba(0, 0, 0, 0.75);
+    box-shadow: 1px 8px 19px -12px rgba(0, 0, 0, 0.75);
     box-sizing: border-box;
     border-radius: 15px;
     overflow: hidden;
@@ -38,27 +56,42 @@
     &:hover {
         box-shadow: 1px 5px 19px -3px rgba(15, 49, 53, 0.75);
     }
-    .card-header {
-        .img-wrapper {
-            max-height: 270px;
-            overflow: hidden;
-            text-align: center;
-            :deep(img) {
-                max-width: 360px;
-                height: auto;
-            }
+    .img-wrapper {
+        overflow: hidden;
+        text-align: center;
+        img {
+            max-width: 360px;
+            height: auto;
+        }
+        .default-img {
+            height: 150px;
         }
     }
-    .card-body {
+    .default-img-wrapper {
+        overflow: hidden;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+            align-self: center;
+            max-width: 360px;
+            height: auto;
+        }
+        .default-img {
+            height: 150px;
+        }
+    }
+    .card-content {
         padding: 8px;
         flex: 1;
-        .card-title {
+        .title {
             font-size: var(--font-size-content);
             font-weight: 600;
             margin-top: 4px;
             margin-bottom: 8px;
         }
-        .card-content {
+        .description {
             max-width: 360px;
             display: -webkit-box;
             -webkit-line-clamp: 8;
@@ -70,5 +103,4 @@
         padding: 8px 8px 4px 8px;
     }
 }
-
 </style>

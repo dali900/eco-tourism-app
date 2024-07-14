@@ -116,6 +116,22 @@ export const useAdStore = defineStore('ad', {
             this.loading = true;
             const appLangId = langId || getLangId();
             try {
+                const response = await http.get('/api/ad-categories/'+id+'/'+appLangId);
+                this.category = response.data;
+                this.loading = false;
+                return response.data;
+            } catch (error) {
+                if(env === 'local' || env === 'dev'){
+                    console.log(error);
+                }
+                this.loading = false;
+                throw error;
+            }
+        },
+        async adminGetCatagory(id, langId = ''){
+            this.loading = true;
+            const appLangId = langId || getLangId();
+            try {
                 const response = await http.get('/api/ad-categories/admin/'+id+'/'+appLangId);
                 this.category = response.data;
                 this.loading = false;

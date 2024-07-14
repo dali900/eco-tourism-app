@@ -9,52 +9,112 @@
             <div class="filters">
                 <div class="grid">
                     <div class="field col-12 md:col-6 lg:col-4">
-                        <Dropdown v-model="categoryDropdowns.values.rootCategory" 
-                            class="w-full"
-                            optionLabel="t_name"
-                            :placeholder="t('ads.category')"
-                            :options="rootCategories"
-                            @change="onRootCategoryChange"
-                        />
+                        <FloatLabel class="mb-2">
+                            <Dropdown v-model="categoryDropdowns.values.rootCategory" 
+                                id="rootCategory"
+                                class="w-full"
+                                showClear
+                                optionValue="id"
+                                optionLabel="t_name"
+                                :options="rootCategories"
+                                @change="onRootCategoryChange"
+                            />
+                            <label for="rootCategory">{{ t('ads.category') }}</label>
+                        </FloatLabel>
                     </div>
-                    <div class="field col-12 md:col-6 lg:col-4" v-if="categoryDropdowns.options.subCategory1 && categoryDropdowns.options.subCategory1.length">
-                        <Dropdown v-model="categoryDropdowns.values.subCategory1" 
-                            class="w-full"
-                            optionLabel="t_name"
-                            :placeholder="t('ads.category')"
-                            :options="categoryDropdowns.options.subCategory1"
-                            @change="onSubCategory1IdChange"
-                        />
+                    <div class="field col-12 md:col-6 lg:col-4">
+                        <FloatLabel class="mb-2">
+                            <Dropdown v-model="categoryDropdowns.values.subCategory1" 
+                                id="subCategory1"
+                                class="w-full"
+                                showClear
+                                optionValue="id"
+                                optionLabel="t_name"
+                                :disabled="!categoryDropdowns.options.subCategory1 || !categoryDropdowns.options.subCategory1.length"
+                                :options="categoryDropdowns.options.subCategory1"
+                                @change="onSubCategory1IdChange"
+                            />
+                            <label for="subCategory1">{{ t('ads.subCategory') }}</label>
+                        </FloatLabel>
                     </div>
-                    <div class="field col-12 md:col-6 lg:col-4" v-if="categoryDropdowns.options.subCategory2 && categoryDropdowns.options.subCategory2.length">
-                        <Dropdown v-model="categoryDropdowns.values.subCategory2" 
-                            class="w-full"
-                            optionLabel="t_name"
-                            :placeholder="t('ads.category')"
-                            :options="categoryDropdowns.options.subCategory2"
-                            @change="onSubCategory2IdChange"
-                        />
+                    <div class="field col-12 md:col-6 lg:col-4" v-if="showDropdownSubcategory2">
+                        <FloatLabel class="mb-2">
+                            <Dropdown v-model="categoryDropdowns.values.subCategory2" 
+                                id="subCategory2"
+                                class="w-full"
+                                showClear
+                                optionValue="id"
+                                optionLabel="t_name"
+                                :disabled="!categoryDropdowns.options.subCategory2 || !categoryDropdowns.options.subCategory2.length"
+                                :options="categoryDropdowns.options.subCategory2"
+                                @change="onSubCategory2IdChange"
+                            />
+                            <label for="subCategory2">{{ t('ads.subCategory') }}</label>
+                        </FloatLabel>
                     </div>
+                </div>
+                <div class="grid">
+                    <div class="field col-12 md:col-6 lg:col-4">
+                        <FloatLabel class="mb-2">
+                            <InputNumber 
+                                v-model="filters.min_price.value" 
+                                :useGrouping="false"
+                                inputId="min_price" 
+                                class="w-full"
+                                showButtons
+                                :min="0"
+                                @keyup.enter="search"
+                            />
+                            <label for="min_price">{{ t('ads.minPrice') }}</label>
+                        </FloatLabel>
+                    </div>
+                    <div class="field col-12 md:col-6 lg:col-4">
+                        <FloatLabel class="mb-2">
+                            <InputNumber 
+                                v-model="filters.max_price.value" 
+                                :useGrouping="false"
+                                inputId="max_price" 
+                                class="w-full"
+                                showButtons
+                                :min="0"
+                                @keyup.enter="search"
+                            />
+                            <label for="max_price">{{ t('ads.maxPrice') }}</label>
+                        </FloatLabel>
+                    </div>
+                    <div class="field col-12 md:col-6 lg:col-4">
+                        <FloatLabel class="mb-2">
+                            <Dropdown v-model="filters.place_id.value" 
+                                id="places"
+                                class="w-full"
+                                showClear
+                                optionValue="id"
+                                optionLabel="t_name"
+                                :disabled="!places || !places.length"
+                                :options="places"
+                                @change="onSubCategory2IdChange"
+                            />
+                            <label for="places">{{ t('ads.place') }}</label>
+                        </FloatLabel>
+                    </div>
+                    <div class="field col-12 md:col-6 lg:col-4">
+                        <div>
+                            <Button 
+                                class="btn-d w-full" 
+                                icon="pi pi-search"
+                                :loading="adsLoading"
+                                @click="search"
+                            >
+                                {{ t('ads.search') }} <i class="pl-2 pi pi-search"></i>
+                            </Button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div class="results">
-                <div class="ad-card">
-                    <!-- <AdCard>
-                        <template #image>
-                            <img
-                                v-if="props.attraction.thumbnail"
-                                alt="content-img"
-                                :src="apiBaseUrl + props.attraction.thumbnail.file_url"
-                            />
-                            <img v-else alt="content-img" src="/images/thumbnails/attraction.jpg" />
-                        </template>
-                        <template #title>
-                            {{ props.attraction.t.name }}
-                        </template>
-                        <template #content>
-                            {{ props.attraction.t.summary }}
-                        </template>
-                    </AdCard> -->
+                <div class="ad-card mb-2" v-for="ad in ads">
+                    <AdCard :ad="ad"/>
                 </div>
             </div>
         </div>
@@ -62,23 +122,24 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onBeforeMount } from 'vue';
+import { ref, reactive, watch, computed, onBeforeMount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
-import { useNewsStore } from '@/stores/news';
+import { usePlaceStore } from '@/stores/place';
 import { useAdStore } from '@/stores/ad';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useI18n } from 'vue-i18n';
+import FloatLabel from 'primevue/floatlabel';
 import AdCard from './adCard/AdCard.vue'
 
 const router = useRouter();
 const route = useRoute();
 const { t, locale } = useI18n();
 
-const newsStore = useNewsStore();
+const placeStore = usePlaceStore();
 const adStore = useAdStore();
 const { ads, rootCategories, loading: adsLoading } = storeToRefs(adStore);
-const selectedCategory = ref(null);
+const places = ref(null);
 const categoryDropdowns = reactive({
     values: {//ids
         rootCategory: null,
@@ -90,6 +151,8 @@ const categoryDropdowns = reactive({
         subCategory2: null,
     }
 });
+const minPrice = ref(Number(route.query['min-price']) || null);
+const maxPrice = ref(Number(route.query['max-price']) || null);
 
 const perPage = ref(10);
 const sort = ref({
@@ -104,14 +167,22 @@ const pagination = ref({
 const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     title: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    category_id: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    category_id: { value: Number(route.query['category-id']) || null, matchMode: FilterMatchMode.EQUALS },
+    place_id: { value: Number(route.query['place-id']) || null, matchMode: FilterMatchMode.EQUALS },
+    min_price: { value: Number(route.query['min-price']) || null, matchMode: FilterMatchMode.GREATER_THAN_OR_EQUAL_TO },
+    max_price: { value: Number(route.query['max-price']) || null, matchMode: FilterMatchMode.LESS_THAN_OR_EQUAL_TO },
     description: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
 onBeforeMount(() => {
+    if (route.query['category-id']) {
+        adStore.getCatagory(route.query['category-id']).then(responseData => {
+            setCategoryValues(responseData);
+        });
+    }
     adStore.getRootCategories()
         .then(responseData => {
-            if(responseData.ancestorsAndSelf) {
+            /* if(responseData.ancestorsAndSelf) {
                 let i = 0;
                 for (const filedName in categoryDropdowns.values) {
                     if (categoryDropdowns.values.hasOwnProperty(filedName)) {
@@ -124,22 +195,50 @@ onBeforeMount(() => {
                     }
                 
                 }
-            }
+            } */
         })
     adStore.getAds({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
     })
+    placeStore.getDropdownOptions().then(responseData => {
+        places.value = responseData;
+    })
 });
 
+//translation
 watch(locale, (newVal) => {
+    //get root category translations
     adStore.getRootCategories();
+    //get ads translations
     adStore.getAds({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
-    })
+    });
+    //get places translations
+    placeStore.getDropdownOptions().then(responseData => {
+        places.value = responseData;
+    });
+    //get subcategory1 translations
+    if(categoryDropdowns.values.subCategory1)
+    {
+        adStore.getCategories({filters: {"parent_id": {value: categoryDropdowns.values.rootCategory, matchMode: FilterMatchMode.EQUALS}}})
+            .then( responseData => { 
+                console.log(responseData);
+                categoryDropdowns.options.subCategory1 = responseData.results
+            })
+    }
+    //get subcategory2 translations
+    if(categoryDropdowns.values.subCategory2)
+    {
+        adStore.getCategories({filters: {"parent_id": {value: categoryDropdowns.values.subCategory1, matchMode: FilterMatchMode.EQUALS}}})
+            .then( responseData => { 
+                console.log(responseData);
+                categoryDropdowns.options.subCategory2 = responseData.results
+            })
+    }
 })
 
 //load and filter dropdown options - subtypes based on root type id
@@ -164,13 +263,63 @@ watch( () => categoryDropdowns.values.subCategory1, (newVal, oldVal) => {
     }
 });
 
+const showDropdownSubcategory2 = computed(() => {
+    if (categoryDropdowns.options.subCategory1 && categoryDropdowns.options.subCategory1.length && categoryDropdowns.values.subCategory1) {
+        return true;
+    }
+    return false;
+});
+
+/* watch( filters, (newVal, oldVal) => {
+    
+}, 
+{ deep: true }
+); */
+
+const applyFilters = () => {
+  router.push({
+    query: {
+      "category-id": filters.value.category_id.value || "",
+      "place-id": filters.value.place_id.value || "",
+      "min-price": filters.value.min_price.value || "",
+      "max-price": filters.value.max_price.value || "",
+    }
+  });
+};
+
+const setCategoryValues = (data) => {
+    if(data && data.ancestorsAndSelf) {
+        let i = 0;
+        for (const filedName in categoryDropdowns.values) {
+            if (categoryDropdowns.values.hasOwnProperty(filedName)) {
+                const dropdownValue = categoryDropdowns.values[filedName];
+                const parent = data.ancestorsAndSelf[i];
+                if (parent) {
+                    categoryDropdowns.values[filedName] = parent.id;
+                }
+                i++;
+            }
+        
+        }
+    }
+}
+
+const search = () => {
+    applyFilters();
+    adStore.getAds({
+        sort: sort.value,
+        pagination: pagination.value,
+        filters: filters.value,
+    });
+};
+
 const onPage = (event) => {
     pagination.value.page = event.page + 1;
     if (perPage.value != event.rows) {
         pagination.value.perPage = event.rows;
     }
     router.replace({ query: { page: pagination.value.page } })
-    newsStore.getNews({
+    adStore.getAds({
         sort: sort.value,
         pagination: pagination.value,
         filters: filters.value,
@@ -179,20 +328,19 @@ const onPage = (event) => {
 
 // on change 2. dropdown gets new options, and 3. dropdown options will be empty
 const onRootCategoryChange = (event) => {
-    console.log(event);
     categoryDropdowns.values.subCategory1 = null;
     categoryDropdowns.options.subCategory1 = null;
-    filters.value.category_id.value = event.value.id;
+    filters.value.category_id.value = event.value;
 }
 
 const onSubCategory1IdChange = (event) => {
     categoryDropdowns.values.subCategory2 = null;
     categoryDropdowns.options.subCategory2 = null;
-    filters.value.category_id.value = event.value.id;
+    filters.value.category_id.value = event.value;
 }
 
 const onSubCategory2IdChange = (event) => {
-    filters.value.category_id.value = event.value.id;
+    filters.value.category_id.value = event.value;
 }
 
 </script>
@@ -302,6 +450,15 @@ const onSubCategory2IdChange = (event) => {
                 }
             }
         }
+    }
+    :deep(.p-inputnumber-button-group button){
+        color: var(--color-black-soft);
+        background: transparent;
+        border: 1px solid transparent;
+    }
+    :deep(.p-inputnumber-button-group){
+        position: absolute;
+        right: 1px;
     }
 }
 .gallery-image-wrapper {

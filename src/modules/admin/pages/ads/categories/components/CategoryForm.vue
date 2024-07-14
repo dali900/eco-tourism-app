@@ -137,7 +137,7 @@ watch( openDialog, (newVal, oldVal) => {
             if(props.formData && props.formData.id){
                 languages.value = responseData;
                 selectDefaultLanguage();
-                adStore.getCatagory(props.formData.id, selectedLang.value.id);
+                adStore.adminGetCatagory(props.formData.id, selectedLang.value.id);
             } else {
                 //TODO: kreirati konstantu za default jezik
                 //Za sada defualt jezik je sr latinica, za drugi jezik potrebno je u lokal storage sacuvati lang code
@@ -239,7 +239,7 @@ const onLangChange = (event) => {
     form.selected_language_id = event.value.id;
     if (event.value && props.formData?.id) {
         //fetch translations
-        adStore.getCatagory(props.formData.id, event.value.id)
+        adStore.adminGetCatagory(props.formData.id, event.value.id)
             .then((responseData) => {
                 form.name = responseData.name;
             })
