@@ -103,7 +103,63 @@
                             </div>
                         </div>
                         <div class="field col-12 md:col-6 lg:col-4">
-                            <label for="expires_at_formated" :class="{'p-error': formErrors.start_date}">Ističe *</label>
+                            <label label for="first_name" :class="{'p-error': formErrors.first_name}">Ime *</label>
+                            <div>
+                                <InputText id="first_name" 
+                                    v-model="form.first_name" 
+                                    type="text" 
+                                    :class="{'p-invalid': formErrors.first_name}" 
+                                    @keyup.enter="save"
+                                />
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.first_name}}</small>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-4">
+                            <label label for="last_name" :class="{'p-error': formErrors.last_name}">Prezime *</label>
+                            <div>
+                                <InputText id="last_name" 
+                                    v-model="form.last_name" 
+                                    type="text" 
+                                    :class="{'p-invalid': formErrors.last_name}" 
+                                    @keyup.enter="save"
+                                />
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.last_name}}</small>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-4">
+                            <label label for="phone_number" :class="{'p-error': formErrors.phone_number}">Telefon </label>
+                            <div>
+                                <InputMask
+                                    id="phone"
+                                    v-model="form.phone_number"
+                                    mask="999/99 99 99?99"
+                                    placeholder="064/12 34 567"
+                                />
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.phone_number}}</small>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-4">
+                            <label label for="email" :class="{'p-error': formErrors.email}">Email</label>
+                            <div>
+                                <InputText id="email" 
+                                    v-model="form.email" 
+                                    type="text" 
+                                    :class="{'p-invalid': formErrors.email}" 
+                                    @keyup.enter="save"
+                                />
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.email}}</small>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-6 lg:col-4">
+                            <label for="expires_at_formated" :class="{'p-error': formErrors.expires_at}">Ističe *</label>
                                 <div>
                                     <Calendar inputId="expires_at_formated" v-model="form.expires_at_formated" dateFormat="dd.mm.yy." :inputClass="formErrors.start_date ? 'p-invalid' : ''" @keyup.enter="save" class="calendar-field"/>
                                 </div>
@@ -266,6 +322,7 @@ import { ref, reactive, watch, computed, onMounted, onBeforeMount, onUnmounted }
 import InputNumber from 'primevue/inputnumber';
 import TreeSelect from 'primevue/treeselect';
 import RadioButton from 'primevue/radiobutton';
+import InputMask from 'primevue/inputmask';
 import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
@@ -316,6 +373,10 @@ const filters = ref({
 const form = reactive({
     category_id: null,
     title: "",
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    email: "",
     order_num: null,
     place_id: null,
     suggested: false,
@@ -340,6 +401,10 @@ const formErrors = reactive({
     approved: "",
     suggested: "",
     title: "",
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    email: "",
     description: "",
     price: "",
     currency: "",
@@ -358,6 +423,10 @@ const clearFormErrors = () => {
     formErrors.approved = "";
     formErrors.suggested = "";
     formErrors.title = "";
+    formErrors.first_name = "";
+    formErrors.last_name = "";
+    formErrors.phone_number = "";
+    formErrors.email = "";
     formErrors.description = "";
     formErrors.price = "";
     formErrors.currency = "";
@@ -461,9 +530,9 @@ const save = async () => {
     //Update
     if(route.params.id)
     {
-        form.id = route.params.id;
+        const id = route.params.id;
         disabledSaveBtn.value = true;
-        adStore.update(form, formErrors)
+        adStore.update(id, form, formErrors)
             .then(() => {
                 setFormData(ad.value);
                 toast.add({severity:'success', summary: 'Ažuriranje uspešno!', detail: form.name, life: 3000});
@@ -483,9 +552,9 @@ const save = async () => {
             .then((responseData) => {
                 toast.add({severity:'success', summary: 'Oglas kreirana!', detail: form.name, life: 2000});
                 //redirect user from create to update page
-                router.push({name: 'admin-ads'})
                 disabledSaveBtn.value = false;
                 form.tmp_files = [];
+                router.push({name: 'admin-ads'})
 
             })
             .catch((err) => {

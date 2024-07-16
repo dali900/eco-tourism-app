@@ -1,5 +1,8 @@
 <template>
     <div class="app-card">
+        <div class="price">
+            {{ props.ad.price_formated }} <span class="currency">{{ props.ad.currency }}</span>
+        </div>
         <div class="grid h-full">
             <div class="col-12 md:col-3 lg:col-4">
                 <div v-if="props.ad.thumbnail" class="img-wrapper h-full">
@@ -12,13 +15,36 @@
             <div class="col-12 md:col-9 lg:col-8">
                 <div class="card-content h-full">
                     <h2 class="title">
-                        {{ props.ad.title }}
+                        {{ props.ad.t.title }}
                     </h2>
-                    <div class="description">
-                        {{ props.ad.description }}
+                    <div class="grid mb-3">
+                        <div class="col-12 md:col-4 lg:col-4" v-if="props.ad.category.ancestorsAndSelf">
+                            <div class="item">
+                                <div class="data">
+                                    {{ props.ad.category.ancestorsAndSelf[0].t.name }}
+                                </div>
+                                <div class="label">{{ t('ads.category') }}</div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-4 lg:col-4" v-if="props.ad.category.ancestorsAndSelf && props.ad.category.ancestorsAndSelf.length > 1">
+                            <div class="item">
+                                <div class="data">
+                                    {{ props.ad.category.ancestorsAndSelf[1].t.name }}
+                                </div>
+                                <div class="label">{{ t('ads.subCategory') }}</div>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-4 lg:col-4">
+                            <div class="item">
+                                <div class="data">
+                                    {{ props.ad.place.t.name }}
+                                </div>
+                                <div class="label">{{ t('ads.place') }}</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="description">
-                        {{ props.ad.price }}
+                        {{ props.ad.t.description }}
                     </div>
                     <div class="card-footer">
                         
@@ -31,7 +57,9 @@
 
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
-
+import { useI18n } from 'vue-i18n';
+const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
+const { t } = useI18n();
 const props = defineProps({
     ad: {
         default: false
@@ -51,16 +79,36 @@ const props = defineProps({
     box-shadow: 1px 8px 19px -12px rgba(0, 0, 0, 0.75);
     box-sizing: border-box;
     border-radius: 15px;
+    border: 1px solid var(--color-black-mute);
+    border-bottom: none;
     overflow: hidden;
     transition: 0.1s linear;
+    position: relative;
     &:hover {
         box-shadow: 1px 5px 19px -3px rgba(15, 49, 53, 0.75);
+    }
+    @media screen and (max-width: 768px) {
+        height: auto;
+    }
+    .price {
+        position: absolute;
+        right: 0;
+        padding: 16px;
+        background-color: #6CDF8C;
+        font-size: 16px;
+        font-weight: 600;
+        color: #4d4d4d;
+        border-bottom-left-radius: 15px;
+    }
+    .currency {
+        font-size: 14px;
     }
     .img-wrapper {
         overflow: hidden;
         text-align: center;
+        margin-left: -6px;
         img {
-            max-width: 360px;
+            max-width: 405px;
             height: auto;
         }
         .default-img {
@@ -70,9 +118,11 @@ const props = defineProps({
     .default-img-wrapper {
         overflow: hidden;
         text-align: center;
+        padding: 4px;
         display: flex;
         justify-content: center;
         align-items: center;
+        height: 100%;
         img {
             align-self: center;
             max-width: 360px;
@@ -85,18 +135,33 @@ const props = defineProps({
     .card-content {
         padding: 8px;
         flex: 1;
+        text-align: left;
         .title {
             font-size: var(--font-size-content);
             font-weight: 600;
             margin-top: 4px;
-            margin-bottom: 8px;
+            margin-bottom: 32px;
+        }
+        .data {
+            margin-bottom: 4px;
+        }
+        .label {
+            font-size: 10px;
+            color: var(--text-secondary-color);
+            text-transform: uppercase;
         }
         .description {
-            max-width: 360px;
             display: -webkit-box;
+            line-clamp: 8;
             -webkit-line-clamp: 8;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+        @media screen and (max-width: 768px) {
+            .description {
+                line-clamp: 4;
+                -webkit-line-clamp: 4;
+            }
         }
     }
     .card-footer {

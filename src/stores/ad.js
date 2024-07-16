@@ -220,15 +220,18 @@ export const useAdStore = defineStore('ad', {
             }
         },
         //update response
-        async update(data, errorFields){
+        async update(id, data, errorFields){
             this.loading = true;
             try {            
-                const response = await http.put('/api/ads/'+data.id, data);
+                const response = await http.put('/api/ads/'+id, data);
                 const ad = response.data;
                 if(this.ads && this.ads.length){
                     //replace the existing resource
-                    const index = this.ads.findIndex( el => el.id == data.id);
-                    this.ads[index] = ad;
+                    /* const index = this.ads.findIndex( el => el.id == id);
+                    if (index !== -1){
+                        console.log({ad});
+                        this.ads[index] = ad;
+                    }  */
                 }
                 //if selected ad in form, update it
                 if(this.ad){

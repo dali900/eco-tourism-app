@@ -113,8 +113,13 @@
                 </div>
             </div>
             <div class="results">
-                <div class="ad-card mb-2" v-for="ad in ads">
-                    <AdCard :ad="ad"/>
+                <div class="ad-card mb-4" v-if="ads && ads.length > 0" v-for="ad in ads">
+                    <router-link :to="{ name: 'ad', params: { id: ad.id } }" class="text-link">
+                        <AdCard :ad="ad"/>
+                    </router-link>
+                </div>
+                <div v-else class="mb-3">
+                    {{ t('ads.noResults') }}
                 </div>
             </div>
         </div>
@@ -151,8 +156,6 @@ const categoryDropdowns = reactive({
         subCategory2: null,
     }
 });
-const minPrice = ref(Number(route.query['min-price']) || null);
-const maxPrice = ref(Number(route.query['max-price']) || null);
 
 const perPage = ref(10);
 const sort = ref({
@@ -270,14 +273,9 @@ const showDropdownSubcategory2 = computed(() => {
     return false;
 });
 
-/* watch( filters, (newVal, oldVal) => {
-    
-}, 
-{ deep: true }
-); */
-
 const applyFilters = () => {
   router.push({
+    path: '/ads/',
     query: {
       "category-id": filters.value.category_id.value || "",
       "place-id": filters.value.place_id.value || "",
@@ -372,7 +370,9 @@ const onSubCategory2IdChange = (event) => {
         margin-bottom: 64px;
     }
     .filters {
-
+        border: 1px solid var(--text-light-color);
+        padding: 32px 16px 16px 16px;
+        margin-bottom: 32px;
     }
     .category-title {
         font-size: 26px;

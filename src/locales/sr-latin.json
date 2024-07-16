@@ -67,7 +67,8 @@
         "place": "Mesto",
         "search": "Pretraga",
         "results": "Rezultati",
-        "noResults": "Nema rezultata, pokušajte sa drugom pretragom."
+        "noResults": "Nema rezultata, pokušajte sa drugom pretragom.",
+        "description": "Opis"
     },
     "footer": {
         "link1": "Radio stanice nasih opština",
@@ -80,6 +81,8 @@
         "bottomPart3": "ažuriranje portala na dnevnom nivou"
     },
     "common": {
-        "more": "Više"
+        "more": "Više",
+        "loading": "Učitavanje",
+        "cantFindPage": "Nismo uspeli da pronađemo stranicu koju tražite. Proverite URL adresu ili pokušajte kasnije ponovo."
     }
 }

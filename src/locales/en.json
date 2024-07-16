@@ -67,7 +67,8 @@
         "place": "Place",
         "search": "Search",
         "results": "Results",
-        "noResults": "There are no results"
+        "noResults": "There are no results",
+        "description": "Description"
     },
     "footer": {
         "link1": "Radio stations of our municipalities",
@@ -80,6 +81,8 @@
         "bottomPart3": "portal update daily"
     },
     "common": {
-        "more": "More"
+        "more": "More",
+        "loading": "Loading",
+        "cantFindPage": "We couldn't find the page you are looking for. Check the URL address or try again later."
     }
 }

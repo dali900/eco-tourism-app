@@ -219,7 +219,6 @@ const save = async () => {
         adStore.createCategory(form, formErrors)
             .then((responseData) => {
                 toast.add({severity:'success', summary: 'Kreiran nova kategorija!', detail: form.name, life: 3000});
-                console.log(responseData);
                 emit('created', responseData);
                 closeAndClearForm();
             })
