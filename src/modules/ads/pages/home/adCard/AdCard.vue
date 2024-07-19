@@ -1,6 +1,6 @@
 <template>
     <div class="app-card">
-        <div class="price">
+        <div class="price-mobile">
             {{ props.ad.price_formated }} <span class="currency">{{ props.ad.currency }}</span>
         </div>
         <div class="grid h-full">
@@ -14,9 +14,16 @@
             </div>
             <div class="col-12 md:col-9 lg:col-8">
                 <div class="card-content h-full">
-                    <h2 class="title">
-                        {{ props.ad.t.title }}
-                    </h2>
+                    <div class="header">
+                        <h2 class="title">
+                            {{ props.ad.t.title }}
+                        </h2>
+                        <div class="price-wrapper">
+                            <div class="price">
+                                {{ props.ad.price_formated }} <span class="currency">{{ props.ad.currency }}</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="grid mb-3">
                         <div class="col-12 md:col-4 lg:col-4" v-if="props.ad.category.ancestorsAndSelf">
                             <div class="item">
@@ -90,7 +97,8 @@ const props = defineProps({
     @media screen and (max-width: 768px) {
         height: auto;
     }
-    .price {
+    .price-mobile {
+        display: none;
         position: absolute;
         right: 0;
         padding: 16px;
@@ -99,9 +107,9 @@ const props = defineProps({
         font-weight: 600;
         color: #4d4d4d;
         border-bottom-left-radius: 15px;
-    }
-    .currency {
-        font-size: 14px;
+        @media screen and (max-width: 768px) {
+            display: block;
+        }
     }
     .img-wrapper {
         overflow: hidden;
@@ -136,11 +144,35 @@ const props = defineProps({
         padding: 8px;
         flex: 1;
         text-align: left;
-        .title {
-            font-size: var(--font-size-content);
-            font-weight: 600;
-            margin-top: 4px;
-            margin-bottom: 32px;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            .title {
+                font-size: var(--font-size-content);
+                font-weight: 600;
+                margin-top: 4px;
+                margin-bottom: 32px;
+            }
+            .price-wrapper {
+                flex: 0 0 auto;
+                display: block;
+                @media screen and (max-width: 768px) {
+                display: none;
+            }
+            }
+            .price {
+                padding: 16px;
+                background-color: #6CDF8C;
+                font-size: 16px;
+                font-weight: 600;
+                color: #4d4d4d;
+                border-bottom-left-radius: 15px;
+                margin-top: -8px;
+                margin-right: -8px;
+            }
+            .currency {
+                font-size: 14px;
+            }
         }
         .data {
             margin-bottom: 4px;
@@ -152,8 +184,8 @@ const props = defineProps({
         }
         .description {
             display: -webkit-box;
-            line-clamp: 8;
-            -webkit-line-clamp: 8;
+            line-clamp: 7;
+            -webkit-line-clamp: 7;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }

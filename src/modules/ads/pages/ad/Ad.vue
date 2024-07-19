@@ -1,5 +1,8 @@
 <template>
     <div class="ad-container">
+        <!-- <div class="full-screen-gallery">
+
+        </div> -->
         <div v-if="ad" class="ad">
             <div class="header">
                 <div class="title">
@@ -12,7 +15,7 @@
             <div class="ad-data">
                 <div class="grid">
                     <div class="field col-12 md:col-6 lg:col-6">
-                        <div class="images">
+                        <!-- <div class="images">
                             <Splide v-if="ad.images" ref="mainSplideRef" :options="mainOptions" aria-label="My Favorite Images">
                                 <SplideSlide v-for="img in ad.images">
                                     <img class="splide-img" :src="apiBaseUrl+img.file_url" :alt="ad.title">
@@ -25,6 +28,46 @@
                                     <img class="splide-img" :src="apiBaseUrl+img.file_url" :alt="ad.title">
                                 </SplideSlide>
                             </Splide>
+                        </div> -->
+                        <!-- <div class="imagess">
+                            <lightgallery
+                                :items="ad.images"
+                                :settings="{ 
+                                    speed: 500, 
+                                    plugins: plugins,
+                                }"
+                            >
+                                <a v-for="img in ad.images" :key="img.id" :href="apiBaseUrl+img.file_url">
+                                    <img :alt="img.original_name" :src="apiBaseUrl+img.file_url" />
+                                </a>
+                            </lightgallery>
+                        </div> -->
+                        <div class="images">
+                            <Galleria
+                                :value="ad.images"
+                                :responsiveOptions="responsiveOptions"
+                                :numVisible="5"
+                            >
+                                <template #item="slotProps">
+                                    <div class="gallery-image-wrapper">
+                                        <Image
+                                            :src="apiBaseUrl + slotProps.item.file_url"
+                                            :alt="slotProps.item.original_name"
+                                            imageClass="gallery-image"
+                                            preview
+                                        />
+                                    </div>
+                                </template>
+                                <template #thumbnail="slotProps">
+                                    <div class="gallery-thumbnail-wrapper">
+                                        <img
+                                            :src="apiBaseUrl + slotProps.item.file_url"
+                                            :alt="slotProps.item.original_name"
+                                            class="thumbnail-image"
+                                        />
+                                    </div>
+                                </template>
+                            </Galleria>
                         </div>
                     </div>
                     <div class="field col-12 md:col-6 lg:col-6">
@@ -80,6 +123,16 @@ import { useRouter, useRoute } from 'vue-router';
 import { usePlaceStore } from '@/stores/place';
 import { useAdStore } from '@/stores/ad';
 import { useI18n } from 'vue-i18n';
+import Galleria from 'primevue/galleria';
+import Image from 'primevue/image';
+import { responsiveOptions } from '@/constants/gallerySettings'
+
+import Lightgallery from 'lightgallery/vue';
+import lgThumbnail from 'lightgallery/plugins/thumbnail';
+import lgZoom from 'lightgallery/plugins/zoom';
+
+// If you are using scss you can skip the css imports below and use scss instead
+import 'lightgallery/scss/lightgallery.scss';
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
 const router = useRouter();
@@ -92,13 +145,16 @@ const { ad, loading } = storeToRefs(adStore);
 const mainSplideRef = ref(null);
 const thumbnailSplideRef = ref(null);
 const timeout = ref(null);
+const plugins = ref([lgThumbnail, lgZoom]);
 
 const mainOptions = {
       type      : 'loop',
-      perPage   : 2,
+      perPage   : 1,
       perMove   : 1,
       gap       : '1rem',
       pagination: false,
+      width     : '100vw',
+      height    : '100vh',
     };
 
 const thumbsOptions = {
@@ -143,8 +199,18 @@ watch(locale, (newVal) => {
     adStore.getAd(route.params.id);
 })
 
+const images = computed(() => {
+    if (ad) {
+        return ad.images.map( img => apiBaseUrl.img.file_url);
+    }
+    return [];
+})
+
 </script>
 <style scoped lang="scss">
+/* @import 'lightgallery/css/lightgallery.css';
+@import 'lightgallery/css/lg-thumbnail.css';
+@import 'lightgallery/css/lg-zoom.css'; */
 .ad-container {
     padding: 16px 16px;
     display: flex;
@@ -234,6 +300,14 @@ watch(locale, (newVal) => {
             margin-bottom: 24px;
         }
     }
-    
+    .full-screen-gallery {
+        z-index: 99999999;
+        position: absolute;
+        height: 100vh;
+        width: 100vw;
+        top: -60px;
+        overflow: hidden;
+        background-color: grey;
+    }
 }
 </style>
