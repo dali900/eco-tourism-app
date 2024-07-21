@@ -1,9 +1,37 @@
 <template>
     <div class="ad-container">
-        <!-- <div class="full-screen-gallery">
-
-        </div> -->
         <div v-if="ad" class="ad">
+            <div class="full-screen-gallery">
+                <Galleria v-if="ad.images && ad.images.length"
+                    v-model:visible="displayBasic"
+                    :value="ad.images"
+                    :responsiveOptions="fullScreenOptions"
+                    :circular="true"
+                    :numVisible="5"
+                    :fullScreen="true"
+                    :showItemNavigators="true"
+                >
+                    <template #item="slotProps">
+                        <div class="gallery-image-wrapper-full-screen">
+                            <img
+                                class="gallery-image-full-screen"
+                                :src="apiBaseUrl + slotProps.item.file_url"
+                                :alt="slotProps.item.original_name"
+                                @click="openFullScreenGalleria"
+                            />
+                        </div>
+                    </template>
+                    <template #thumbnail="slotProps">
+                        <div class="gallery-thumbnail-wrapper">
+                            <img
+                                :src="apiBaseUrl + slotProps.item.file_url"
+                                :alt="slotProps.item.original_name"
+                                class="thumbnail-image"
+                            />
+                        </div>
+                    </template>
+                </Galleria>
+            </div>
             <div class="header">
                 <div class="title">
                     {{ ad.t.title }}
@@ -15,46 +43,20 @@
             <div class="ad-data">
                 <div class="grid">
                     <div class="field col-12 md:col-6 lg:col-6">
-                        <!-- <div class="images">
-                            <Splide v-if="ad.images" ref="mainSplideRef" :options="mainOptions" aria-label="My Favorite Images">
-                                <SplideSlide v-for="img in ad.images">
-                                    <img class="splide-img" :src="apiBaseUrl+img.file_url" :alt="ad.title">
-                                </SplideSlide>
-                            </Splide>
-                        </div>
                         <div class="images">
-                            <Splide v-if="ad.images" ref="thumbnailSplideRef" :options="thumbsOptions" aria-label="My Favorite Images">
-                                <SplideSlide v-for="img in ad.images">
-                                    <img class="splide-img" :src="apiBaseUrl+img.file_url" :alt="ad.title">
-                                </SplideSlide>
-                            </Splide>
-                        </div> -->
-                        <!-- <div class="imagess">
-                            <lightgallery
-                                :items="ad.images"
-                                :settings="{ 
-                                    speed: 500, 
-                                    plugins: plugins,
-                                }"
-                            >
-                                <a v-for="img in ad.images" :key="img.id" :href="apiBaseUrl+img.file_url">
-                                    <img :alt="img.original_name" :src="apiBaseUrl+img.file_url" />
-                                </a>
-                            </lightgallery>
-                        </div> -->
-                        <div class="images">
-                            <Galleria
+                            <Galleria v-if="ad.images && ad.images.length"
                                 :value="ad.images"
                                 :responsiveOptions="responsiveOptions"
                                 :numVisible="5"
+                                :circular="true"
                             >
                                 <template #item="slotProps">
                                     <div class="gallery-image-wrapper">
-                                        <Image
+                                        <img
+                                            class="gallery-image"
                                             :src="apiBaseUrl + slotProps.item.file_url"
                                             :alt="slotProps.item.original_name"
-                                            imageClass="gallery-image"
-                                            preview
+                                            @click="openFullScreenGalleria"
                                         />
                                     </div>
                                 </template>
@@ -68,6 +70,9 @@
                                     </div>
                                 </template>
                             </Galleria>
+                            <div v-else>
+                                <img class="default-img" alt="content-img" src="/images/app-logo3-fade.png" />
+                            </div>
                         </div>
                     </div>
                     <div class="field col-12 md:col-6 lg:col-6">
@@ -115,60 +120,26 @@
     </div>
 </template>
 <script setup>
-import '@splidejs/vue-splide/css';
 import { ref, reactive, watch, computed, onBeforeMount, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import { Splide, SplideSlide } from '@splidejs/vue-splide';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
 import { usePlaceStore } from '@/stores/place';
 import { useAdStore } from '@/stores/ad';
 import { useI18n } from 'vue-i18n';
 import Galleria from 'primevue/galleria';
-import Image from 'primevue/image';
-import { responsiveOptions } from '@/constants/gallerySettings'
-
-import Lightgallery from 'lightgallery/vue';
-import lgThumbnail from 'lightgallery/plugins/thumbnail';
-import lgZoom from 'lightgallery/plugins/zoom';
-
-// If you are using scss you can skip the css imports below and use scss instead
-import 'lightgallery/scss/lightgallery.scss';
+import { responsiveOptions, fullScreenOptions } from '@/constants/gallerySettings'
 
 const apiBaseUrl = import.meta.env.VITE_BASE_API_URL;
-const router = useRouter();
 const route = useRoute();
 const { t, locale } = useI18n();
 
-const placeStore = usePlaceStore();
 const adStore = useAdStore();
 const { ad, loading } = storeToRefs(adStore);
 const mainSplideRef = ref(null);
 const thumbnailSplideRef = ref(null);
 const timeout = ref(null);
-const plugins = ref([lgThumbnail, lgZoom]);
-
-const mainOptions = {
-      type      : 'loop',
-      perPage   : 1,
-      perMove   : 1,
-      gap       : '1rem',
-      pagination: false,
-      width     : '100vw',
-      height    : '100vh',
-    };
-
-const thumbsOptions = {
-      type        : 'slide',
-      rewind      : true,
-      gap         : '1rem',
-      pagination  : false,
-      fixedWidth  : 110,
-      fixedHeight : 70,
-      cover       : true,
-      focus       : 'center',
-      isNavigation: true,
-      updateOnMove: true,
-    };
+const fullScreenGalleria = ref(false);
+const displayBasic = ref(false);
 
 onBeforeMount(() => {
     if (route.params.id) {
@@ -177,18 +148,13 @@ onBeforeMount(() => {
 });
 
 onMounted( () => {
-    /* setTimeout(()=>{
-        const thumbsSplide = thumbnailSplideRef.value?.splide;
-        mainSplideRef.value?.sync( thumbsSplide );
-        
-    },1000) */
-    const interval = setInterval(() => {
+    /* const interval = setInterval(() => {
       if (mainSplideRef.value) {
         const thumbsSplide = thumbnailSplideRef.value?.splide;
         mainSplideRef.value?.sync( thumbsSplide );
         clearInterval(interval)
       }
-    }, 50)
+    }, 50) */
 });
 
 onBeforeUnmount(() => {
@@ -199,18 +165,13 @@ watch(locale, (newVal) => {
     adStore.getAd(route.params.id);
 })
 
-const images = computed(() => {
-    if (ad) {
-        return ad.images.map( img => apiBaseUrl.img.file_url);
-    }
-    return [];
-})
+const openFullScreenGalleria = () => {
+    fullScreenGalleria.value = true;
+    displayBasic.value = true;
+};
 
 </script>
 <style scoped lang="scss">
-/* @import 'lightgallery/css/lightgallery.css';
-@import 'lightgallery/css/lg-thumbnail.css';
-@import 'lightgallery/css/lg-zoom.css'; */
 .ad-container {
     padding: 16px 16px;
     display: flex;
@@ -247,6 +208,12 @@ const images = computed(() => {
             width: 440px;
             height: 100%;
             border: 1px solid var(--color-black-mute);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .default-img {
+                height: 150px;
+            }
             :deep(.splide-img) {
                 max-height: 330px;
                 width: auto;
@@ -301,13 +268,59 @@ const images = computed(() => {
         }
     }
     .full-screen-gallery {
-        z-index: 99999999;
-        position: absolute;
-        height: 100vh;
-        width: 100vw;
-        top: -60px;
-        overflow: hidden;
-        background-color: grey;
+        
+    }
+}
+.gallery-image-wrapper {
+    height: 480px;
+    max-width: 640px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.gallery-image-wrapper-full-screen {
+    height: auto;
+    max-width: 1440px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+:deep(.gallery-image) {
+    width: 100%;
+    max-height: 500px;
+    /* height: auto; */
+    display: block;
+    cursor: pointer;
+}
+:deep(.gallery-image-full-screen) {
+    width: auto;
+    max-height: 768px;
+    /* height: auto; */
+    display: block;
+}
+.gallery-thumbnail-wrapper {
+    max-width: 100px;
+    overflow: hidden;
+}
+.thumbnail-image {
+    max-height: 100px;
+    width: auto;
+}
+@media screen and (max-width: 768px) {
+    :deep(.gallery-image-full-screen) {
+        width: 440px;
+        height: auto;
+        /* height: auto; */
+        display: block;
+    }
+}
+@media screen and (max-width: 1200px) {
+    :deep(.gallery-image-full-screen) {
+        max-width: 768px;
+        height: auto;
+        /* height: auto; */
+        display: block;
     }
 }
 </style>

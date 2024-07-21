@@ -113,10 +113,15 @@
                 </div>
             </div>
             <div class="results">
-                <div class="ad-card mb-4" v-if="ads && ads.length > 0" v-for="ad in ads">
-                    <router-link :to="{ name: 'ad', params: { id: ad.id } }" class="text-link">
-                        <AdCard :ad="ad"/>
-                    </router-link>
+                <div v-if="ads && ads.length > 0">
+                    <div class="ad-card mb-4" v-for="ad in ads">
+                        <router-link :to="{ name: 'ad', params: { id: ad.id } }" class="text-link">
+                            <AdCard :ad="ad"/>
+                        </router-link>
+                    </div>
+                </div>
+                <div v-else-if="adsLoading" class="mb-3">
+                    {{ t('common.loading') }}...
                 </div>
                 <div v-else class="mb-3">
                     {{ t('ads.noResults') }}
@@ -143,7 +148,7 @@ const { t, locale } = useI18n();
 
 const placeStore = usePlaceStore();
 const adStore = useAdStore();
-const { ads, rootCategories, loading: adsLoading } = storeToRefs(adStore);
+const { ads, rootCategories, adsLoading } = storeToRefs(adStore);
 const places = ref(null);
 const categoryDropdowns = reactive({
     values: {//ids

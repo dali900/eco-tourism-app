@@ -8,6 +8,7 @@ const env = import.meta.env.VITE_APP_ENV;
 export const useAdStore = defineStore('ad', {
     state: () => ({
         loading: false,
+        adsLoading: false,
         category: null,
         categories: null,
         categoriesTotal: null,
@@ -146,20 +147,20 @@ export const useAdStore = defineStore('ad', {
         },
         //get filtered and paginated resources
         async getAds(params){
-            this.loading = true;
+            this.adsLoading = true;
             this.ad = null;
             try {
-                const urlParams = parseFilterParams(params);             
+                const urlParams = parseFilterParams(params);         
                 const response = await http.get('/api/ads', urlParams);
                 this.ads = response.data.results;
                 this.adsTotal = response.data.pagination.total;
-                this.loading = false;
+                this.adsLoading = false;    
                 return response.data;
             } catch (error) {
                 if(env === 'local' || env === 'dev'){
                     console.log(error);
                 }
-                this.loading = false;
+                this.adsLoading = false;
                 throw error;
             }
         },
