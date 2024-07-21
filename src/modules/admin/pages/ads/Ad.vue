@@ -225,7 +225,7 @@
                                 <small class="p-error">{{formErrors.suggested}}</small>
                             </div>
                         </div> -->
-                        <div class="field col-12 md:col-6 lg:col-4" v-if="authStore.hasEditorAccess()">
+                        <!-- <div class="field col-12 md:col-6 lg:col-4" v-if="authStore.hasEditorAccess()">
                             <div>
                                 <Checkbox
                                     inputId="approved"
@@ -238,7 +238,7 @@
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.approved}}</small>
                             </div>
-                        </div>
+                        </div> -->
                         <div v-if="canEdit" class="field col-12 md:col-12 lg:col-12">
                             <label :class="{'p-error': formErrors.images}">Slike</label>
                             <div>
