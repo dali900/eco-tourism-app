@@ -222,7 +222,7 @@
                     </div>
                 </div>
                 <div class="list">
-                    <div class="grid partner-row">
+                    <div class="grid flex-justify-center partner-row">
                         <div class="col-12 md:col-6 lg:col-2">
                             <div class="partner">
                                 {{ t('home.partnersList.p1') }}
@@ -245,84 +245,13 @@
                         </div>
                         <div class="col-12 md:col-6 lg:col-2">
                             <div class="partner">
-                                Dragan Vlajic
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                Dragan Vlajic
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid partner-row">
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                {{ t('home.partnersList.p1') }}
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                {{ t('home.partnersList.p2') }}
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                {{ t('home.partnersList.p3') }}
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                {{ t('home.partnersList.p4') }}
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                Dragan Vlajic
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                Dragan Vlajic
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid partner-row">
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                {{ t('home.partnersList.p1') }}
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                {{ t('home.partnersList.p2') }}
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                {{ t('home.partnersList.p3') }}
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                {{ t('home.partnersList.p4') }}
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                Dragan Vlajic
-                            </div>
-                        </div>
-                        <div class="col-12 md:col-6 lg:col-2">
-                            <div class="partner">
-                                Dragan Vlajic
+                                {{ t('home.partnersList.p5') }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        
 
         <div class="partners">
 
