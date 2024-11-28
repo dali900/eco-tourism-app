@@ -80,20 +80,25 @@
                         </div>
                         <div class="field col-12">
                             <label for="text" :class="{'p-error': formErrors.text}">Sadržaj</label>
-                            <div>
-                                <Textarea id="text" type="text" v-model="form.text" :class="{'p-invalid': formErrors.text}" rows="10"/>
+                            <div :class="{'error-border': formErrors.text}">
+                                <!-- <Textarea id="text" type="text" v-model="form.text" :class="{'p-invalid': formErrors.text}" rows="10"/> -->
+                                <jodit-editor 
+                                    v-model="form.text" 
+                                    :config="{height: 400, zIndex: 21}"
+                                    :buttons="editorButtons"
+                                />
                             </div>
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.text}}</small>
                             </div>
                         </div>
                         <div class="field col-12 md:col-6 lg:col-4">
-                            <label for="root_category" :class="{'p-error': formErrors.category_id}">Kategorija *</label>
+                            <label for="root_category" :class="{'p-error': formErrors.category_ids}">Kategorija *</label>
                             <div>
-                                <TreeSelect v-model="selectedCategoryValues" :options="tree" selectionMode="multiple" display="chip" placeholder="Izaberi kategoriju" class="md:w-20rem w-full" />
+                                <TreeSelect v-model="selectedCategoryValues" :options="tree" selectionMode="multiple" display="chip" placeholder="Izaberi kategoriju" class="md:w-20rem w-full" :class="{'p-invalid': formErrors.category_ids}"/>
                             </div>
                             <div class="error-field">
-                                <small class="p-error">{{formErrors.category_id}}</small>
+                                <small class="p-error">{{formErrors.category_ids}}</small>
                             </div>
                         </div>
                         <div class="field col-12 md:col-6 lg:col-4">
@@ -199,6 +204,9 @@ import { useNewsStore } from '@/stores/news'
 import { useAuthStore } from '@/stores/auth'
 import { useFileStore } from '@admin/stores/file'
 import { useGlobalStore } from '@/stores/global'
+import { editorButtons } from '@/constants/editorOptions'
+import { JoditEditor } from 'jodit-vue'
+import 'jodit/build/jodit.min.css'
 import TreeSelect from 'primevue/treeselect';
 import dateTool from '@/util/dateTool'
 import NoAccess from '../noAccess/NoAccess.vue'
@@ -568,5 +576,11 @@ input.p-invalid{
 .thumbnail-image {
     max-height: 100px;
     width: auto;
+}
+:deep(.jodit-toolbar__box) {
+    z-index: 1 !important;
+}
+.error-border {
+    border: 1px solid red;
 }
 </style>

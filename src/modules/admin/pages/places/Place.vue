@@ -75,8 +75,13 @@
                         </div>
                         <div class="field col-12">
                             <label for="description" :class="{'p-error': formErrors.description}">Opis</label>
-                            <div>
-                                <Textarea id="description" type="text" v-model="form.description" :class="{'p-invalid': formErrors.description}" rows="10"/>
+                            <div :class="{'error-border': formErrors.description}">
+                                <!-- <Textarea id="description" type="text" v-model="form.description" :class="{'p-invalid': formErrors.description}" rows="10"/> -->
+                                <jodit-editor 
+                                    v-model="form.description" 
+                                    :config="{height: 400, zIndex: 21}"
+                                    :buttons="editorButtons"
+                                />
                             </div>
                             <small class="p-error">{{formErrors.description}}</small>
                         </div>
@@ -169,6 +174,9 @@ import { usePlaceStore } from '@/stores/place'
 import { useAuthStore } from '@/stores/auth'
 import { useFileStore } from '@admin/stores/file'
 import { useGlobalStore } from '@/stores/global'
+import { editorButtons } from '@/constants/editorOptions'
+import { JoditEditor } from 'jodit-vue'
+import 'jodit/build/jodit.min.css'
 import NoAccess from '../noAccess/NoAccess.vue'
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
@@ -560,5 +568,11 @@ input.p-invalid{
 .thumbnail-image {
     max-height: 100px;
     width: auto;
+}
+:deep(.jodit-toolbar__box) {
+    z-index: 1 !important;
+}
+.error-border {
+    border: 1px solid red;
 }
 </style>

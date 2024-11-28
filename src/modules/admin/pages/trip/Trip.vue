@@ -85,32 +85,7 @@
                                 <jodit-editor 
                                     v-model="form.text" 
                                     :config="{height: 400, zIndex: 21}"
-                                    :buttons="[
-                                        'source', '|',
-                                        'bold',
-                                        'strikethrough',
-                                        'underline',
-                                        'italic', '|',
-                                        'ul',
-                                        'ol', '|',
-                                        'outdent', 'indent',  '|',
-                                        'font',
-                                        'fontsize',
-                                        'brush',
-                                        'paragraph', '|',
-                                        /* 'file',
-                                        'image',
-                                        'video',
-                                        'table',
-                                        'link', '|', */
-                                        'align', 'undo', 'redo', '|',
-                                        'hr',
-                                        'eraser',
-                                        'copyformat', '|',
-                                        'symbol',
-                                        'fullsize',
-                                        'print',
-                                        'about']"
+                                    :buttons="editorButtons"
                                 />
                             </div>
                             <div class="error-field">
@@ -242,6 +217,7 @@ import NoAccess from '../noAccess/NoAccess.vue'
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
 import 'jodit/build/jodit.min.css'
+import { editorButtons } from '@/constants/editorOptions'
 import { JoditEditor } from 'jodit-vue'
 import { responsiveOptions } from '@/constants/gallerySettings'
 

@@ -71,8 +71,14 @@
                         </div>
                         <div class="field col-12">
                             <label for="content" :class="{'p-error': formErrors.content}">Sadržaj *</label>
-                            <div>
-                                <Textarea id="content" type="text" v-model="form.content" :class="{'p-invalid': formErrors.content}" rows="10"/>
+                            <div :class="{'error-border': formErrors.content}">
+                                <!-- <Textarea id="content" type="text" v-model="form.content" :class="{'p-invalid': formErrors.content}" rows="10"/> -->
+                                <jodit-editor 
+                                    v-model="form.content" 
+                                    
+                                    :config="{height: 400, zIndex: 21}"
+                                    :buttons="editorButtons"
+                                />
                             </div>
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.content}}</small>
@@ -404,6 +410,9 @@ import { usePlaceStore } from '@/stores/place'
 import { useFileStore } from '@admin/stores/file'
 import { getSelectedApp } from '../../util/general'
 import dateTool from '@/util/dateTool'
+import { editorButtons } from '@/constants/editorOptions'
+import { JoditEditor } from 'jodit-vue'
+import 'jodit/build/jodit.min.css'
 import NoAccess from '../noAccess/NoAccess.vue'
 import Galleria from 'primevue/galleria';
 import Image from 'primevue/image';
@@ -897,5 +906,11 @@ input.p-invalid{
 .thumbnail-image {
     max-height: 100px;
     width: auto;
+}
+:deep(.jodit-toolbar__box) {
+    z-index: 1 !important;
+}
+.error-border {
+    border: 1px solid red;
 }
 </style>

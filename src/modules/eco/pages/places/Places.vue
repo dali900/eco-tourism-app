@@ -25,7 +25,7 @@
                         <div class="">
                             <router-link :to="{ name: 'place', params: { id: item.id } }" class="text-link">
                                 <div class="name">{{ item.t.name }}</div>
-                                <div class="text">{{ item.t.description }}</div>
+                                <div class="text" v-html="item.t.description"></div>
                             </router-link>
                         </div>
                     </div>
