@@ -20,13 +20,25 @@
         "places": "Mesta",
         "tours": "Ture",
         "suggestionTitle": "Naša preporuka",
-        "partnersTitle": "Osnvači i prijatelji sajta",
+        "partnersTitle": "OSNIVAČI:",
         "partnersList": {
-            "p1": "Bojan Milovanović Lipovica",
-            "p2": "Bane Jovanović Sige",
-            "p3": "Udruženje žena Ćovdin",
-            "p4": "Farma Cvjetinović Zlatovo",
-            "p5": "Dragan Vlajić"
+            "p1": "MILOŠ MILOŠEVIĆ",
+            "p2": "BANE JOVANOVIĆ",
+            "p3": "ŽELJKO MILIĆ",
+            "p4": "BOJAN MILANOVIĆ",
+            "p5": "DANKO NOVAKOVIĆ",
+            "p6": "DANIJEL GRUJIĆ",
+            "p7": "ALEKSANDAR MILADINOVIĆ",
+            "p8": "DARKO CVJETINOVIĆ",
+            "p9": "MILIJADA MILIĆ",
+            "p10": "GORICA MARINKOVIĆ"
+        },
+        "membersList": {
+            "m1": "Bojan Milovanović Lipovica",
+            "m2": "Bane Jovanović Sige",
+            "m3": "Udruženje žena Ćovdin",
+            "m4": "Farma Cvjetinović Zlatovo",
+            "m5": "Dragan Vlajić"
         }
     },
     "attractions": {

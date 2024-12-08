@@ -248,6 +248,31 @@
                                 {{ t('home.partnersList.p5') }}
                             </div>
                         </div>
+                        <div class="col-12 md:col-6 lg:col-2">
+                            <div class="partner">
+                                {{ t('home.partnersList.p6') }}
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2">
+                            <div class="partner">
+                                {{ t('home.partnersList.p7') }}
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2">
+                            <div class="partner">
+                                {{ t('home.partnersList.p8') }}
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2">
+                            <div class="partner">
+                                {{ t('home.partnersList.p9') }}
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6 lg:col-2">
+                            <div class="partner">
+                                {{ t('home.partnersList.p10') }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
