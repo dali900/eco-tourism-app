@@ -78,6 +78,7 @@
         "minPrice": "Cena od",
         "maxPrice": "Cena do",
         "place": "Mesto",
+        "seller": "Prodavac",
         "search": "Pretraga",
         "results": "Rezultati",
         "noResults": "Nema rezultata, pokušajte sa drugom pretragom.",

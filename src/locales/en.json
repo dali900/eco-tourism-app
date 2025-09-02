@@ -78,6 +78,7 @@
         "minPrice": "Min price",
         "maxPrice": "Max price",
         "place": "Place",
+        "seller": "Seller",
         "search": "Search",
         "results": "Results",
         "noResults": "There are no results",

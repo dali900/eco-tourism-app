@@ -50,9 +50,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="description">
-                        {{ props.ad.t.description }}
-                    </div>
+                    <div class="description" v-html="props.ad.description"></div>
                     <div class="card-footer">
                         
                     </div>

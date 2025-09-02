@@ -26,6 +26,8 @@ export const editorButtons = [
     'undo',
     'redo',
     '|',
+    'link',
+    '|',
     'hr',
     'eraser',
     'copyformat',

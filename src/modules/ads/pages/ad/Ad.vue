@@ -85,12 +85,17 @@
                                 <div class="data">{{ ad.place.t.name }}</div>
                                 <div class="label">{{ t('ads.place') }}</div>
                             </div>
+                            <div class="data-item">
+                                <div class="data">{{ ad.first_name }} {{ ad.last_name }}</div>
+                                <div class="label">{{ t('ads.seller') }}</div>
+                            </div>
                             <div class="data-item" v-if="ad.phone_number">
                                 <div class="contact">
-                                    <div>{{ ad.t.first_name }}</div>
-                                    <div>
-                                        <i class="pi pi-phone mr-2"></i> {{ ad.phone_number }}
-                                    </div>
+                                    <a :href="`tel:${ad.phone_number}`" style="color: inherit; text-decoration: none;">
+                                        <div>
+                                            <i class="pi pi-phone mr-2"></i> {{ ad.phone_number }}
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                             <div class="data-item" v-if="ad.email" :title="ad.email">
@@ -105,9 +110,7 @@
                     <div class="description-title">
                         {{ t('ads.description') }}
                     </div>
-                    <div class="description-content">
-                        {{ ad.t.description }}
-                    </div>
+                    <div class="description-content" v-html="ad.description"></div>
                 </div>
             </div>
         </div>

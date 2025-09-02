@@ -170,7 +170,12 @@
                         <div class="field col-12">
                             <label for="description" :class="{'p-error': formErrors.description}">Opis *</label>
                             <div>
-                                <Textarea id="description" type="text" v-model="form.description" :class="{'p-invalid': formErrors.description}" rows="10"/>
+                                <!-- <Textarea id="description" type="text" v-model="form.description" :class="{'p-invalid': formErrors.description}" rows="10"/> -->
+                                <jodit-editor 
+                                    v-model="form.description" 
+                                    :config="{height: 400, zIndex: 21}"
+                                    :buttons="editorButtons"
+                                />
                             </div>
                             <div class="error-field">
                                 <small class="p-error">{{formErrors.description}}</small>
@@ -333,6 +338,9 @@ import { useAuthStore } from '@/stores/auth'
 import { useGlobalStore } from '@/stores/global'
 import { usePlaceStore } from '@/stores/place'
 import { useFileStore } from '@admin/stores/file'
+import { JoditEditor } from 'jodit-vue'
+import 'jodit/build/jodit.min.css'
+import { editorButtons } from '@/constants/editorOptions'
 import { getSelectedApp } from '../../util/general'
 import dateTool from '@/util/dateTool'
 import NoAccess from '../noAccess/NoAccess.vue'
