@@ -90,13 +90,13 @@
                                 <div class="label">{{ t('ads.seller') }}</div>
                             </div>
                             <div class="data-item" v-if="ad.phone_number">
-                                <div class="contact">
-                                    <a :href="`tel:${ad.phone_number}`" style="color: inherit; text-decoration: none;">
+                                <a :href="`tel:${ad.phone_number}`" style="color: inherit; text-decoration: none;">
+                                    <div class="contact">
                                         <div>
                                             <i class="pi pi-phone mr-2"></i> {{ ad.phone_number }}
                                         </div>
-                                    </a>
-                                </div>
+                                    </div>
+                                </a>
                             </div>
                             <div class="data-item" v-if="ad.email" :title="ad.email">
                                 <div class="contact">
@@ -177,10 +177,10 @@ const openFullScreenGalleria = () => {
 <style scoped lang="scss">
 .ad-container {
     padding: 16px 16px;
-    display: flex;
-    justify-content: center;
     @media screen and (min-width: 992px) {
         padding: 16px 64px;
+        display: flex;
+        justify-content: center;
     }
     .ad {
         flex: 1 1 auto;
