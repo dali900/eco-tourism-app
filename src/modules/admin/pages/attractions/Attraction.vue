@@ -137,6 +137,21 @@
                             </div>
                         </div>
                         <div class="field col-12 md:col-6 lg:col-4">
+                            <label for="phone_number" :class="{'p-error': formErrors.phone_number}">Kontakt telefon</label>
+                            <div>
+                                <InputText id="phone_number" 
+                                    v-model="form.phone_number" 
+                                    type="text" 
+                                    placeholder="0641234567"
+                                    :class="{'p-invalid': formErrors.phone_number}" 
+                                    @keyup.enter="save"
+                                />
+                            </div>
+                            <div class="error-field">
+                                <small class="p-error">{{formErrors.phone_number}}</small>
+                            </div>
+                        </div>
+                        <div class="field col-12">
                             <div>
                                 <Checkbox
                                     inputId="suggested"
@@ -150,7 +165,7 @@
                                 <small class="p-error">{{formErrors.suggested}}</small>
                             </div>
                         </div>
-                        <div class="field col-12 md:col-6 lg:col-4" v-if="authStore.hasEditorAccess()">
+                        <div class="field col-12" v-if="authStore.hasEditorAccess()">
                             <div>
                                 <Checkbox
                                     inputId="visible"
@@ -464,6 +479,7 @@ const form = reactive({
     name: "",
     order_num: null,
     place_id: null,
+    phone_number: null,
     suggested: false,
     visible: true,
     summary: "",
@@ -476,6 +492,7 @@ const formErrors = reactive({
     category_id: "",
     order_num: "",
     place_id: "",
+    phone_number: "",
     suggested: "",
     visible: "",
     name: "",
@@ -488,6 +505,7 @@ const clearFormErrors = () => {
     formErrors.category_id = "";
     formErrors.order_num = "";
     formErrors.place_id = "";
+    formErrors.phone_number = "";
     formErrors.suggested = "";
     formErrors.visible = "";
     formErrors.name = "";

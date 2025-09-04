@@ -93,7 +93,7 @@
                                 <a :href="`tel:${ad.phone_number}`" style="color: inherit; text-decoration: none;">
                                     <div class="contact">
                                         <div>
-                                            <i class="pi pi-phone mr-2"></i> {{ ad.phone_number }}
+                                            <i class="pi pi-phone mr-2"></i> {{ ad.phone_number_formated }}
                                         </div>
                                     </div>
                                 </a>
@@ -208,7 +208,7 @@ const openFullScreenGalleria = () => {
             }
         }
         .images {
-            width: 440px;
+            max-width: 440px;
             height: 100%;
             border: 1px solid var(--color-black-mute);
             display: flex;

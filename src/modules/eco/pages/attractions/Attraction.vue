@@ -20,6 +20,17 @@
                     {{ attraction.place.t.name }}
                 </RouterLink>
             </div>
+
+            <div class="phone-number" v-if="attraction.phone_number">
+                <a :href="`tel:${attraction.phone_number}`" style="color: inherit; text-decoration: none;">
+                    <Button
+                        type="button"
+                        class="btn-d"
+                        :label="attraction.phone_number_formated"
+                        icon="pi pi-phone"
+                    />
+                </a>
+            </div>
             
             <div class="galleria">
                 <div class="flex-centered-item">
@@ -148,7 +159,10 @@ const attractionContent = computed( () => {
         margin-bottom: 32px;
     }
     .place {
-        margin-bottom: 64px;
+        margin-bottom: 16px;
+    }
+    .phone-number {
+        margin-bottom: 32px;
     }
 }
 .gallery-image-wrapper {

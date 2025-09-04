@@ -133,11 +133,18 @@
                         <div class="field col-12 md:col-6 lg:col-4">
                             <label label for="phone_number" :class="{'p-error': formErrors.phone_number}">Telefon </label>
                             <div>
-                                <InputMask
+                                <!-- <InputMask
                                     id="phone"
                                     v-model="form.phone_number"
                                     mask="999/99 99 99?99"
                                     placeholder="064/12 34 567"
+                                /> -->
+                                <InputText id="phone_number" 
+                                    v-model="form.phone_number" 
+                                    type="text" 
+                                    placeholder="0641234567"
+                                    :class="{'p-invalid': formErrors.phone_number}" 
+                                    @keyup.enter="save"
                                 />
                             </div>
                             <div class="error-field">
@@ -327,7 +334,7 @@ import { ref, reactive, watch, computed, onMounted, onBeforeMount, onUnmounted }
 import InputNumber from 'primevue/inputnumber';
 import TreeSelect from 'primevue/treeselect';
 import RadioButton from 'primevue/radiobutton';
-import InputMask from 'primevue/inputmask';
+/* import InputMask from 'primevue/inputmask'; */
 import { storeToRefs } from 'pinia'
 import { useRouter, useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast";
