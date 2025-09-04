@@ -5,7 +5,7 @@ import apps from "../constants/apps"
 export const setHtmlHeader = () => {
     let appExists = false;
     let title = "Selo na 3 klika";
-    let tabIcon = "/images/acta-media-logo.png";
+    let tabIcon = "/images/app-logo3.png";
     let appFound = false;
 
     const host = window.location.host;

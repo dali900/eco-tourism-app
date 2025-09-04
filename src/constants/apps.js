@@ -17,7 +17,7 @@ export default {
         appName: "admin",
         title: "Actamedia Admin",
         alias: ['actamedia.net', 'localhost'],
-        tabIcon: '/images/acta-media-logo.png'
+        tabIcon: '/images/app-logo3.png'
     },
 
 }
