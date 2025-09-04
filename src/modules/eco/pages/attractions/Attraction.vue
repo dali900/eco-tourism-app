@@ -135,6 +135,8 @@ const attractionContent = computed( () => {
         div {
             border-bottom: 1px solid var(--text-secondary-color);
             padding: 16px;
+            font-size: 32px;
+            word-break: break-word;
         }
         margin-bottom: 64px;
     }
@@ -149,6 +151,11 @@ const attractionContent = computed( () => {
     @media screen and (min-width: 992px) {
         .page-body {
             padding: 0 64px;
+        }
+        .title {
+            div {
+                font-size: 40px;
+            }
         }
     }
     .title {
